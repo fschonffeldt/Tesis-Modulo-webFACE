@@ -1,0 +1,13 @@
+# Ignorar archivos innecesarios
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Ignorar configuraciones locales de IDE/editores
+.vscode/
+.idea/
+
+# Ignorar archivos de caché y sistema
+wp-content/cache/
+wp-content/uploads/
