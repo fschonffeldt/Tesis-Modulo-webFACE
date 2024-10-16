@@ -24,3 +24,5 @@ function crear_custom_post_type_avisos() {
     register_post_type('avisos', $args);
 }
 add_action('init', 'crear_custom_post_type_avisos');
+
+modificacion;
