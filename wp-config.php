@@ -63,7 +63,7 @@ define('NONCE_SALT',       'I1l]X>Ur$8)eTKsZyQFSX${Drc5Y[>A|KEm z+gveooMj?B}[KUL
 $table_prefix  = 'wp_';
 
 // definir nueva url (migración)
- define('WP_HOME', 'http://localhost/site');
+ define('WP_HOME', 'http://localhost/site/');
  define('WP_SITEURL', 'http://localhost/site');
 
 /**
