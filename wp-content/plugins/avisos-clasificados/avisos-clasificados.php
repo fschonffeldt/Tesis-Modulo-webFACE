@@ -6,5 +6,6 @@ Version: 1.0
 Author: Fernanda Schonffeldt Cisternas
 */
 require_once plugin_dir_path(__FILE__) . 'includes/posttypes.php';
+require_once plugin_dir_path(__FILE__) . 'includes/avisos-shortcodes.php';
 
 register_activation_hook(__FILE__, 'avisos_rewrite_flush');
