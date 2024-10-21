@@ -1,5 +1,5 @@
 <?php
-// Función para mostrar los avisos clasificados usando un shortcode
+// Función para mostrar los avisos clasificados sin información de contacto
 function mostrar_avisos_clasificados() {
     $args = array(
         'post_type' => 'avisos',
@@ -32,7 +32,7 @@ function mostrar_avisos_clasificados() {
                 <p><?php the_excerpt(); ?></p>
 
                 <!-- Enlace para leer más -->
-                <a href="<?php the_permalink(); ?>">Leer más</a>
+                <a href="<?php echo esc_url(get_permalink()); ?>">Ver más detalles</a>
             </div>
             <hr>
             <?php

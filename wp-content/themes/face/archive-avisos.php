@@ -11,16 +11,19 @@ get_header(); // Cargar el header del tema
                 <div class="aviso">
                     <!-- Mostrar la imagen destacada del aviso -->
                     <?php if (has_post_thumbnail()) : ?>
-                        <a href="<?php the_permalink(); ?>">
+                        <a href="<?php the_permalink(); ?>" target="_blank">
                             <?php the_post_thumbnail(); ?>
                         </a>
                     <?php endif; ?>
 
                     <!-- Mostrar el título del aviso con un enlace -->
-                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                    <h2><a href="<?php the_permalink(); ?>" target="_blank"><?php the_title(); ?></a></h2>
 
                     <!-- Mostrar el extracto del aviso -->
                     <p><?php the_excerpt(); ?></p>
+
+                    <!-- Enlace para ver más detalles en una nueva pestaña -->
+                    <a href="<?php the_permalink(); ?>" target="_blank">Ver más detalles</a>
                 </div>
             <?php endwhile; ?>
         </div>
