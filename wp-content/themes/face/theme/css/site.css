@@ -1,0 +1,270 @@
+/*--------------------------------------------------------------
+# Fuente
+--------------------------------------------------------------*/
+@font-face {
+    font-family: Tipo-UBB-Bold;
+    src: url('../fonts/bold_condensed.otf');
+    font-weight: 700;
+    font-stretch: condensed;
+}
+@font-face {
+    font-family: Tipo-UBB-Regular;
+    src: url('../fonts/regular_condensed.otf');
+    font-weight: 700;
+    font-stretch: condensed;
+}
+@font-face {
+    font-family: Tipo-UBB-Black;
+    src: url('../fonts/black_condensed.otf');
+    font-weight: 700;
+    font-stretch: condensed;
+}
+
+/*--------------------------------------------------------------
+# Estilos globales
+--------------------------------------------------------------*/
+body {font-size: 17px;font-weight: 400;background-color: #ffffff;color: #2e3c4d;font-family: "Fira Sans", sans-serif;}
+.wrapper {max-width: 1200px; margin: 0px auto;}
+.font-ubb {font-family: Tipo-UBB-Bold;}
+
+h1, h2, h3, h4, h5, h6 {color: #0d5ba4; text-align: left; position: relative;}
+h1 {font-size: 2.8rem;}
+h2 {font-size: 2.2rem;}
+h3 {font-size: 2rem;}
+h4 {font-size: 1.7rem;}
+h1 svg {margin-top: -5px;}
+
+.more-button a {color: #1d3c88; text-decoration: none; position: relative; margin-top: -20px; font-weight: bold; transition: all ease .2s;}
+.more-button a:hover {color: #e96626; text-decoration: underline;}
+a {text-decoration: none;color: #3054a1;}
+a:hover {color: #e96626;}
+ol, ul {list-style: none; margin-bottom: 0px!important; padding-inline-start: 0px !important;}
+strong {font-weight: 500;}
+
+.banner-page {background-color: #c3d4e7;background-position: center center;background-size: cover}
+.banner-page h1 {color: #0d5ba4;}
+.banner-page p {color: #153f6c;padding-top: 5px;}
+iframe {max-width: 100% !important;}
+.border-bottom {border-bottom: 3px solid #dee2e6 !important}
+
+/*--------------------------------------------------------------
+# header
+--------------------------------------------------------------*/
+header {background-color: #e0ecfa; position: relative;}
+header::before {content: ""; position: absolute; top: 0; left: 0; width: 50px; height: 50px; background-color: #e96626; z-index: 9999;}
+header .top {background: rgb(212,223,235); background: linear-gradient(90deg, rgba(212,223,235,0) 0%, rgba(212,223,235,1) 100%);}
+header .top a {padding: 2px 15px;color: #2e3c4d;font-weight: 600;font-size: 0.9rem;}
+header .top .search-button {background-color: #e96626; color: #ffffff}
+@media (max-width: 575.98px) { 
+	header::before {display: none;}
+}
+
+/*--------------------------------------------------------------
+# menu
+--------------------------------------------------------------*/
+header .content-menu {background-color: #0d5ba4;}
+.menu ul li {display: flex;justify-content: center;flex-direction: column;font-weight: bold;position: relative;line-height: 19px;padding: 5px 20px;}
+.menu ul li a {text-decoration: none; transition: all ease .2s; display: block;}
+#menu-principal {display: flex;justify-content: center;flex-direction: row;min-height: 51px;}
+
+/*menu full*/
+.menu-full ul li a {text-decoration: none;color: #ffffff;font-weight: 500;}
+.menu-full ul li a:hover {color: #b5cbe5;}
+.menu-full ul ul {opacity: 0;visibility: hidden;position: absolute;top: 100%;background-color: #034a8d;transition: visibility 0.3s, opacity 0.2s linear;width: 250px;border-radius: 0px;/* box-shadow: 0px 0px 50px 0px rgb(0 0 0 / 15%); */left: 5%;/* -webkit-box-shadow: 0px 1px 5px 0px rgb(169 166 166); */-moz-box-shadow: 0px 1px 5px 0px rgb(169 166 166);/* box-shadow: 0px 1px 5px 0px rgb(169 166 166); */}
+.menu-full ul ul li {width: 100%;display: contents;}
+.menu-full ul ul li a {line-height: 20px;color: #ffffff;height: auto !important;text-align: left;font-weight: 400;padding: 10px 25px;border-bottom: 1px dotted rgba(1,1,1,0.1);text-transform: capitalize;font-size: 0.95rem;}
+.menu-full ul ul li a:hover { color: #cdcdcd !important}
+.menu-full ul ul li:last-child a {border-bottom: 0px;}
+.menu-full ul li:hover > ul {opacity:1;visibility:visible;z-index: 9999;display: block;margin: auto;left: 5%;}
+.menu-full > a:hover > li a {background-color: #0d5ba4}
+.menu-full ul li ul li.current-menu-item {background-color: inherit}
+.menu-full ul li.current-menu-item a {color: #ffffff !important;}
+.menu-full ul ul::before {content: "";position: absolute;display: block;width: 0;height: 0;border-width: 7px 8px;border-style: solid;border-color: transparent;z-index: 1001;top: -13px;border-bottom-color: #064c8d;left: 40px;right: 0;}
+.menu-full ul ul li.current-menu-item a {color: #cdcdcd !important}
+
+/*menu responsive*/
+#responsive-menu ul {padding-left: 0px !important;}
+#responsive-menu ul li {padding: 0px}
+#responsive-menu ul li a {border-top: 1px solid rgba(0,0,0,0.1);padding: 5px 20px !important;display: block;color: #ffffff;font-weight: 500;font-size: 0.9rem;}
+
+/*--------------------------------------------------------------
+# Slider
+--------------------------------------------------------------*/
+.carousel-control-next, .carousel-control-prev {background-color: #e96626;width: 60px;height: 100px;top: 40%;opacity: 1;}
+
+/*--------------------------------------------------------------
+# Noticias
+--------------------------------------------------------------*/
+.news {background-color: #f0f8fe; position: relative;}
+.news .item {background-color: #eaeaea; min-height: 425px;}
+.news .item-small {background-color: #eaeaea; min-height: 200px;}
+.news::before {content: ""; position: absolute; top: 0; left: 0; width: 50px; height: 50px; background-color: #0d5ba4; z-index: 9999;}
+.news::after {content: ""; position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background-color: #0d5ba4; z-index: 9999;}   
+.news {background-color: #ffffff;}
+.news h4 {font-size: 1.1rem; font-weight: 500;}
+.news .figure {background-size: cover;min-height: 130px;background-position: center center;overflow: hidden;transition: ease all .2s;opacity: 0.9;background-color: #eff1f4;}
+.news .date {font-weight: 400;}
+.news a {transition: all ease .2s;}
+.news .new:hover .figure {transform: scale(1.02); opacity: 1;}
+.page-news {background-color: #ffffff;}
+.page-news figure {height: 200px;}
+.single-post .date {position: absolute; bottom: 0; background-color: #e96626; color: #fff; padding: 2px 20px;}
+@media (max-width: 575.98px) { 
+	.news::before {display: none;}
+	.news::after {display: none;}
+}
+.page-news::before {display: none;}
+.page-news::after {display: none;}
+
+/*--------------------------------------------------------------
+# Actividades
+--------------------------------------------------------------*/
+
+.activities {background-color: #e0ecfa; position: relative;}
+.activities .card {border: 1px solid #ffc629; text-align: center; border-radius: 0px}
+.activities .card-body {padding: 10px 20px;}
+.activities .fecha-actividad { min-height: 100px; max-height: 120px; background-color: #fff; background-size: cover; padding: 10px; box-sizing: border-box; color: #0d5ba4; font-weight: bold;}
+.activities .titulo {text-transform: uppercase;}
+.activities h4 { margin-bottom: 0px; color: #fff}
+.activities .fecha-actividad .dia {text-align: center;display:block;font-size: 65px;line-height: 50px;color: #0d5ba4;font-weight: 900;}
+.activities .fecha-actividad .hora {text-align: center; display:block; font-size: 20px;}
+.activities .fecha-actividad {transition: 0.4s;}
+.activities .box-actividad {transition: all ease .2s;}
+.activities .box-actividad:hover {transform: scale(1.02);}
+
+/*--------------------------------------------------------------
+# Breadcrumb
+--------------------------------------------------------------*/
+.breadcrumb {font-size: 0.9rem;}
+
+/*--------------------------------------------------------------
+# team
+--------------------------------------------------------------*/
+.team figure {width: 130px;height: 130px;background-position: center center;background-size: cover; border:0px !important; opacity: 0.8;background-color: #98a8bb;border: 0px;}
+.team h4 {font-size: 1.3rem; font-family: "Roboto", sans-serif !important;}
+.team a {font-weight: 700;}
+.team .input-group-text {background-color: #617287;border-radius: 0px;color: #fff;border: 0px;}
+.team .form-control {background-color: #dee2e6; border-radius: 0px; padding: 15px 20px;}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+footer {background-color: #1B2E51;}
+footer a {color: #e96626}
+footer .social-menu path {fill: #ffffff}
+
+/*--------------------------------------------------------------
+# scroll
+--------------------------------------------------------------*/
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track {border-radius: 0; }
+::-webkit-scrollbar-thumb {border-radius: 0; background: #e96626; }
+::-webkit-scrollbar-thumb:window-inactive { background: #e96626; }
+
+/*--------------------------------------------------------------
+# Lista
+--------------------------------------------------------------*/
+.list-group-item { font-size: 0.9rem; font-weight: 500;}
+.list-group-item a {transition: ease all .2s; color: #0d5ba4;}
+.list-group-item a:hover {color: #e96626;}
+.list-group-flush .menu-item a {position: relative;display: block;padding: 0.5rem 1rem;color: #2e3c4d;text-decoration: none;border-width: 0 0 1px;font-size: 0.95rem;font-weight: 500;transition: ease all .2s;border-bottom: 3px solid #dee2e6;}
+.list-group-flush .menu-item a:hover {color: #e96626 !important}
+.list-group-flush li.current-menu-item > a{color: #e96626;padding-left: 30px;}
+.list-group-flush li .sub-menu {display: none;}
+.list-group-flush li.current-menu-item .sub-menu{display: block;}
+
+/*--------------------------------------------------------------
+# Paginas
+--------------------------------------------------------------*/
+.text-content h1, .text-content h2, .text-content h3, .text-content h4, .text-content h5, .text-content h6 {color: #5a718d;width: fit-content;font-weight: 600;margin-bottom: 30px;padding-bottom: 10px;text-transform: uppercase;font-family: Tipo-UBB-Bold;}
+.text-content .wp-block-quote { border-left: 0px; padding-left: 1em; background-color: #f4f6f6; padding: 15px 25px; margin: 10px 0px}
+.text-content .wp-block-quote p {margin-bottom: 5px;}
+.text-content ul, .text-content ol {margin-bottom: 20px !important; list-style: square; margin-left: 30px;}
+.text-content a {font-weight: 700; }
+.text-content :where(.wp-block-columns) {margin-bottom: 0px !important;}
+.text-content .wp-block-separator.has-background:not(.is-style-dots) {background-color: #dee2e6 !important; height: 3px;}
+.text-content hr {border-bottom: 3px dotted #dee2e6 !important;margin: 40px 0px;opacity: 1;border-top: 0px;}
+.text-content h1.wp-block-heading::after, .text-content h2.wp-block-heading::after, .text-content h3.wp-block-heading::after, .text-content h4.wp-block-heading::after, .text-content h5.wp-block-heading::after, .text-content h6.wp-block-heading::after {
+    content: ""; display: block; width: 100px; height: 3px; background-color: #f1843b; position: absolute; bottom: 0; left: 0%; }
+
+/*--------------------------------------------------------------
+# alert
+--------------------------------------------------------------*/
+.alert-success {background-color: #F9F9F9; border-radius: 10px;  border: 0px; border-left: 10px solid #76C100; border-right: 10px solid #76C100; padding: 40px; color: inherit;}
+.alert-secondary {background-color: #e0ecfa; color: #26303d; padding: 10px 30px;}
+.alert-secondary a {  color: #e96626; text-decoration: underline;}
+
+/*--------------------------------------------------------------
+# btn
+--------------------------------------------------------------*/
+.btn-primary { background-color: #e96626; border-color: #e96626;}
+.btn-primary:hover { background-color: #0ea198; border-color: #0ea198;}
+
+/*--------------------------------------------------------------
+# Pagination
+--------------------------------------------------------------*/
+.pagination {justify-content: center; list-style: none !important;}
+.pagination .page-link {color:  inherit;background-color: #f5f5f5;border: 1px solid #e8ecef;min-width: 40px;border-radius: 0px;}
+.pagination .page-item.active .page-link {background-color: #0d5ba4;color: #fff;border-color: #0d5ba4;border-radius: 0px;}
+.pagination .page-link:hover {background-color: #e96626;color: #ffffff;border: 1px solid #e96626;}
+
+/*--------------------------------------------------------------
+# Boton subir
+--------------------------------------------------------------*/
+#scrollTopBtn {display: none;position: fixed;bottom: 20px;right: 30px;z-index: 99;border: none;outline: none;background-color: #98a8bb;color: #ffffff;cursor: pointer;padding: 5px 15px;font-size: 0.9rem;transition: all ease .2s;text-transform: uppercase;}
+#scrollTopBtn:hover {background-color: rgb(111 130 153);}
+
+/*--------------------------------------------------------------
+# Sitemap
+--------------------------------------------------------------*/
+.sitemap ul > li {border-bottom: 3px solid #dee2e6;display: block;padding: 10px 0px;}
+.sitemap ul > li > ul > li:last-child {border-bottom: none;}
+.sitemap ul ul > li {padding: 10px 30px; border-bottom: 3px solid #dee2e6; display: block; padding-left: 0px; }
+.sitemap ul li a { color: #2e3c4d !important;}
+.sitemap ul > li.menu-item-has-children > a {font-weight: 700;color: #e96626 !important;border-bottom: 3px solid #dee2e6;display: block;padding: 10px 0px;width: 100%;}
+.sitemap .menu ul li {font-weight: 400 !important;}
+
+/*--------------------------------------------------------------
+# Botones para compartir
+--------------------------------------------------------------*/
+ul.share-buttons{list-style: none;padding: 0;}
+ul.share-buttons li{display: inline;}
+ul.share-buttons li a .hover-svg {transition: all ease .2s;}
+ul.share-buttons li:hover a .hover-svg {fill: #5a718d !important;}
+
+/*--------------------------------------------------------------
+# contacto
+--------------------------------------------------------------*/
+.contact { min-height: 450px;}
+.contact a {font-weight: 700;}
+.contact .form-control {border: 0px; padding: 10px 30px;text-align: left;font-size: 1rem; border-radius: 0px;}
+.contact .btn-primary {background-color: #e96626; color: #fff;}
+.wpcf7 form .wpcf7-response-output { margin: 0px !important; padding: 10px 25px; }
+.wpcf7 form.invalid .wpcf7-response-output, .wpcf7 form.unaccepted .wpcf7-response-output {border-color: #ef8e99;background-color: #ef8e99;color: #ffffff;border-radius: 50px;}
+.wpcf7 form.sent .wpcf7-response-output {border-color: #8a95a3;background-color: #8a95a3;color: #ffffff;border-radius: 50px;}
+.wpcf7-not-valid-tip { color: #dc3232; font-size: 0.8em;  font-weight: normal; margin-left: 30px; display: block;}
+
+/*--------------------------------------------------------------
+# tabla
+--------------------------------------------------------------*/
+.wp-block-table td, .wp-block-table th {  padding: 10px;}
+.wp-block-table thead td, .wp-block-table thead th { padding: 10px;}
+
+/*--------------------------------------------------------------
+# categorias noticias
+--------------------------------------------------------------*/
+.menu-categories-list {list-style: none; padding: 0; margin: 0; text-align: center;}
+.menu-categories-item { background-color: #f1f1f1; padding: 5px 20px; margin-right: 5px; display: inline-block; margin-bottom: 10px; box-shadow: 0px 3px 8px -5px rgb(255 255 255);}
+.menu-categories-item a {text-decoration: none; color: #040506; font-weight: 500; font-size: 0.9rem; transition: color 0.3s ease;}
+.menu-categories-item a:hover { color: #e96626;}
+
+/*--------------------------------------------------------------
+# Buscador pagina
+--------------------------------------------------------------*/
+.search-container {position: relative;}
+.search-button {cursor: pointer;}
+.search-field { position: absolute; top: 50%;right: 0;width: 0;height: 42px;overflow: hidden;transition: width 0.4s ease-in-out;background-color: #fff;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);transform: translateY(-50%);display: flex;align-items: center;}
+.search-field input { width: 100%; border: none; outline: none; font-size: 0.9rem; padding: 0 10px;	height: 42px;}
+.search-field button {background-color: #e96626}
+.search-container.active .search-field { width: 600px;}
+.search-field input::placeholder { color: #aaa;}
