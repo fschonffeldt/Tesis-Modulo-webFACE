@@ -1,0 +1,87 @@
+Tesis Módulo Web FACE 🏫
+Módulo web para la Facultad de Ciencias Empresariales (FACE) de la Universidad del Bío-Bío, que permite a los estudiantes, administrativos y profesores acceder a avisos clasificados y actividades grupales de manera eficiente y segura.
+
+Características Principales
+Gestión de Avisos Clasificados: Publicación de avisos para compra/venta de artículos, servicios ofrecidos y otros.
+Difusión de Actividades Grupales: Calendario y detalles de eventos organizados por grupos validados.
+
+Tecnologías Utilizadas
+Contenedores: Docker, Docker Compose
+Servidor Web: Apache
+Lenguaje de Programación: PHP
+Base de Datos: MySQL
+Frontend: HTML, CSS, JavaScript
+Versiones
+Aquí se indican las versiones recomendadas de las tecnologías utilizadas:
+
+PHP: 8.2
+MySQL: 5.7
+Docker: 20.10 o superior
+Docker Compose: 1.27 o superior
+⚠️ Nota: Es recomendable usar estas versiones para evitar problemas de compatibilidad.
+
+Estructura del Proyecto
+plaintext
+Copiar código
+SITE/
+├── wp-admin/
+├── wp-content/
+│   ├── languages/
+│   ├── plugins/
+│   │   ├── avisos-clasificados/
+│   │   ├── contact-form-7/
+│   │   ├── gtranslate/
+│   │   ├── ... (otros plugins)
+│   └── themes/
+├── wp-includes/
+├── .htaccess
+├── Dockerfile
+├── docker-compose.yml
+└── wp-config.php
+Instalación
+Prerrequisitos
+Docker y Docker Compose instalados
+XAMPP (opcional, para otros servicios locales)
+Pasos de Instalación
+Clonar el repositorio:
+
+bash
+Copiar código
+git clone https://github.com/tu-usuario/tu-repositorio.git
+cd tu-repositorio
+Configurar el archivo wp-config.php:
+
+Asegúrate de que las credenciales de la base de datos sean correctas.
+Configura DB_HOST, DB_NAME, DB_USER y DB_PASSWORD según tu entorno.
+Construir y levantar los contenedores:
+
+bash
+Copiar código
+docker-compose up -d --build
+Acceder al sitio en http://localhost:8080.
+
+Uso
+Iniciar los Contenedores
+Para iniciar los contenedores en modo de desarrollo:
+
+bash
+Copiar código
+docker-compose up -d
+Detener los Contenedores
+Para detener los contenedores:
+
+bash
+Copiar código
+docker-compose down
+Esquema de la Base de Datos
+La base de datos utiliza MySQL con la siguiente estructura principal:
+
+Tablas de WordPress: Configuración estándar de WordPress.
+Tablas Personalizadas:
+avisos: Información sobre los avisos clasificados.
+eventos: Detalles de las actividades grupales.
+Contacto
+Para más información, puedes contactar a:
+
+Fernanda Monserratt Schonffeldt Cisternas
+Correo: Fernanda.shonffeldt2101@alumnos.ubiobio.cl
