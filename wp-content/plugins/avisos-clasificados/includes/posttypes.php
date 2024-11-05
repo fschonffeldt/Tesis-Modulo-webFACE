@@ -6,6 +6,13 @@ function avisos_post_type() {
         'singular_name' => 'Aviso Clasificado',
         'menu_name' => 'Avisos Clasificados',
         'name_admin_bar' => 'Aviso Clasificado',
+        'add_new' => 'Añadir Nuevo',
+        'add_new_item' => 'Añadir Nuevo Aviso',
+        'new_item' => 'Nuevo Aviso',
+        'edit_item' => 'Editar Aviso',
+        'view_item' => 'Ver Aviso',
+        'all_items' => 'Avisos Clasificados',
+        'search_items' => 'Buscar Avisos',
     );
 
     $args = array(
