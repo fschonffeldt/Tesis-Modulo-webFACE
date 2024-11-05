@@ -14,17 +14,17 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ## Tecnologías Utilizadas
 
-- **Servidor Web**: Apache (contenedorizado con Docker)
-- **Lenguaje**: PHP
-- **Base de Datos**: MySQL (contenedorizado con Docker)
+- **Servidor Web**: Apache 
+- **Lenguaje**: PHP 
+- **Base de Datos**: MySQL 
 - **Contenedores**: Docker, Docker Compose
 
 ---
 
 ## Versiones
 
-- **PHP**: 8.2
-- **MySQL**: 5.7
+- **PHP**: 7.4
+- **MySQL**: 10.5
 - **Docker**: 20.10 o superior
 - **Docker Compose**: 1.27 o superior
 
@@ -34,7 +34,6 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ## Estructura del Proyecto
 
-```plaintext
 SITE/
 ├── wp-admin/
 ├── wp-content/
