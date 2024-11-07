@@ -18,3 +18,4 @@ function encolar_estilos_avisos_clasificados() {
 
 // Asegurarse de usar 'wp_enqueue_scripts' correctamente
 add_action('wp_enqueue_scripts', 'encolar_estilos_avisos_clasificados');
+
