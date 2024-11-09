@@ -1,0 +1,90 @@
+/* Archivo: assets/style.css */
+
+.avisos-clasificados-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.aviso-clasificado {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.aviso-clasificado h3 {
+    font-size: 1.2em;
+    margin: 0 0 10px;
+}
+
+.aviso-contenido {
+    font-size: 1em;
+    margin: 0 0 10px;
+}
+
+.aviso-ver-mas {
+    font-size: 0.9em;
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.aviso-ver-mas:hover {
+    text-decoration: underline;
+}
+
+/* Archivo: assets/style.css LOGIN */
+
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.login-container label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.login-container button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #0073aa;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.login-container button[type="submit"]:hover {
+    background-color: #005a8d;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+}
