@@ -21,4 +21,7 @@ function handleError(error, msg) {
   console.error("🗯  " + error.message);
 }
 
-export { handleFatalError, handleError };
+module.exports = {
+  handleFatalError,
+  handleError,
+};

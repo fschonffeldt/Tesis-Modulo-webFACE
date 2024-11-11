@@ -60,4 +60,4 @@ function respondInternalError(
   });
 }
 
-export { respondSuccess, respondError, respondInternalError };
+module.exports = { respondSuccess, respondError, respondInternalError };

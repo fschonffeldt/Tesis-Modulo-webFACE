@@ -1,9 +1,8 @@
 "use strict";
 // Importa el modelo de datos 'User'
-import User from "../models/user.model.js";
-import Role from "../models/role.model.js";
-import Facultade from "../models/facultade.model.js";
-import { handleError } from "../utils/errorHandler.js";
+const User = require("../models/user.model.js");
+const Role = require("../models/role.model.js");
+const { handleError } = require("../utils/errorHandler");
 
 /**
  * Obtiene todos los usuarios de la base de datos
@@ -30,7 +29,7 @@ async function getUsers() {
  */
 async function createUser(user) {
   try {
-    const { username, rut, email, password, roles, facultades } = user;
+    const { username, email, password, roles } = user;
 
     const userFound = await User.findOne({ email: user.email });
     if (userFound) return [null, "El usuario ya existe"];
@@ -39,17 +38,11 @@ async function createUser(user) {
     if (rolesFound.length === 0) return [null, "El rol no existe"];
     const myRole = rolesFound.map((role) => role._id);
 
-    const facultadesFound = await Facultade.find({ name: { $in: facultades } });
-    if (facultadesFound.length === 0) return [null, "La facultad no existe"];
-    const myFacultade = facultadesFound.map((facultade) => facultade._id);
-
     const newUser = new User({
       username,
-      rut,
       email,
       password: await User.encryptPassword(password),
       roles: myRole,
-      facultades: myFacultade,
     });
     await newUser.save();
 
@@ -90,7 +83,7 @@ async function updateUser(id, user) {
     const userFound = await User.findById(id);
     if (!userFound) return [null, "El usuario no existe"];
 
-    const { username, email, rut, password, newPassword, roles } = user;
+    const { username, email, password, newPassword, roles } = user;
 
     const matchPassword = await User.comparePassword(
       password,
@@ -106,20 +99,13 @@ async function updateUser(id, user) {
 
     const myRole = rolesFound.map((role) => role._id);
 
-    const facultadesFound = await Facultade.find({ name: { $in: facultades } });
-    if (facultadesFound.length === 0) return [null, "La facultad no existe"];
-    
-    const myFacultade = facultadesFound.map((facultade) => facultade._id);
-
     const userUpdated = await User.findByIdAndUpdate(
       id,
       {
         username,
         email,
-        rut,
         password: await User.encryptPassword(newPassword || password),
         roles: myRole,
-        facultades: myFacultade,
       },
       { new: true },
     );
@@ -143,7 +129,7 @@ async function deleteUser(id) {
   }
 }
 
-export default {
+module.exports = {
   getUsers,
   createUser,
   getUserById,

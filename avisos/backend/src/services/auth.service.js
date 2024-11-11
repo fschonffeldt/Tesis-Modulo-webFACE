@@ -1,14 +1,17 @@
 "use strict";
 
 /** Modelo de datos 'User' */
-import User from "../models/user.model.js";
+const User = require("../models/user.model.js");
+
 /** Modulo 'jsonwebtoken' para crear tokens */
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
-import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from "../config/configEnv.js";
+const {
+  ACCESS_JWT_SECRET,
+  REFRESH_JWT_SECRET,
+} = require("../config/configEnv.js");
 
-import { handleError } from "../utils/errorHandler.js";
-
+const { handleError } = require("../utils/errorHandler");
 
 /**
  * Inicia sesión con un usuario.
@@ -37,7 +40,7 @@ async function login(user) {
     }
 
     const accessToken = jwt.sign(
-      { email: userFound.email, roles: userFound.roles ,rut: userFound.rut},
+      { email: userFound.email, roles: userFound.roles },
       ACCESS_JWT_SECRET,
       {
         expiresIn: "1d",
@@ -101,4 +104,7 @@ async function refresh(cookies) {
   }
 }
 
-export default { login, refresh };
+module.exports = {
+  login,
+  refresh,
+};

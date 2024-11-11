@@ -1,11 +1,11 @@
 "use strict";
 
-import { respondSuccess, respondError } from "../utils/resHandler.js";
-import { handleError } from "../utils/errorHandler.js";
+const { respondSuccess, respondError } = require("../utils/resHandler");
+const { handleError } = require("../utils/errorHandler");
 
 /** Servicios de autenticación */
-import AuthService from "../services/auth.service.js";
-import { authLoginBodySchema } from "../schema/auth.schema.js";
+const AuthServices = require("../services/auth.service");
+const { authLoginBodySchema } = require("../schema/auth.schema");
 
 /**
  * Inicia sesión con un usuario.
@@ -21,7 +21,7 @@ async function login(req, res) {
     if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [accessToken, refreshToken, errorToken] =
-      await AuthService.login(body);
+      await AuthServices.login(body);
 
     if (errorToken) return respondError(req, res, 400, errorToken);
 
@@ -68,7 +68,7 @@ async function refresh(req, res) {
     const cookies = req.cookies;
     if (!cookies?.jwt) return respondError(req, res, 400, "No hay token");
 
-    const [accessToken, errorToken] = await AuthService.refresh(cookies);
+    const [accessToken, errorToken] = await AuthServices.refresh(cookies);
 
     if (errorToken) return respondError(req, res, 400, errorToken);
 
@@ -79,7 +79,7 @@ async function refresh(req, res) {
   }
 }
 
-export default {
+module.exports = {
   login,
   logout,
   refresh,
