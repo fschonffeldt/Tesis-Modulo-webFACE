@@ -1,4 +1,4 @@
 /** Roles permitidos por la base de datos */
-const ROLES = ["empleado", "supervisor", "admin"];
+const ROLES = ["user", "admin"];
 
-export default ROLES;
+module.exports = ROLES;

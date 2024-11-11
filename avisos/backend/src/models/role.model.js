@@ -1,10 +1,10 @@
 "use strict";
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
-import { Schema, model } from "mongoose";
-import ROLES from "../constants/roles.constants.js";
+const mongoose = require("mongoose");
+const ROLES = require("../constants/roles.constants");
 
 // Crea el esquema de la coleccion 'roles'
-const roleSchema = new Schema(
+const roleSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -18,6 +18,6 @@ const roleSchema = new Schema(
 );
 
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
-const Role = model("Role", roleSchema);
+const Role = mongoose.model("Role", roleSchema);
 
-export default Role;
+module.exports = Role;

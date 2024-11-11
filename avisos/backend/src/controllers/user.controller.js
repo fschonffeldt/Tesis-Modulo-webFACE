@@ -1,12 +1,9 @@
 "use strict";
 
-import { respondSuccess, respondError } from "../utils/resHandler.js";
-import UserService from "../services/user.service.js";
-import { userBodySchema, userIdSchema } from "../schema/user.schema.js";
-import { handleError } from "../utils/errorHandler.js";
-import User from '../models/user.model.js';
-import Facultade from '../models/facultade.model.js';
-import Role from '../models/role.model.js';
+const { respondSuccess, respondError } = require("../utils/resHandler");
+const UserService = require("../services/user.service");
+const { userBodySchema, userIdSchema } = require("../schema/user.schema");
+const { handleError } = require("../utils/errorHandler");
 
 /**
  * Obtiene todos los usuarios
@@ -126,91 +123,10 @@ async function deleteUser(req, res) {
   }
 }
 
-/**
- * Busca un usuario por su RUT y devuelve su correo electrónico.
- * @param {string} rut El RUT del usuario a buscar.
- * @returns {Promise<string|null>} El correo electrónico del usuario o null si no se encuentra.
- */
-async function findUserByRut(req, res) {
-  try {
-    const rut = req.params.rut; // Extrae el RUT de los parámetros de la ruta
-    console.log(`Buscando usuario con RUT: ${rut}`); // Agregar console.log aquí
-
-    const user = await User.findOne({ rut: rut }).populate('roles').exec();
-    console.log("Resultado de la búsqueda:", user); // Agregar console.log aquí
-
-    if (user) {
-      console.log("Usuario encontrado:", user); // Agregar console.log aquí
-      res.status(200).send(user); // Envía el correo electrónico del usuario como respuesta
-    } else {
-      console.log("Usuario no encontrado"); // Agregar console.log aquí
-      res.status(404).send("Usuario no encontrado"); // Envía un mensaje de error si el usuario no se encuentra
-    }
-  } catch (error) {
-    console.error('Error buscando al usuario por RUT:', error);
-    res.status(500).send("Error interno del servidor"); // Envía un mensaje de error en caso de un error del servidor
-  }
-}
-
-
-/**
- * Busca usuarios por su facultad y devuelve una lista de usuarios.
- * @param {string} faculty La facultad de los usuarios a buscar.
- * @returns {Promise<Array|Error>} Una lista de usuarios o un error si no se encuentra.
- */
-async function findUsersByFaculty(req, res) {
-  try {
-    const faculty = req.params.faculty; // Asumiendo que la facultad se pasa como parámetro en la URL
-    const users = await User.find({ faculty: faculty }).exec(); // Asumiendo que el modelo de usuario tiene un campo `faculty`
-    
-    if (!users || users.length === 0) {
-      return res.status(404).send({
-        message: "No se encontraron usuarios para la facultad especificada"
-      });
-    }
-    
-    return res.status(200).send(users);
-  } catch (error) {
-    console.error('Error buscando usuarios por facultad:', error);
-    return res.status(500).send({
-      message: "Error interno al buscar usuarios por facultad"
-    });
-  }
-}
-
-/**
- * Busca usuarios por su rol y devuelve una lista de usuarios.
- * @param {string} role El rol de los usuarios a buscar.
- * @returns {Promise<Array|Error>} Una lista de usuarios o un error si no se encuentra.
- */
-async function findUsersByRole(req, res) {
-  try {
-    const role = req.params.role; // Asumiendo que el rol se pasa como parámetro en la URL
-    const users = await User.find({ role: role }).exec(); // Asumiendo que el modelo de usuario tiene un campo `role`
-    
-    if (!users || users.length === 0) {
-      return res.status(404).send({
-        message: "No se encontraron usuarios para el rol especificado"
-      });
-    }
-    
-    return res.status(200).send(users);
-  } catch (error) {
-    console.error('Error buscando usuarios por rol:', error);
-    return res.status(500).send({
-      message: "Error interno al buscar usuarios por rol"
-    });
-  }
-}
-
-export default {
+module.exports = {
   getUsers,
   createUser,
   getUserById,
   updateUser,
   deleteUser,
-  findUserByRut,
-  findUsersByFaculty,
-  findUsersByRole,
- 
 };

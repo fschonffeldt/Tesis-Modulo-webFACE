@@ -1,23 +1,20 @@
-"use strict";
-
 // Importa el archivo 'configEnv.js' para cargar las variables de entorno
-import { PORT, HOST } from "./config/configEnv.js";
+const { PORT, HOST } = require("./config/configEnv.js");
 // Importa el módulo 'cors' para agregar los cors
-import cors from "cors";
+const cors = require("cors");
 // Importa el módulo 'express' para crear la aplicacion web
-import express, { urlencoded, json } from "express";
+const express = require("express");
 // Importamos morgan para ver las peticiones que se hacen al servidor
-import morgan from "morgan";
+const morgan = require("morgan");
 // Importa el módulo 'cookie-parser' para manejar las cookies
-import cookieParser from "cookie-parser";
+const cookieParser = require("cookie-parser");
 /** El enrutador principal */
-import indexRoutes from "./routes/index.routes.js";
+const indexRoutes = require("./routes/index.routes.js");
 // Importa el archivo 'configDB.js' para crear la conexión a la base de datos
-import { setupDB } from "./config/configDB.js";
+const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
-import { handleFatalError, handleError } from "./utils/errorHandler.js";
-import { createFacultades, createRoles, createUsers } from "./config/initialSetup.js";
-import marcarTareasNoRealizadas from './services/scheduler.service.js'; // Importa la función de tareas programadas
+const { handleFatalError, handleError } = require("./utils/errorHandler.js");
+const { createRoles, createUsers } = require("./config/initialSetup");
 
 /**
  * Inicia el servidor web
@@ -26,17 +23,16 @@ async function setupServer() {
   try {
     /** Instancia de la aplicacion */
     const server = express();
-    server.disable("x-powered-by");
-    // Agregamos los cors
-    server.use(cors({ credentials: true, origin: true }));
-    // Agrega el middleware para el manejo de datos en formato URL
-    server.use(urlencoded({ extended: true }));
     // Agrega el middleware para el manejo de datos en formato JSON
-    server.use(json());
+    server.use(express.json());
+    // Agregamos los cors
+    server.use(cors({ origin: "/" }));
     // Agregamos el middleware para el manejo de cookies
     server.use(cookieParser());
     // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(morgan("dev"));
+    // Agrega el middleware para el manejo de datos en formato URL
+    server.use(express.urlencoded({ extended: true }));
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 
@@ -60,13 +56,8 @@ async function setupAPI() {
     await setupServer();
     // Inicia la creación de los roles
     await createRoles();
-    // Inicia la creación de los facultades
-    await createFacultades();
     // Inicia la creación del usuario admin y user
     await createUsers();
-
-    // Ejecuta la función de tareas programadas
-    marcarTareasNoRealizadas();
   } catch (err) {
     handleFatalError(err, "/server.js -> setupAPI");
   }

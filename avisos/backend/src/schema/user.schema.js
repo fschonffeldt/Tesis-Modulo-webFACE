@@ -1,8 +1,8 @@
 "use strict";
 
-import Joi from "joi";
-import ROLES from "../constants/roles.constants.js";
-import FACULTADES from "../constants/facultades.constants.js";
+const Joi = require("joi");
+const ROLES = require("../constants/roles.constants");
+
 /**
  * Esquema de validación para el cuerpo de la solicitud de usuario.
  * @constant {Object}
@@ -12,15 +12,6 @@ const userBodySchema = Joi.object({
     "string.empty": "El nombre de usuario no puede estar vacío.",
     "any.required": "El nombre de usuario es obligatorio.",
     "string.base": "El nombre de usuario debe ser de tipo string.",
-  }),
-  rut: Joi.string().required().min(9).max(10)
-  .pattern(/^[0-9]+[-|‐]{1}[0-9kK]{1}$/).messages({
-    "string.empty": "El rut no puede estar vacío.",
-    "any.required": "El rut es obligatorio.",
-    "string.base": "El rut debe ser de tipo string.",
-    "string.min": "El rut debe tener al menos 9 caracteres.",
-    "string.max": "El rut debe tener al menos 10 caracteres.",
-    "string.pattern.base": "El rut tiene el formato XXXXXXXX-X, ejemplo: 12345678-9.",
   }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
@@ -42,15 +33,6 @@ const userBodySchema = Joi.object({
       "any.required": "El rol es obligatorio.",
       "string.base": "El rol debe ser de tipo string.",
       "any.only": "El rol proporcionado no es válido.",
-    }),
-  facultades: Joi.array()
-    .items(Joi.string().valid(...FACULTADES))
-    .required()
-    .messages({
-      "array.base": "La facultad debe ser de tipo array.",
-      "any.required": "La facultad es obligatoria.",
-      "string.base": "La facultad debe ser de tipo string.",
-      "any.only": "La facultad proporcionada no es válida.",
     }),
   newPassword: Joi.string().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
@@ -77,4 +59,4 @@ const userIdSchema = Joi.object({
     }),
 });
 
-export { userBodySchema, userIdSchema };
+module.exports = { userBodySchema, userIdSchema };
