@@ -12,6 +12,7 @@ const avisoSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    immutable: true,
   },
   descripcion: {
     type: String,

@@ -11,7 +11,7 @@ const authRoutes = require("./auth.routes.js");
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
-const avisoroutes = require("./aviso.route.js");
+const avisoroutes = require("./aviso.routes.js");
 
 /** Instancia del enrutador */
 const router = express.Router();
