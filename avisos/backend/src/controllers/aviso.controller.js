@@ -61,7 +61,7 @@ exports.getAvisos = async (req, res) => {
 exports.getAvisoById = async (req, res) => {
   try {
     const avisoId = req.params.id;
-    const aviso = await Aviso.findById(avisoId).select("-usuarioEmail"); // Excluir usuarioEmail
+    const aviso = await Aviso.findOne({ id: avisoId }).select("-usuarioEmail"); // Busca por el campo `id`
 
     if (!aviso) {
       return res.status(404).json({ message: "Aviso no encontrado" });
@@ -82,8 +82,8 @@ exports.updateAviso = async (req, res) => {
     const avisoId = req.params.id;
     const { titulo, descripcion, precio, categoria, contacto } = req.body;
 
-    const avisoActualizado = await Aviso.findByIdAndUpdate(
-      avisoId,
+    const avisoActualizado = await Aviso.findOneAndUpdate(
+      { id: avisoId }, // Busca por el campo `id`
       { titulo, descripcion, precio, categoria, contacto },
       { new: true, select: "-usuarioEmail" }, // Excluir usuarioEmail de la respuesta
     );
@@ -102,7 +102,9 @@ exports.updateAviso = async (req, res) => {
 exports.deleteAviso = async (req, res) => {
   try {
     const avisoId = req.params.id;
-    const avisoEliminado = await Aviso.findByIdAndDelete(avisoId);
+    
+    // Eliminar el aviso usando el campo `id` directamente
+    const avisoEliminado = await Aviso.findOneAndDelete({ id: avisoId }); // Usa directamente `id: avisoId`
 
     if (!avisoEliminado) {
       return res.status(404).json({ message: "Aviso no encontrado" });
@@ -110,6 +112,7 @@ exports.deleteAviso = async (req, res) => {
 
     res.status(200).json({ message: "Aviso eliminado" });
   } catch (error) {
+    console.error("Error al eliminar el aviso:", error);
     res.status(500).json({ message: "Error al eliminar el aviso", error });
   }
 };
