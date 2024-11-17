@@ -5,6 +5,7 @@ const {
   getAvisoById, 
   updateAviso, 
   deleteAviso,
+  reportAviso,
 } = require("../controllers/aviso.controller");
 const router = express.Router();
 
@@ -14,5 +15,5 @@ router.get("/", getAvisos);
 router.get("/:id", getAvisoById);
 router.put("/:id", updateAviso); 
 router.delete("/:id", deleteAviso);
-
+router.post("/:id/report", reportAviso);
 module.exports = router;

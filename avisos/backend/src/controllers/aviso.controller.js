@@ -116,3 +116,26 @@ exports.deleteAviso = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar el aviso", error });
   }
 };
+exports.reportAviso = async (req, res) => {
+  try {
+    const avisoId = req.params.id;
+    const aviso = await Aviso.findOne({ id: avisoId });
+
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
+
+    aviso.reportes += 1;
+
+    // Si el aviso ha alcanzado el límite de reportes, desactívalo
+    const limiteReportes = 3; // Puedes ajustar este límite
+    if (aviso.reportes >= limiteReportes) {
+      aviso.estado = "Desactivado";
+    }
+
+    await aviso.save();
+    res.status(200).json({ message: "Reporte registrado", estado: aviso.estado });
+  } catch (error) {
+    res.status(500).json({ message: "Error al reportar el aviso", error });
+  }
+};
