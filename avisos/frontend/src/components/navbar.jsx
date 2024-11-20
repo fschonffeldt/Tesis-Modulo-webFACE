@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const navbarStyle = {
     position: 'fixed',
-    right: '0',
+    left: '0',
     top: '0',
     height: '100vh',
     width: '250px',

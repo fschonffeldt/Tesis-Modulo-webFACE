@@ -7,7 +7,7 @@
   justify-content: flex-start;
   height: 100%;
   position: fixed;
-  right: 0; /* Posiciona la barra lateral a la derecha */
+  left: 0; /* Posiciona la barra lateral a la derecha */
   top: 0;
   bottom: 0;
   padding-top: 20px;
