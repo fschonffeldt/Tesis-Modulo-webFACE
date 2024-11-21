@@ -5,18 +5,40 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
+import ListarAvisos from './pages/Avisos/ListarAvisos';
+import CrearAviso from './pages/Avisos/CrearAviso';
+import EditarAviso from './pages/Avisos/EditarAviso';
+import MisAvisos from './pages/Avisos/MisAvisos';
 
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Root />,
-    errorElement: <ErrorPage />,
+    path: '/', // Ruta raíz
+    element: <Root />, // Componente raíz
+    errorElement: <ErrorPage />, // Página para manejar errores
     children: [
       {
         path: '/home',
         element: <App />,
       },
+      // Rutas del CRUD de Avisos
+      {
+        path: '/listar-avisos',
+        element: <ListarAvisos />,
+      },
+      {
+        path: '/crear-aviso',
+        element: <CrearAviso />,
+      },
+      {
+        path: '/editar-aviso/:id',
+        element: <EditarAviso />,
+      },
+      {
+        path: '/mis-avisos',
+        element: <MisAvisos />,
+      },
+     
     ],
   },
   {
@@ -29,4 +51,3 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <RouterProvider router={router} />
 );
-

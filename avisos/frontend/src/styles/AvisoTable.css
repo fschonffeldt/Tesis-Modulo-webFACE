@@ -1,0 +1,123 @@
+/* Contenedor principal */
+.listar-avisos-container {
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 1000px; /* Ajusta el ancho máximo */
+  background-color: #fefefe; /* Fondo blanco */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  overflow-x: auto; /* Desplazamiento horizontal para pantallas pequeñas */
+}
+
+/* Título */
+.listar-avisos-container h1 {
+  text-align: center;
+  color: #0f5ba3; /* Azul corporativo */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Tabla */
+.avisos-table {
+  width: 100%; /* Ocupa todo el espacio disponible */
+  border-collapse: collapse;
+  font-size: 16px;
+  text-align: left; /* Alinea texto a la izquierda */
+  background-color: white;
+}
+
+.avisos-table thead tr {
+  background-color: #0f5ba3; /* Azul corporativo */
+  color: white;
+}
+
+.avisos-table th,
+.avisos-table td {
+  padding: 15px; /* Espaciado interno */
+  border: 1px solid #ddd; /* Bordes suaves */
+  word-wrap: break-word; /* Ajusta texto largo */
+}
+
+.avisos-table thead th {
+  text-transform: uppercase; /* Mayúsculas para los encabezados */
+  font-weight: bold;
+  text-align: center; /* Centra el texto del encabezado */
+}
+
+.avisos-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Fondo alternado */
+}
+
+.avisos-table tbody tr:hover {
+  background-color: #eaf4fc; /* Resalta la fila al pasar el mouse */
+}
+
+/* Centrar contenido */
+.avisos-table td {
+  text-align: center; /* Centra el contenido */
+}
+
+/* Botones de acción */
+.actions-column {
+  display: flex;
+  justify-content: center; /* Centra los botones */
+  gap: 10px; /* Espaciado entre botones */
+}
+
+.action-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  text-align: center;
+}
+
+/* Botón eliminar */
+.action-button.delete {
+  background-color: #e74c3c; /* Rojo para eliminar */
+  color: white;
+}
+
+.action-button.delete:hover {
+  background-color: #c0392b;
+  transform: scale(1.05); /* Efecto de zoom */
+}
+
+/* Botón reportar */
+.action-button.report {
+  background-color: #f39c12; /* Naranja para reportar */
+  color: white;
+}
+
+.action-button.report:hover {
+  background-color: #d35400;
+  transform: scale(1.05); /* Efecto de zoom */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .avisos-table {
+    font-size: 14px; /* Reduce el tamaño del texto */
+  }
+
+  .actions-column {
+    flex-direction: column; /* Los botones se apilan verticalmente */
+    gap: 5px; /* Reduce el espaciado en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .avisos-table th,
+  .avisos-table td {
+    font-size: 12px; /* Ajusta el texto para pantallas pequeñas */
+  }
+
+  .action-button {
+    padding: 6px 12px;
+    font-size: 12px; /* Botones más pequeños */
+  }
+}
