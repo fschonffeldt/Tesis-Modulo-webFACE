@@ -39,16 +39,18 @@ const Navbar = () => {
           <li onClick={() => handleNavigation('/home')}>
             <span>Home</span>
           </li>
-          <li onClick={() => handleNavigation('/about')}>
-            <span>About</span>
+          <li onClick={() => handleNavigation('/listar-avisos')}>
+            <span>Listar Avisos</span>
           </li>
-          <li onClick={() => handleNavigation('/contact')}>
-            <span>Contact</span>
+          <li onClick={() => handleNavigation('/mis-avisos')}>
+           <span>Mis Avisos</span>
+        </li>
+          <li onClick={() => handleNavigation('/crear-aviso')}>
+            <span>Crear Aviso</span>
           </li>
         </ul>
       </div>
     </div>
   );
 };
-
 export default Navbar;

@@ -2,7 +2,6 @@ import { Outlet } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext';
 import Navbar from '../components/navbar.jsx';
 import TopBar from '../components/TopBar.jsx';
-import '../styles/Generico.css'; 
 import '../styles/App.css';
 
 function Root() {

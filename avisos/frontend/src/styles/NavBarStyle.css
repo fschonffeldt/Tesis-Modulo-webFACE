@@ -1,17 +1,17 @@
 .sidebar {
   width: 250px;
-  background-color: #387ADF;
+  background-color: rgb(34, 42, 45);
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   height: 100%;
   position: fixed;
-  left: 0; /* Posiciona la barra lateral a la derecha */
+  left: 0; /* Posiciona la barra lateral a la izquierda */
   top: 0;
   bottom: 0;
   padding-top: 20px;
-  border-left: 1px solid #387ADF;
+  border-left: 1px solid rgb(34, 42, 45);
   transition: width 0.5s; /* Transición suave al colapsar */
 }
 
