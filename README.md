@@ -19,14 +19,15 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
    - PHP v7.4: Utilizado en el entorno WordPress.
 
 **Frameworks y Librerías**
-   **Frontend:**
-      - React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
-      - Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
 
-   **Backend:**
-      - Express.js (v4.18.2): Framework para crear APIs RESTful.
-      - Mongoose (v7.5.2): ORM para interactuar con MongoDB.
-      - WordPress (v6.6.2): CMS para la gestión de contenido.
+**Frontend:**
+   - React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
+   - Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
+
+**Backend:**
+   - Express.js (v4.18.2): Framework para crear APIs RESTful.
+   - Mongoose (v7.5.2): ORM para interactuar con MongoDB.
+   - WordPress (v6.6.2): CMS para la gestión de contenido.
 
 **Bases de Datos**
    - MongoDB (v8.0.3): Base de datos NoSQL.
