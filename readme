@@ -45,33 +45,34 @@ Dependencias Necesarias
 1. Instalar Git
 Ejecuta el siguiente comando:
 
-``bash
+```bash
 sudo apt-get install git
-
+```
 2. Instalar Docker y Docker Compose
 Ejecuta los siguientes comandos para instalar Docker:
 
-``bash
+```bash
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install -y docker-ce docker-compose-plugin
-
+```
 Instalación
 1. Clonar el repositorio
 Ejecuta el siguiente comando:
 
-``bash
+```bash
 git clone https://github.com/fschonffeldt/Tesis-Modulo-webFACE.git
 cd Tesis-Modulo-webFACE
-
+```
 2. Configurar las variables de entorno
 Configuración del backend:
 
-``bash
+```bash
 cd backend/src/config
 cp .env.example .env
+```
 
 3. Creacion de BD en la nube con MongoDB
 a)Crear una cuenta en MongoDB Atlas.
@@ -87,7 +88,7 @@ d)Configurar la conexión en el archivo .env.
     ->Copia la cadena de conexión (Connection String) proporcionada por MongoDB Atlas.
     ->Modifica la cadena en tu archivo .env para incluir el usuario, contraseña y base de datos que creaste.
 Deberia quedar algo asi:
-``bash
+```bash
 # Configuración del servidor
 PORT= aquí va el puerto que vas a utilizar (ejemplo: 3000)
 HOST= puede ir localhost, una IP o el dominio donde estará disponible el servidor (ejemplo: localhost)
@@ -102,7 +103,7 @@ REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
 ⚠️ **Nota** 
 (ACCESS_JWT_SECRET y REFRESH_JWT_SECRET) son claves utilizadas para firmar y verificar la autenticidad de los tokens JWT en tu aplicación.
 Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados.
-
+```
 
 Ejecución
 Con Docker
@@ -110,6 +111,7 @@ Ejecuta el siguiente comando desde la raíz del proyecto:
 
 ```bash
 #docker-compose up --build
+```
 
 Accede a las siguientes URLs:
 
