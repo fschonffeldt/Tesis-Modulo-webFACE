@@ -37,11 +37,11 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ---
 
-Requisitos Previos
+ ## Requisitos Previos
 Sistema Operativo Recomendado
 El entorno recomendado es Ubuntu Bullseye 11. Puedes instalarlo en un entorno físico, virtual o Docker.
 
-Dependencias Necesarias
+## Dependencias Necesarias
 
 1. Instalar Git
 Ejecuta el siguiente comando:
@@ -61,7 +61,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 sudo apt update
 sudo apt install -y docker-ce docker-compose-plugin
 ```
-Instalación
+## Instalación
 1. Clonar el repositorio
 Ejecuta el siguiente comando:
 
@@ -116,7 +116,7 @@ REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
 Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados.
 ```
 
-Ejecución
+## Ejecución
 Con Docker
 Ejecuta el siguiente comando desde la raíz del proyecto:
 
@@ -126,6 +126,6 @@ Ejecuta el siguiente comando desde la raíz del proyecto:
 
 Accede a las siguientes URLs:
 
-Frontend: http://localhost:5173
-Backend: http://localhost:3000
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:3000
 
