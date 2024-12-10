@@ -48,6 +48,8 @@ Ejecuta el siguiente comando:
 ```bash
 sudo apt-get install git
 ```
+
+
 2. Instalar Docker y Docker Compose
 Ejecuta los siguientes comandos para instalar Docker:
 
