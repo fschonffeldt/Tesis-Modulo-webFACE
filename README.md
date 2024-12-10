@@ -14,23 +14,23 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ## Tecnologías Utilizadas
 
-**Lenguajes
-JavaScript: Usado en el backend y frontend.
-PHP v7.4: Utilizado en el entorno WordPress.
+**Lenguajes**
+-JavaScript: Usado en el backend y frontend.
+-PHP v7.4: Utilizado en el entorno WordPress.
 
-**Frameworks y Librerías
-*Frontend:
-React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
-Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
+**Frameworks y Librerías**
+*Frontend:**
+-React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
+-Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
 
-*Backend:
-Express.js (v4.18.2): Framework para crear APIs RESTful.
-Mongoose (v7.5.2): ORM para interactuar con MongoDB.
-WordPress (v6.6.2): CMS para la gestión de contenido.
+*Backend:**
+-Express.js (v4.18.2): Framework para crear APIs RESTful.
+-Mongoose (v7.5.2): ORM para interactuar con MongoDB.
+-WordPress (v6.6.2): CMS para la gestión de contenido.
 
-**Bases de Datos
-MongoDB (v8.0.3): Base de datos NoSQL.
-MySQL/MariaDB (v10.5): Base de datos relacional para WordPress.
+**Bases de Datos**
+-MongoDB (v8.0.3): Base de datos NoSQL.
+-MySQL/MariaDB (v10.5): Base de datos relacional para WordPress.
 
 > ⚠️ **Nota**: Usar estas versiones garantiza la compatibilidad y estabilidad del proyecto.
 
