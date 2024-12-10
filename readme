@@ -7,45 +7,80 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 ## Características Principales
 
 - **Gestión de Avisos Clasificados**: Publicación y gestión de avisos relacionados con compra/venta de artículos y servicios.
-- **Promoción de Actividades Grupales**: Detalles y horarios de actividades organizadas dentro de la facultad.
+- **Promoción de Actividades Grupales**: Detalles y horarios de actividades organizadas dentro de la universidad.
 
 ---
 
 
 ## Tecnologías Utilizadas
 
-- **Servidor Web**: Apache 
-- **Lenguaje**: PHP 
-- **Base de Datos**: MySQL 
-- **Contenedores**: Docker, Docker Compose
+**Lenguajes
+JavaScript: Usado en el backend y frontend.
+PHP v7.4: Utilizado en el entorno WordPress.
 
----
+**Frameworks y Librerías
+*Frontend:
+React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
+Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
 
-## Versiones
+*Backend:
+Express.js (v4.18.2): Framework para crear APIs RESTful.
+Mongoose (v7.5.2): ORM para interactuar con MongoDB.
+WordPress (v6.6.2): CMS para la gestión de contenido.
 
-- **PHP**: 7.4
-- **MySQL**: 10.5
-- **Docker**: 20.10 o superior
-- **Docker Compose**: 1.27 o superior
+**Bases de Datos
+MongoDB (v8.0.3): Base de datos NoSQL.
+MySQL/MariaDB (v10.5): Base de datos relacional para WordPress.
 
 > ⚠️ **Nota**: Usar estas versiones garantiza la compatibilidad y estabilidad del proyecto.
 
 ---
 
-## Estructura del Proyecto
+Requisitos Previos
+Sistema Operativo Recomendado
+El entorno recomendado es Ubuntu Bullseye 11. Puedes instalarlo en un entorno físico, virtual o Docker.
 
-SITE/
-├── wp-admin/
-├── wp-content/
-│   ├── languages/
-│   ├── plugins/
-│   │   ├── avisos-clasificados/
-│   │   ├── contact-form-7/
-│   │   ├── gtranslate/
-│   │   ├── ... (otros plugins)
-│   └── themes/
-├── wp-includes/
-├── .htaccess
-├── Dockerfile
-├── docker-compose.yml
-└── wp-config.php
+Dependencias Necesarias
+
+1. Instalar Git
+Ejecuta el siguiente comando:
+
+```bash
+sudo apt-get install git
+
+2. Instalar Docker y Docker Compose
+Ejecuta los siguientes comandos para instalar Docker:
+
+```bash
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-compose-plugin
+
+Instalación
+1. Clonar el repositorio
+Ejecuta el siguiente comando:
+
+```bash
+git clone https://github.com/fschonffeldt/Tesis-Modulo-webFACE.git
+cd Tesis-Modulo-webFACE
+
+2. Configurar las variables de entorno
+Configuración del backend:
+
+```bash
+cd backend/src/config
+cp .env.example .env
+
+Ejecución
+Con Docker
+Ejecuta el siguiente comando desde la raíz del proyecto:
+
+```bash
+docker-compose up --build
+
+Accede a las siguientes URLs:
+
+Frontend: http://localhost:5173
+Backend: http://localhost:3000
