@@ -5,6 +5,7 @@ import CrearAviso from '../pages/Avisos/CrearAviso';
 import EditarAviso from '../pages/Avisos/EditarAviso';
 import ListarAviso from '../pages/Avisos/ListarAvisos';
 import MisAvisos from '../pages/Avisos/MisAvisos';
+import Home from '../pages/Home';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       {/* Configuración de rutas */}
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/listar-avisos" element={<ListarAviso />} />
           <Route path="/crear-aviso" element={<CrearAviso />} />
           <Route path="/editar-aviso/:id" element={<EditarAviso />} />

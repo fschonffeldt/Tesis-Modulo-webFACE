@@ -174,3 +174,12 @@ exports.reportAviso = async (req, res) => {
   }
 };
 
+exports.getAvisosPublicos = async (req, res) => {
+  try {
+      const avisos = await Aviso.find().select("-contacto -usuarioEmail");
+      res.status(200).json(avisos);
+  } catch (error) {
+      console.error("Error al obtener avisos públicos:", error);
+      res.status(500).json({ message: "Error al obtener avisos públicos", error });
+  }
+};

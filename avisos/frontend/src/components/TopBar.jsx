@@ -11,7 +11,7 @@ const TopBar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/auth');
+    navigate('/listar-avisos');
   };
 
   return (

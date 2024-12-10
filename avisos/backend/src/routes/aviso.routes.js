@@ -7,11 +7,13 @@ const {
   updateAviso, 
   deleteAviso,
   reportAviso,
+  getAvisosPublicos
 } = require("../controllers/aviso.controller");
 const router = express.Router();
 
 router.post("/", createAviso); 
 router.get("/", getAvisos);
+router.get("/public", getAvisosPublicos);
 
 router.get("/usuario", getAvisosByUsuario);
 router.post("/:id/report", reportAviso);

@@ -11,6 +11,7 @@ import EditarAviso from './pages/Avisos/EditarAviso';
 import MisAvisos from './pages/Avisos/MisAvisos';
 
 
+
 const router = createBrowserRouter([
   {
     path: '/', // Ruta raíz
@@ -18,14 +19,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />, // Página para manejar errores
     children: [
       {
-        path: '/home',
+        path: '/',
         element: <App />,
       },
       // Rutas del CRUD de Avisos
-      {
-        path: '/listar-avisos',
-        element: <ListarAvisos />,
-      },
       {
         path: '/crear-aviso',
         element: <CrearAviso />,
@@ -40,6 +37,10 @@ const router = createBrowserRouter([
       },
      
     ],
+  },
+  {
+    path: '/listar-avisos',
+    element: <ListarAvisos />,
   },
   {
     path: '/auth',
