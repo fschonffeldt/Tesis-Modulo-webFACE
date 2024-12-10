@@ -76,16 +76,17 @@ cd backend/src/config
 cp .env.example .env
 ```
 
-3. Creacion de BD en la nube con MongoDB
-a)Crear una cuenta en MongoDB Atlas.
-b)Crear un clúster y una base de datos.
+3. Creacion de BD en la nube con MongoDB:
+   
+-a)Crear una cuenta en MongoDB Atlas.
+-b)Crear un clúster y una base de datos.
     ->Crea un clúster gratuito en la región de tu preferencia.
     ->Accede a Collections y crea una nueva base de datos, por ejemplo: avisosDB.
-c)Crear un usuario y una contraseña.
+-c)Crear un usuario y una contraseña.
     ->Ve a Database Access.
     ->Crea un nuevo usuario con permisos de lectura/escritura y asigna una contraseña segura.
     ->Nota: Guarda el usuario y contraseña, ya que los necesitarás para configurar el proyecto.
-d)Configurar la conexión en el archivo .env.
+-d)Configurar la conexión en el archivo .env.
     ->Ve a Network Access en MongoDB Atlas y agrega tu IP actual (0.0.0.0/0 para permitir acceso desde cualquier IP).
     ->Copia la cadena de conexión (Connection String) proporcionada por MongoDB Atlas.
     ->Modifica la cadena en tu archivo .env para incluir el usuario, contraseña y base de datos que creaste.
