@@ -14,33 +14,34 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ## Tecnologías Utilizadas
 
-**Lenguajes
-JavaScript: Usado en el backend y frontend.
-PHP v7.4: Utilizado en el entorno WordPress.
+**Lenguajes**
+   - JavaScript: Usado en el backend y frontend.
+   - PHP v7.4: Utilizado en el entorno WordPress.
 
-**Frameworks y Librerías
-*Frontend:
-React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
-Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
+**Frameworks y Librerías**
 
-*Backend:
-Express.js (v4.18.2): Framework para crear APIs RESTful.
-Mongoose (v7.5.2): ORM para interactuar con MongoDB.
-WordPress (v6.6.2): CMS para la gestión de contenido.
+**Frontend:**
+   - React.js (v18.2.0): Biblioteca para construir interfaces dinámicas.
+   - Vite.js: Herramienta de desarrollo para aplicaciones rápidas.
 
-**Bases de Datos
-MongoDB (v8.0.3): Base de datos NoSQL.
-MySQL/MariaDB (v10.5): Base de datos relacional para WordPress.
+**Backend:**
+   - Express.js (v4.18.2): Framework para crear APIs RESTful.
+   - Mongoose (v7.5.2): ORM para interactuar con MongoDB.
+   - WordPress (v6.6.2): CMS para la gestión de contenido.
+
+**Bases de Datos**
+   - MongoDB (v8.0.3): Base de datos NoSQL.
+   - MySQL/MariaDB (v10.5): Base de datos relacional para WordPress.
 
 > ⚠️ **Nota**: Usar estas versiones garantiza la compatibilidad y estabilidad del proyecto.
 
 ---
 
-Requisitos Previos
+ ## Requisitos Previos
 Sistema Operativo Recomendado
 El entorno recomendado es Ubuntu Bullseye 11. Puedes instalarlo en un entorno físico, virtual o Docker.
 
-Dependencias Necesarias
+## Dependencias Necesarias
 
 1. Instalar Git
 Ejecuta el siguiente comando:
@@ -60,7 +61,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 sudo apt update
 sudo apt install -y docker-ce docker-compose-plugin
 ```
-Instalación
+## Instalación
 1. Clonar el repositorio
 Ejecuta el siguiente comando:
 
@@ -76,19 +77,27 @@ cd backend/src/config
 cp .env.example .env
 ```
 
-3. Creacion de BD en la nube con MongoDB
-a)Crear una cuenta en MongoDB Atlas.
-b)Crear un clúster y una base de datos.
-    ->Crea un clúster gratuito en la región de tu preferencia.
-    ->Accede a Collections y crea una nueva base de datos, por ejemplo: avisosDB.
-c)Crear un usuario y una contraseña.
-    ->Ve a Database Access.
-    ->Crea un nuevo usuario con permisos de lectura/escritura y asigna una contraseña segura.
-    ->Nota: Guarda el usuario y contraseña, ya que los necesitarás para configurar el proyecto.
-d)Configurar la conexión en el archivo .env.
-    ->Ve a Network Access en MongoDB Atlas y agrega tu IP actual (0.0.0.0/0 para permitir acceso desde cualquier IP).
-    ->Copia la cadena de conexión (Connection String) proporcionada por MongoDB Atlas.
-    ->Modifica la cadena en tu archivo .env para incluir el usuario, contraseña y base de datos que creaste.
+3. Creacion de BD en la nube con MongoDB:
+   
+3.1. **Crear una cuenta en MongoDB Atlas**  
+   - Ve a [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).  
+   - Regístrate o inicia sesión con tu cuenta existente.
+
+3.2. **Crear un clúster y una base de datos**  
+   3.2.1. Crea un clúster gratuito en la región de tu preferencia.  
+   3.2.2. Accede a **Collections** y crea una nueva base de datos, por ejemplo: `avisosDB`.
+
+3.3. **Crear un usuario y una contraseña**  
+   3.3.1. Ve a **Database Access**.  
+   3.3.2. Crea un nuevo usuario con permisos de lectura/escritura y asigna una contraseña segura.  
+   - **Nota:** Guarda el usuario y contraseña, ya que los necesitarás para configurar el proyecto.
+
+3.4. **Configurar la conexión en el archivo `.env`**  
+   3.4.1. Ve a **Network Access** en MongoDB Atlas y agrega tu IP actual (`0.0.0.0/0` para permitir acceso desde cualquier IP).  
+   3.4.2. Copia la cadena de conexión (**Connection String**) proporcionada por MongoDB Atlas.  
+   3.4.3. Modifica la cadena en tu archivo `.env` para incluir el usuario, contraseña y base de datos que creaste.
+
+    
 Deberia quedar algo asi:
 ```bash
 # Configuración del servidor
@@ -107,7 +116,7 @@ REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
 Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados.
 ```
 
-Ejecución
+## Ejecución
 Con Docker
 Ejecuta el siguiente comando desde la raíz del proyecto:
 
@@ -117,6 +126,6 @@ Ejecuta el siguiente comando desde la raíz del proyecto:
 
 Accede a las siguientes URLs:
 
-Frontend: http://localhost:5173
-Backend: http://localhost:3000
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:3000
 
