@@ -4,21 +4,36 @@ import axios from './root.service'; // Configuración global de Axios
 export const createAviso = async (aviso) => {
   try {
     const response = await axios.post('/avisos', aviso);
-    return response.data; // Retorna el aviso creado
+    return response.data;
   } catch (error) {
     console.error('Error al crear el aviso:', error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };
 
-// Obtener todos los avisos
+// Obtener avisos públicos
+export const getPublicAvisos = async () => {
+  try {
+    const response = await axios.get('/avisos/public');
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener los avisos públicos:', error);
+    throw error;
+  }
+};
+
+// Obtener avisos privados (usuarios autenticados)
 export const getAvisos = async () => {
   try {
-    const response = await axios.get('/avisos');
-    return response.data; // Retorna la lista de avisos
+    const response = await axios.get('/avisos', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluye el token si está autenticado
+      },
+    });
+    return response.data;
   } catch (error) {
-    console.error('Error al obtener los avisos:', error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    console.error('Error al obtener los avisos privados:', error);
+    throw error;
   }
 };
 
@@ -26,53 +41,69 @@ export const getAvisos = async () => {
 export const getAvisoById = async (id) => {
   try {
     const response = await axios.get(`/avisos/${id}`);
-    return response.data; // Retorna los datos del aviso
+    return response.data;
   } catch (error) {
     console.error(`Error al obtener el aviso con ID ${id}:`, error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };
 
 // Actualizar un aviso por ID
 export const updateAviso = async (id, aviso) => {
   try {
-    const response = await axios.put(`/avisos/${id}`, aviso);
-    return response.data; // Retorna el aviso actualizado
+    const response = await axios.put(`/avisos/${id}`, aviso, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error(`Error al actualizar el aviso con ID ${id}:`, error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };
 
 // Eliminar un aviso por ID
 export const deleteAviso = async (id) => {
   try {
-    const response = await axios.delete(`/avisos/${id}`);
-    return response.data; // Retorna el mensaje de éxito
+    const response = await axios.delete(`/avisos/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error(`Error al eliminar el aviso con ID ${id}:`, error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };
 
 // Reportar un aviso por ID
 export const reportAviso = async (id) => {
   try {
-    const response = await axios.post(`/avisos/${id}/report`);
-    return response.data; // Retorna el estado del aviso tras el reporte
+    const response = await axios.post(`/avisos/${id}/report`, null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error(`Error al reportar el aviso con ID ${id}:`, error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };
 
 // Obtener los avisos del usuario autenticado
 export const getAvisosByUsuario = async () => {
   try {
-    const response = await axios.get('/avisos/usuario'); // Endpoint del backend
-    return response.data; // Retorna la lista de avisos del usuario autenticado
+    const response = await axios.get('/avisos/usuario', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error('Error al obtener los avisos del usuario:', error);
-    throw error; // Lanza el error para manejarlo en el frontend
+    throw error;
   }
 };

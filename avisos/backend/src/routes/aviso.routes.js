@@ -2,18 +2,24 @@ const express = require("express");
 const { 
   createAviso, 
   getAvisos, 
-  getAvisoById, 
+  getAvisoById,
+  getAvisosByUsuario,
   updateAviso, 
   deleteAviso,
   reportAviso,
+  getAvisosPublicos
 } = require("../controllers/aviso.controller");
 const router = express.Router();
 
-// CRUD Aviso
 router.post("/", createAviso); 
 router.get("/", getAvisos);
-router.get("/:id", getAvisoById);
+router.get("/public", getAvisosPublicos);
+
+router.get("/usuario", getAvisosByUsuario);
+router.post("/:id/report", reportAviso);
 router.put("/:id", updateAviso); 
 router.delete("/:id", deleteAviso);
-router.post("/:id/report", reportAviso);
+
+router.get("/:id", getAvisoById);
+
 module.exports = router;

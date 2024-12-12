@@ -8,7 +8,7 @@ exports.createAviso = async (req, res) => {
       const { titulo, descripcion, precio, categoria, contacto } = req.body;
       console.log("Datos recibidos en el body:", req.body); 
   
-      const usuarioEmail = req.email; // Usamos req.email directamente del middleware
+      const usuarioEmail = req.email;
       console.log("Email del usuario autenticado:", usuarioEmail);
   
       const nuevoAviso = new Aviso({
@@ -79,43 +79,77 @@ exports.getAvisoById = async (req, res) => {
 // Actualizar un aviso
 exports.updateAviso = async (req, res) => {
   try {
-    const avisoId = req.params.id;
-    const { titulo, descripcion, precio, categoria, contacto } = req.body;
+      const avisoId = req.params.id;
+      const { titulo, descripcion, precio, categoria, contacto } = req.body;
 
-    const avisoActualizado = await Aviso.findOneAndUpdate(
-      { id: avisoId }, // Busca por el campo `id`
-      { titulo, descripcion, precio, categoria, contacto },
-      { new: true, select: "-usuarioEmail" }, // Excluir usuarioEmail de la respuesta
-    );
+      const aviso = await Aviso.findOne({ id: avisoId });
+      if (!aviso) {
+          return res.status(404).json({ message: "Aviso no encontrado" });
+      }
 
-    if (!avisoActualizado) {
-      return res.status(404).json({ message: "Aviso no encontrado" });
-    }
+      // Verificar si el usuario autenticado es el propietario del aviso
+      if (aviso.usuarioEmail !== req.email) {
+          return res.status(403).json({ message: "No tienes permiso para modificar este aviso" });
+      }
 
-    res.status(200).json(avisoActualizado);
+      aviso.titulo = titulo || aviso.titulo;
+      aviso.descripcion = descripcion || aviso.descripcion;
+      aviso.precio = precio || aviso.precio;
+      aviso.categoria = categoria || aviso.categoria;
+      aviso.contacto = contacto || aviso.contacto;
+
+      const avisoActualizado = await aviso.save();
+      res.status(200).json(avisoActualizado);
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar el aviso", error });
+      console.error("Error al actualizar el aviso:", error);
+      res.status(500).json({ message: "Error al actualizar el aviso", error });
   }
 };
 
 // Eliminar un aviso
 exports.deleteAviso = async (req, res) => {
   try {
-    const avisoId = req.params.id;
-    
-    // Eliminar el aviso usando el campo `id` directamente
-    const avisoEliminado = await Aviso.findOneAndDelete({ id: avisoId }); // Usa directamente `id: avisoId`
+      const avisoId = req.params.id;
 
-    if (!avisoEliminado) {
-      return res.status(404).json({ message: "Aviso no encontrado" });
-    }
+      const aviso = await Aviso.findOne({ id: avisoId });
+      if (!aviso) {
+          return res.status(404).json({ message: "Aviso no encontrado" });
+      }
 
-    res.status(200).json({ message: "Aviso eliminado" });
+      // Verificar si el usuario autenticado es el propietario del aviso
+      if (aviso.usuarioEmail !== req.email) {
+          return res.status(403).json({ message: "No tienes permiso para eliminar este aviso" });
+      }
+
+      await Aviso.deleteOne({ id: avisoId });
+      res.status(200).json({ message: "Aviso eliminado" });
   } catch (error) {
-    console.error("Error al eliminar el aviso:", error);
-    res.status(500).json({ message: "Error al eliminar el aviso", error });
+      console.error("Error al eliminar el aviso:", error);
+      res.status(500).json({ message: "Error al eliminar el aviso", error });
   }
 };
+
+exports.getAvisosByUsuario = async (req, res) => {
+  try {
+      const usuarioEmail = req.email; // Obtén el email del usuario autenticado
+      console.log("Email del usuario autenticado:", usuarioEmail);
+
+      // Buscar avisos relacionados al email del usuario autenticado
+      const avisos = await Aviso.find({ "contacto.email": usuarioEmail }).select("-usuarioEmail");
+      console.log("Avisos encontrados para el usuario:", avisos);
+
+      if (avisos.length === 0) {
+          return res.status(404).json({ message: "No se encontraron avisos para este usuario" });
+      }
+
+      res.status(200).json(avisos);
+  } catch (error) {
+      console.error("Error al obtener avisos del usuario:", error);
+      res.status(500).json({ message: "Error al obtener avisos del usuario", error });
+  }
+};
+
+
 exports.reportAviso = async (req, res) => {
   try {
     const avisoId = req.params.id;
@@ -127,8 +161,8 @@ exports.reportAviso = async (req, res) => {
 
     aviso.reportes += 1;
 
-    // Si el aviso ha alcanzado el límite de reportes, desactívalo
-    const limiteReportes = 3; // Puedes ajustar este límite
+   
+    const limiteReportes = 3; 
     if (aviso.reportes >= limiteReportes) {
       aviso.estado = "Desactivado";
     }
@@ -137,5 +171,15 @@ exports.reportAviso = async (req, res) => {
     res.status(200).json({ message: "Reporte registrado", estado: aviso.estado });
   } catch (error) {
     res.status(500).json({ message: "Error al reportar el aviso", error });
+  }
+};
+
+exports.getAvisosPublicos = async (req, res) => {
+  try {
+      const avisos = await Aviso.find().select("-contacto -usuarioEmail");
+      res.status(200).json(avisos);
+  } catch (error) {
+      console.error("Error al obtener avisos públicos:", error);
+      res.status(500).json({ message: "Error al obtener avisos públicos", error });
   }
 };

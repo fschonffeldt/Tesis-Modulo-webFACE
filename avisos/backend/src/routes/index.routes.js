@@ -12,6 +12,7 @@ const authRoutes = require("./auth.routes.js");
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
 const avisoroutes = require("./aviso.routes.js");
+//const uploadRoutes = require('./upload.routes.js'); 
 
 /** Instancia del enrutador */
 const router = express.Router();
@@ -21,7 +22,7 @@ router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 router.use("/avisos", authenticationMiddleware, avisoroutes);
-
+//router.use('/uploads', uploadRoutes);
 
 // Exporta el enrutador
 module.exports = router;

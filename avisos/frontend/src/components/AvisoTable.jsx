@@ -15,27 +15,33 @@ const AvisoTable = ({ avisos, onDelete, onReport }) => {
           </tr>
         </thead>
         <tbody>
-          {avisos.map((aviso) => (
-            <tr key={aviso.id}>
-              <td>{aviso.titulo}</td>
-              <td>{aviso.descripcion}</td>
-              <td>${aviso.precio}</td>
-              <td className="actions-column">
-                <button
-                  className="action-button delete"
-                  onClick={() => onDelete(aviso.id)}
-                >
-                  Eliminar
-                </button>
-                <button
-                  className="action-button report"
-                  onClick={() => onReport(aviso.id)}
-                >
-                  Reportar
-                </button>
-              </td>
+          {avisos ? (
+            avisos.map((aviso) => (
+              <tr key={aviso.id}>
+                <td>{aviso.titulo}</td>
+                <td>{aviso.descripcion}</td>
+                <td>${aviso.precio}</td>
+                <td className="actions-column">
+                  <button
+                    className="action-button delete"
+                    onClick={() => onDelete(aviso.id)}
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    className="action-button report"
+                    onClick={() => onReport(aviso.id)}
+                  >
+                    Reportar
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">No hay avisos para mostrar.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
