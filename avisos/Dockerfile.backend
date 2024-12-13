@@ -1,17 +1,19 @@
-# Dockerfile.backend
+# Usa una imagen base de Node.js
 FROM node:20.14.0
 
-# Crear y configurar el directorio de trabajo
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar dependencias del backend
+# Copia los archivos de dependencias
 COPY backend/package*.json ./
-RUN npm ci
 
-# Copiar el código fuente del backend
+# Instala todas las dependencias, incluidas las devDependencies
+RUN npm install
+
+# Copia el resto del código de la aplicación al contenedor
 COPY backend .
 
-# Exponer el puerto usado por el backend
+# Exponer el puerto que usa el backend
 EXPOSE 3000
 
 # Comando para iniciar el backend
