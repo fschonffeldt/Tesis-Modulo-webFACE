@@ -1,14 +1,21 @@
+
 services:
-  app:
+  backend:
     build:
-      context: .  # Usamos el Dockerfile ubicado en la raíz
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.backend
     ports:
-      - "3000:3000"  # Puerto para el backend
-      - "5173:5173"  # Puerto para el frontend
+      - "3000:3000"
     volumes:
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
-    command: sh -c "rm -rf /app/backend/node_modules /app/frontend/node_modules && \
-                    cd /app/backend && npm ci && npm start & \
-                    cd /app/frontend && npm ci && npm run dev -- --host 0.0.0.0"
+      - ./backend:/app
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    restart: always

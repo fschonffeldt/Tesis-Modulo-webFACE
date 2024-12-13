@@ -1,0 +1,18 @@
+# Dockerfile.backend
+FROM node:20.14.0
+
+# Crear y configurar el directorio de trabajo
+WORKDIR /app
+
+# Copiar dependencias del backend
+COPY backend/package*.json ./
+RUN npm ci
+
+# Copiar el código fuente del backend
+COPY backend .
+
+# Exponer el puerto usado por el backend
+EXPOSE 3000
+
+# Comando para iniciar el backend
+CMD ["npm", "start"]
