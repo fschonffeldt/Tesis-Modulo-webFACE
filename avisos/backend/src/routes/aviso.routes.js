@@ -9,11 +9,16 @@ const {
   reportAviso,
   getAvisosPublicos
 } = require("../controllers/aviso.controller");
+
+const authenticationMiddleware = require("../middlewares/authentication.middleware");
 const router = express.Router();
+
+router.get("/public", getAvisosPublicos);
+
+router.use(authenticationMiddleware); 
 
 router.post("/", createAviso); 
 router.get("/", getAvisos);
-router.get("/public", getAvisosPublicos);
 
 router.get("/usuario", getAvisosByUsuario);
 router.post("/:id/report", reportAviso);

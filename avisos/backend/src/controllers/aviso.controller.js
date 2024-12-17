@@ -79,53 +79,65 @@ exports.getAvisoById = async (req, res) => {
 // Actualizar un aviso
 exports.updateAviso = async (req, res) => {
   try {
-      const avisoId = req.params.id;
-      const { titulo, descripcion, precio, categoria, contacto } = req.body;
+    const avisoId = req.params.id; // El ID personalizado (UUID)
+    console.log("ID recibido para actualizar:", avisoId);
 
-      const aviso = await Aviso.findOne({ id: avisoId });
-      if (!aviso) {
-          return res.status(404).json({ message: "Aviso no encontrado" });
-      }
+    const { titulo, descripcion, precio, categoria, contacto } = req.body;
 
-      // Verificar si el usuario autenticado es el propietario del aviso
-      if (aviso.usuarioEmail !== req.email) {
-          return res.status(403).json({ message: "No tienes permiso para modificar este aviso" });
-      }
+    // Buscar el aviso usando el campo 'id' (UUID personalizado)
+    const aviso = await Aviso.findOne({ id: avisoId });
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
 
-      aviso.titulo = titulo || aviso.titulo;
-      aviso.descripcion = descripcion || aviso.descripcion;
-      aviso.precio = precio || aviso.precio;
-      aviso.categoria = categoria || aviso.categoria;
-      aviso.contacto = contacto || aviso.contacto;
+    // Verificar si el usuario autenticado es el propietario del aviso
+    if (aviso.contacto.email !== req.email) {
+      return res.status(403).json({ message: "No tienes permiso para modificar este aviso" });
+    }
 
-      const avisoActualizado = await aviso.save();
-      res.status(200).json(avisoActualizado);
+    // Actualizar los campos del aviso solo si se envían en el body
+    aviso.titulo = titulo || aviso.titulo;
+    aviso.descripcion = descripcion || aviso.descripcion;
+    aviso.precio = precio || aviso.precio;
+    aviso.categoria = categoria || aviso.categoria;
+
+    if (contacto && contacto.telefono) {
+      aviso.contacto.telefono = contacto.telefono;
+    }
+
+    // Guardar los cambios
+    const avisoActualizado = await aviso.save();
+    res.status(200).json({ message: "Aviso actualizado correctamente", aviso: avisoActualizado });
   } catch (error) {
-      console.error("Error al actualizar el aviso:", error);
-      res.status(500).json({ message: "Error al actualizar el aviso", error });
+    console.error("Error al actualizar el aviso:", error);
+    res.status(500).json({ message: "Error al actualizar el aviso", error });
   }
 };
 
 // Eliminar un aviso
 exports.deleteAviso = async (req, res) => {
   try {
-      const avisoId = req.params.id;
+    const avisoId = req.params.id; // ID personalizado que viene de la URL
+    console.log("ID recibido para eliminar:", avisoId);
 
-      const aviso = await Aviso.findOne({ id: avisoId });
-      if (!aviso) {
-          return res.status(404).json({ message: "Aviso no encontrado" });
-      }
+    // Buscar el aviso usando el campo 'id' personalizado
+    const aviso = await Aviso.findOne({ id: avisoId });
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
 
-      // Verificar si el usuario autenticado es el propietario del aviso
-      if (aviso.usuarioEmail !== req.email) {
-          return res.status(403).json({ message: "No tienes permiso para eliminar este aviso" });
-      }
+    // Verificar si el usuario autenticado es el propietario del aviso
+    if (aviso.contacto.email !== req.email) {
+      return res.status(403).json({ message: "No tienes permiso para eliminar este aviso" });
+    }
 
-      await Aviso.deleteOne({ id: avisoId });
-      res.status(200).json({ message: "Aviso eliminado" });
+    // Eliminar el aviso usando el campo 'id'
+    await Aviso.deleteOne({ id: avisoId });
+
+    res.status(200).json({ message: "Aviso eliminado correctamente" });
   } catch (error) {
-      console.error("Error al eliminar el aviso:", error);
-      res.status(500).json({ message: "Error al eliminar el aviso", error });
+    console.error("Error al eliminar el aviso:", error);
+    res.status(500).json({ message: "Error al eliminar el aviso", error });
   }
 };
 

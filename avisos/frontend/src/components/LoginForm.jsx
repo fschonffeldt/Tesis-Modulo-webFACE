@@ -12,7 +12,7 @@ function LoginForm() {
 
   const onSubmit = (data) => {
     login(data).then(() => {
-      navigate('/home');
+      navigate('/listar-avisos');
     }).catch(() => {
       showErrorLogin(); // Llama a la función de alerta de error
     });

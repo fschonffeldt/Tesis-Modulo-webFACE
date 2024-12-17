@@ -60,10 +60,13 @@
 
 /* Botones de acción */
 .actions-column {
-  display: flex;
+  display: flex; /* Alinea los botones en fila */
   justify-content: center; /* Centra los botones */
-  gap: 10px; /* Espaciado entre botones */
+  align-items: center; /* Alinea verticalmente */
+  gap: 10px; /* Espacio entre botones */
+  flex-wrap: wrap; /* Evita que los botones se superpongan */
 }
+
 
 .action-button {
   padding: 8px 16px;
@@ -80,6 +83,14 @@
 .action-button.delete {
   background-color: #e74c3c; /* Rojo para eliminar */
   color: white;
+  display: flex; /* Alinea ícono y texto horizontalmente */
+  align-items: center; /* Centra el ícono verticalmente */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  gap: 5px; /* Espacio entre ícono y texto */
+  min-width: 80px; /* Ancho mínimo para el botón */
+  padding: 8px 12px; /* Espaciado interno */
+  font-size: 14px; /* Tamaño de fuente */
+  white-space: nowrap; /* Evita el salto de línea */
 }
 
 .action-button.delete:hover {
@@ -98,26 +109,3 @@
   transform: scale(1.05); /* Efecto de zoom */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .avisos-table {
-    font-size: 14px; /* Reduce el tamaño del texto */
-  }
-
-  .actions-column {
-    flex-direction: column; /* Los botones se apilan verticalmente */
-    gap: 5px; /* Reduce el espaciado en pantallas pequeñas */
-  }
-}
-
-@media (max-width: 480px) {
-  .avisos-table th,
-  .avisos-table td {
-    font-size: 12px; /* Ajusta el texto para pantallas pequeñas */
-  }
-
-  .action-button {
-    padding: 6px 12px;
-    font-size: 12px; /* Botones más pequeños */
-  }
-}

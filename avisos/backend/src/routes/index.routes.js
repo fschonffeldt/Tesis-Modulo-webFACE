@@ -21,7 +21,8 @@ const router = express.Router();
 router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
-router.use("/avisos", authenticationMiddleware, avisoroutes);
+router.use("/avisos", avisoroutes);
+
 //router.use('/uploads', uploadRoutes);
 
 // Exporta el enrutador

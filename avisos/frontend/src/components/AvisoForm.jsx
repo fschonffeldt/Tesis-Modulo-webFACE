@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/AvisoForm.css'; // Archivo CSS para estilos
 
-const AvisoForm = ({ onSubmit, initialData }) => {
+const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
   const [formData, setFormData] = useState(initialData || {
     titulo: '',
     descripcion: '',
@@ -22,7 +22,7 @@ const AvisoForm = ({ onSubmit, initialData }) => {
 
   return (
     <div className="aviso-form-container">
-      <h1 className="form-title">Crear Aviso</h1>
+      <h1 className="form-title">{title}</h1> {/* Título dinámico */}
       <form onSubmit={handleSubmit} className="aviso-form">
         <div className="form-group">
           <label htmlFor="titulo">Título</label>
@@ -72,10 +72,9 @@ const AvisoForm = ({ onSubmit, initialData }) => {
             required
           >
             <option value="" disabled>Seleccione una categoría</option>
-            <option value="electrónica">Electrónica</option>
-            <option value="muebles">Muebles</option>
-            <option value="vehículos">Vehículos</option>
-            <option value="otros">Otros</option>
+            <option value="Educación">Educación</option>
+            <option value="Electrónica">Electrónica</option>
+            <option value="Otros">Otros</option>
           </select>
         </div>
 
@@ -92,7 +91,9 @@ const AvisoForm = ({ onSubmit, initialData }) => {
           />
         </div>
 
-        <button type="submit" className="submit-button">Crear Aviso</button>
+        <button type="submit" className="submit-button">
+          {title === "Crear Aviso" ? "Crear Aviso" : "Guardar Cambios"}
+        </button>
       </form>
     </div>
   );
