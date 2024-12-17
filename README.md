@@ -37,9 +37,12 @@ Aplicación web desarrollada para la Facultad de Ciencias Empresariales (FACE) d
 
 ---
 
+## Para iniciar
+Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
+
  ## Requisitos Previos
 Sistema Operativo Recomendado
-El entorno recomendado es Ubuntu Bullseye 11. Puedes instalarlo en un entorno físico, virtual o Docker.
+El entorno recomendado es Ubuntu 24.04.01. Puedes instalarlo en un entorno físico, virtual o Docker.
 
 ## Dependencias Necesarias
 
@@ -50,31 +53,40 @@ Ejecuta el siguiente comando:
 sudo apt-get install git
 ```
 
-
-2. Instalar Docker y Docker Compose
-Ejecuta los siguientes comandos para instalar Docker:
+2. Instalar Docker
+Ejecuta los siguientes comandos para instalar Docker Compose v2:
 
 ```bash
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-compose-plugin
+sudo apt install curl
+
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
-## Instalación
+Asigna permisos de ejecución a Docker Compose:
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+Verifica la instalación ejecutando:
+```bash
+docker-compose --version
+```
+La salida debería verse similar a:
+Docker Compose version v2.29.2
+
+
+## Instalación del proyecto
 1. Clonar el repositorio
 Ejecuta el siguiente comando:
 
 ```bash
 git clone https://github.com/fschonffeldt/Tesis-Modulo-webFACE.git
-cd Tesis-Modulo-webFACE
+cd Tesis-Modulo-webFACE/avisos
 ```
 2. Configurar las variables de entorno
 Configuración del backend:
 
 ```bash
 cd backend/src/config
-cp .env.example .env
+nano .env
 ```
 
 3. Creacion de BD en la nube con MongoDB:
@@ -118,14 +130,36 @@ Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados
 
 ## Ejecución
 Con Docker
-Ejecuta el siguiente comando desde la raíz del proyecto:
+Ejecuta el siguiente comando desde Tesis-Modulo-webFACE/avisos:
 
 ```bash
-#docker-compose up --build
+# docker-compose up --build
 ```
 
-Accede a las siguientes URLs:
+## Problemas con Docker
+Si tienes problemas al iniciar Docker, puedes instalar las dependencias necesarias de la siguiente forma:
 
-   - Frontend: http://localhost:5173
-   - Backend: http://localhost:3000
+1. Instalar Node.js:
+```bash
+sudo apt install nodejs
+```
+2. Instalar nodemon y otras dependencias:
+```bash
+sudo npm install -g nodemon
+npm install dotenv
+```
+3. Posiciónate en el directorio del backend:
+```bash
+cd Tesis-Modulo-webFACE/avisos/backend/src
+npm start
+```
+4. En una nueva consola, sigue estos pasos para iniciar el frontend:
+```bash
+cd Tesis-Modulo-webFACE/avisos/frontend
+```
+5. Instala las dependencias necesarias con npm:
+```bash
+npm install vite
+```
+6. Ingresa a la URL que te entrega la consola, deberia ser algo asi http://localhost:5173/
 
