@@ -143,13 +143,9 @@ sudo cp mongodb-database-tools-*/bin/* /usr/local/bin/
 2. Restaurar el dump en MongoDB Atlas usando mongorestore:
 
 ```bash
-mongorestore --uri="mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>" ./backup/test
+mongorestore --uri="mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>" ./backup
 ```
-3. Verificar la restauración:
-```bash
-mongo "mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>"
-```
-
+**Debes poner la base de datos que creaste en mongoDB**
 
 ## Ejecución
 Con Docker
@@ -168,6 +164,7 @@ sudo apt install nodejs
 ```
 2. Instalar nodemon y otras dependencias:
 ```bash
+apt install npm
 sudo npm install -g nodemon
 npm install dotenv
 ```
@@ -180,9 +177,10 @@ npm start
 ```bash
 cd Tesis-Modulo-webFACE/avisos/frontend
 ```
-5. Instala las dependencias necesarias con npm:
+5. Instala las dependencias necesarias con npm e inicia:
 ```bash
 npm install vite
+npm run dev
 ```
 6. Ingresa a la URL que te entrega la consola, deberia ser algo asi http://localhost:5173/
 
