@@ -53,7 +53,7 @@ Para mantener un código limpio y uniforme, sigue estas pautas:
 
 - [ESLint](https://eslint.org/): para asegurar el estilo.
 
-- [Prettier](https://prettier.io/)para formato automático.
+- [Prettier](https://prettier.io/): para formato automático.
 
 ## 🛠️ Configuración del Entorno de Desarrollo
 Para configurar tu entorno de desarrollo, sigue los pasos establecidos en el README.
