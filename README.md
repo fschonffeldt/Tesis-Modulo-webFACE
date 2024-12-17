@@ -88,6 +88,25 @@ Configuración del backend:
 cd backend/src/config
 nano .env
 ```
+Deberia quedar algo asi:
+```bash
+# Configuración del servidor
+PORT= aquí va el puerto que vas a utilizar (ejemplo: 3000)
+HOST= puede ir localhost, una IP o el dominio donde estará disponible el servidor (ejemplo: localhost)
+
+# Configuración de la base de datos
+DB_URL=mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>?retryWrites=true&w=majority&appName=<APP_NAME>
+
+# Configuración de JWT
+ACCESS_JWT_SECRET=Super!Tree5&Lemon$Sky@91WindFox
+REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
+```
+⚠️ **Nota** 
+(ACCESS_JWT_SECRET y REFRESH_JWT_SECRET) son claves utilizadas para firmar y verificar la autenticidad de los tokens JWT en tu aplicación.
+Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados.
+
+⚠️ **Nota** 
+Si no tienes una base de datos en MongoDB puedes crearla de la siguiente forma.
 
 3. Creacion de BD en la nube con MongoDB:
    
@@ -109,24 +128,28 @@ nano .env
    3.4.2. Copia la cadena de conexión (**Connection String**) proporcionada por MongoDB Atlas.  
    3.4.3. Modifica la cadena en tu archivo `.env` para incluir el usuario, contraseña y base de datos que creaste.
 
-    
-Deberia quedar algo asi:
+Vuelve al paso 2 para poder configurar las variables de entorno nuevamente.
+
+
+## Restaurar el Dump de Datos (Backup de MongoDB)
+El proyecto viene con un backup en la siguiente ruta Tesis-Modulo-webFACE/avisos/frontend, para poder ejecutarlo sigue estos pasos:
+
+1. Instalar MongoDB Tools:
 ```bash
-# Configuración del servidor
-PORT= aquí va el puerto que vas a utilizar (ejemplo: 3000)
-HOST= puede ir localhost, una IP o el dominio donde estará disponible el servidor (ejemplo: localhost)
-
-# Configuración de la base de datos
-DB_URL=mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>?retryWrites=true&w=majority&appName=<APP_NAME>
-
-# Configuración de JWT
-ACCESS_JWT_SECRET=Super!Tree5&Lemon$Sky@91WindFox
-REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
-
-⚠️ **Nota** 
-(ACCESS_JWT_SECRET y REFRESH_JWT_SECRET) son claves utilizadas para firmar y verificar la autenticidad de los tokens JWT en tu aplicación.
-Estas claves garantizan que los tokens sean seguros y no puedan ser falsificados.
+wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-x86_64-100.10.0.tgz
+tar -zxvf mongodb-database-tools-*.tgz
+sudo cp mongodb-database-tools-*/bin/* /usr/local/bin/
 ```
+2. Restaurar el dump en MongoDB Atlas usando mongorestore:
+
+```bash
+mongorestore --uri="mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>" ./backup/test
+```
+3. Verificar la restauración:
+```bash
+mongo "mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>"
+```
+
 
 ## Ejecución
 Con Docker
