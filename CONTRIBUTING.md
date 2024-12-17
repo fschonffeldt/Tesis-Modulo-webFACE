@@ -40,19 +40,20 @@ Para mantener un código limpio y uniforme, sigue estas pautas:
 
 *JavaScript/React:*
 
-Usa ESLint para análisis de código estático.
-Nombres de variables y funciones en camelCase.
-Comentarios claros y descriptivos para funciones complejas.
+- Usa ESLint para análisis de código estático.
+- Nombres de variables y funciones en camelCase.
+- Comentarios claros y descriptivos para funciones complejas.
 
 *Formato de Código:*
 
-Usa espacios de 2 tabulaciones.
-Archivos ordenados con nombres descriptivos.
+- Usa espacios de 2 tabulaciones.
+- Archivos ordenados con nombres descriptivos.
 
 *Herramientas recomendadas:*
 
-Prettier para formato automático.
-ESLint para asegurar el estilo.
+- [ESLint](https://eslint.org/): para asegurar el estilo.
+
+- [Prettier](https://prettier.io/)para formato automático.
 
 ## 🛠️ Configuración del Entorno de Desarrollo
 Para configurar tu entorno de desarrollo, sigue los pasos establecidos en el README.
@@ -72,11 +73,11 @@ git push origin feature/nueva-funcionalidad
 ```
 3. Crea un Pull Request:
 
-Rama de destino: main o develop.
-Incluye una descripción detallada de los cambios y su propósito.
+- Rama de destino: master
+- Incluye una descripción detallada de los cambios y su propósito.
 
 4. Espera la revisión:
-El equipo revisará tu PR y solicitará cambios si es necesario.
+- El equipo revisará tu PR y solicitará cambios si es necesario.
 
 ## 📬 Contacto y Recursos Útiles
 
