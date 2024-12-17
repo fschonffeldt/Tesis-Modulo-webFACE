@@ -184,3 +184,12 @@ npm run dev
 ```
 6. Ingresa a la URL que te entrega la consola, deberia ser algo asi http://localhost:5173/
 
+## Construido con
+
+- **Frontend:** [React.js](https://reactjs.org/) y [Vite.js](https://vitejs.dev/)
+- **Backend:** [Express.js](https://expressjs.com/) y [Mongoose](https://mongoosejs.com/)
+- **Bases de Datos:** [MongoDB](https://www.mongodb.com/) y [MySQL/MariaDB](https://mariadb.org/)
+- **CMS:** [WordPress](https://wordpress.org/)
+- **Lenguajes:** JavaScript (Node.js y React) y PHP
+
+
