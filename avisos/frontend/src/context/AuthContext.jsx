@@ -19,11 +19,11 @@ export function AuthProvider({ children }) {
     if (token) {
       setJwt(token);
     } else {
-      navigate('/listar-avisos');
+      navigate('/avisos-publicos');
     }
     
     if(!isAuthenticated) {
-      navigate('/listar-avisos');
+      navigate('/avisos-publicos');
     }
   }, [isAuthenticated, navigate]);
 

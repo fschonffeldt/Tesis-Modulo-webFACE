@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getPublicAvisos, getAvisos, deleteAviso, reportAviso } from '../../services/avisos.service.js';
+import { getAvisos, reportAviso } from '../../services/avisos.service.js';
 import AvisoTable from '../../components/AvisoTable';
 import { useNavigate } from 'react-router-dom';
+
 // Función auxiliar para verificar si el usuario está autenticado
-const isAuthenticated = () => !!localStorage.getItem('token');
+const isAuthenticated = () => !!localStorage.getItem('user');
 
 const ListarAvisos = () => {
   const navigate = useNavigate();
@@ -12,17 +13,15 @@ const ListarAvisos = () => {
 
   const fetchAvisos = async () => {
     try {
-      const data = isAuthenticated() ? await getAvisos() : '';
+      const data = isAuthenticated() ? await getAvisos() : [];
       setAvisos(data);
     } catch (error) {
-      console.log('Error al cargar los avisos:', error);
+      console.error('Error al cargar los avisos:', error);
     }
   };
-  useEffect(() => {
-    // Verifica si el usuario está autenticado
-    setIsUserAuthenticated(isAuthenticated());
 
-    // Carga los avisos según el estado de autenticación
+  useEffect(() => {
+    setIsUserAuthenticated(isAuthenticated());
     fetchAvisos();
   }, []);
 
@@ -48,15 +47,17 @@ const ListarAvisos = () => {
     alert('Aviso reportado.');
   };
 
-  const handleLogin = () => {
-    navigate('/auth')
-  }
-
   return (
-    <div>
-      <h1>{isUserAuthenticated ? 'Mis Avisos' : 'Avisos Públicos'}</h1>
-      <AvisoTable avisos={avisos} onDelete={handleDelete} onReport={handleReport} />
-      <button onClick={handleLogin}>Iniciar sesión</button>
+    <div className="listar-avisos-container">
+      <h1 className="listar-avisos-title">
+        {isUserAuthenticated ? 'Mis Avisos' : 'Avisos Públicos'}
+      </h1>
+      <div className="avisos-table-container">
+        <AvisoTable 
+          avisos={avisos} 
+          reportAviso={handleReport} 
+        />
+      </div>
     </div>
   );
 };

@@ -1,206 +1,91 @@
-/* styles.css */
-/* *, html{
-  height: 100vh;
-  width: 100%;
-} */
-/* Background */
-
-html{
-  width: 100%;
-  height: 100vh;
-}
-
-.containerError{
-  width: 100%;
-  height: 100vh;
+/* Estilos generales */
+.error-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  padding: 20px;
   text-align: center;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; 
+  font-family: Arial, sans-serif;
 }
 
-.dildudo{
-  border-radius: 20px;
-  mask-image: linear-gradient(
-    black 96%,
-    transparent
-  );
-  filter: grayscale(100%);
+/* Contenedor principal */
+.error-content {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px 20px;
+  max-width: 500px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.DildudoNotDead{
-  text-transform: uppercase;
-  font-size: 12px;
+/* Imagen de error */
+.error-image img {
+  margin: 0 auto;
+  max-width: 200px;
+  display: block;
+}
+
+/* Título */
+.error-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333333;
+  margin: 20px 0 10px;
+}
+
+/* Descripción */
+.error-description {
+  font-size: 16px;
+  color: #666666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Botón principal */
+.error-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0f5ba3;
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.error-button:hover {
+  background-color: #0c4c84;
+}
+
+/* Footer de créditos */
+.error-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888888;
+}
+
+.error-footer .error-link {
+  color: #f39c12;
+  text-decoration: none;
   font-weight: bold;
 }
 
-.container-didudo{
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
+.error-footer .error-link:hover {
+  text-decoration: underline;
+  color: #d35400;
 }
 
-.didudo-text{
-  font-size: 15px;
-  margin-bottom: 0;
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-
-.bg-background {
-    background-color: #f8f9fa; /* Ajusta este color según sea necesario */
-  }
-  
-  /* Primary color */
-  .bg-primary {
-    background-color: #007bff; /* Ajusta este color según sea necesario */
-  }
-  
-  .text-primary-foreground {
-    color: #fff; /* Ajusta este color según sea necesario */
-  }
-  
-  /* Text colors */
-  .text-foreground {
-    color: #212529; /* Ajusta este color según sea necesario */
-  }
-  
-  .text-muted-foreground {
-    color: #6c757d; /* Ajusta este color según sea necesario */
-  }
-  
-  /* Flex utilities */
-  .flex {
-    display: flex;
-  }
-  
-  .flex-col {
-    flex-direction: column;
-  }
-  
-  .items-center {
-    align-items: center;
-  }
-  
-  .justify-center {
-    justify-content: center;
-  }
-  
-  
-  /* Margin and padding utilities */
-  .mx-auto {
-    margin-left: auto;
-    margin-right: 350px;
-  }
-  
-  .mb-6 {
-    margin-bottom: 1.5rem;
-  }
-  
-  .mt-4 {
-    margin-top: 1rem;
-  }
-  
-  .px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .py-12 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-  
-  .sm\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  
-  .lg\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-  
-  /* Font and text utilities */
-  .text-5xl {
-    font-size: 3rem; /* Ajusta según sea necesario */
-  }
-  
-  .text-6xl {
-    font-size: 4rem; /* Ajusta según sea necesario */
-  }
-  
-  .font-bold {
-    font-weight: bold;
-  }
-  
-  .tracking-tight {
-    letter-spacing: -0.05em; /* Ajusta según sea necesario */
-  }
-  
-  .text-lg {
-    font-size: 1.125rem; /* Ajusta según sea necesario */
-  }
-  
-  /* Button styles */
-  .inline-flex {
-    display: inline-flex;
-  }
-  
-  .items-center {
-    align-items: center;
-  }
-  
-  .rounded-md {
-    border-radius: 0.375rem;
-  }
-  
-  .bg-primary {
-    background-color: #007bff;
-  }
-  
-  .px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .py-2 {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  
-  .text-sm {
-    font-size: 0.875rem; /* Ajusta según sea necesario */
-  }
-  
-  .font-medium {
-    font-weight: 500;
-  }
-  
-  .shadow-sm {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-  
-  .transition-colors {
-    transition: background-color 0.2s;
-  }
-  
-  .hover\:bg-primary\/90:hover {
-    background-color: rgba(0, 123, 255, 0.9);
-  }
-  
-  .focus\:outline-none:focus {
-    outline: none;
-  }
-  
-  .focus\:ring-2:focus {
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
-  }
-  
-  .focus\:ring-primary:focus {
-    box-shadow: 0 0 0 2px #007bff;
-  }
-  
-  .focus\:ring-offset-2:focus {
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
-  }
-  

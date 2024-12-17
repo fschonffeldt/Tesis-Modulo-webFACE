@@ -1,0 +1,99 @@
+/* Fondo oscuro y centrado del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Más opaco */
+    display: flex;
+    z-index: 1000;
+  }
+  
+  /* Contenedor del modal */
+  .modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px; /* Bordes más redondeados */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Ocupar el ancho máximo */
+    max-width: 350px; /* Un ancho más pequeño y balanceado */
+    max-height: 80vh; /* Altura máxima */
+    overflow-y: auto; /* Scroll interno si el contenido lo necesita */
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Ajuste del formulario */
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio uniforme entre los campos */
+  }
+  
+  .modal-content label {
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px; /* Pequeño margen inferior */
+  }
+  
+  .modal-content input,
+  .modal-content textarea,
+  .modal-content select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* No desborda el ancho */
+  }
+  
+  .modal-content textarea {
+    resize: none;
+    height: 60px; /* Altura fija más pequeña */
+  }
+  
+  /* Botón principal */
+  .modal-content button.submit-button {
+    background-color: #0f5ba3;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .modal-content button.submit-button:hover {
+    background-color: #0c4c84;
+  }
+  
+  /* Botón cerrar */
+  .close-button {
+    margin-top: 10px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .close-button:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Animación */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
