@@ -42,7 +42,7 @@ Estas instrucciones te permitirán obtener una copia del proyecto en funcionamie
 
  ## Requisitos Previos
 Sistema Operativo Recomendado
-El entorno recomendado es Ubuntu 24.04.01. Puedes instalarlo en un entorno físico, virtual o Docker.
+El entorno usado fue Ubuntu 24.04.01 y un servidor virtual con Debian Bullseye. Puedes instalarlo en un entorno físico, virtual o Docker.
 
 ## Dependencias Necesarias
 
@@ -183,6 +183,52 @@ npm install vite
 npm run dev
 ```
 6. Ingresa a la URL que te entrega la consola, deberia ser algo asi http://localhost:5173/
+
+## Instalación en Servidor Virtual
+- Se deben seguir las mismas instrucciones del apartado *dependencias necesarias*, exceptuando la instalación de docker.
+- En el paso 2 el .env del backend debe quedar de la siguiente forma
+```bash
+# Configuración del servidor
+PORT= 80 
+HOST= IP servidor (ejemplo: 146.83.194.142)
+
+# Configuración de la base de datos
+DB_URL=mongodb+srv://<USUARIO>:<CONTRASEÑA>@<CLUSTER>.mongodb.net/<BASE_DE_DATOS>?retryWrites=true&w=majority&appName=<APP_NAME>
+
+# Configuración de JWT
+ACCESS_JWT_SECRET=Super!Tree5&Lemon$Sky@91WindFox
+REFRESH_JWT_SECRET=Cactus$7MoonRiver5Bird*8OrangeStar
+```
+
+- Hecho lo anterior se debe instalar PM2:
+```bash
+npm install pm2@latest -g
+```
+
+- Ahora se debe correr el backend desde Tesis-Modulo-webFACE/avisos/backend con el siguiente comando:
+```bash
+pm2 start src/index.js
+```
+- Para el *Frontend* se deben seguir los siguientes pasos
+1. Ubicados en la ruta Tesis-Modulo-webFACE/avisos/frontend, agregamos un nuevo .env con el siguiente contenido
+*VITE_BASE_URL=http://IP:<Puerto 80 -> 4 digitos>/api*
+Se debe poner la IP a la cual tengas acceso y los 4 digitos del puerto 80 que tengas, deberia quedar algo como esto
+
+```bash
+nano .env
+# ejemplo: *VITE_BASE_URL=http://146.83.194.142:1532/api*
+```
+2. Una vez guardado, contruyes el frontend con:
+```bash
+npm run build
+```
+3. Por último se debe iniciar el frontend:
+
+```bash
+pm2 start npm -- run preview
+```
+4. Finalmente te diriges a la página con la IP que asignaste y el puerto
+- ejemplo: http://146.83.194.142:1532/ 
 
 ## Construido con
 
