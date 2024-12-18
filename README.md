@@ -185,7 +185,7 @@ npm run dev
 6. Ingresa a la URL que te entrega la consola, deberia ser algo asi http://localhost:5173/
 
 ## Instalación en Servidor Virtual
-- Se deben seguir las mismas instrucciones del apartado *dependencias necesarias*, exceptuando la instalación de docker.
+- Se deben seguir las mismas instrucciones del apartado **dependencias necesarias**, exceptuando la instalación de docker y las instrucciones de **problemas con el docker** sin iniciar el backend con npm start ni el frontend con npm run dev.
 - En el paso 2 el .env del backend debe quedar de la siguiente forma
 ```bash
 # Configuración del servidor
