@@ -207,7 +207,7 @@ npm install pm2@latest -g
 
 - Ahora se debe correr el backend desde Tesis-Modulo-webFACE/avisos/backend con el siguiente comando:
 ```bash
-pm2 start src/index.js
+pm2 start src/server.js
 ```
 - Para el *Frontend* se deben seguir los siguientes pasos
 1. Ubicados en la ruta Tesis-Modulo-webFACE/avisos/frontend, agregamos un nuevo .env con el siguiente contenido
