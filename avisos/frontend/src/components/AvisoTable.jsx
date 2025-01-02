@@ -1,16 +1,13 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) => {
-  // Template para la columna de acciones
+const AvisoTable = ({ avisos, onDelete, onEdit, showActions = true }) => {
   const actionBodyTemplate = (rowData) => (
     <div className="actions-column">
-      <button
-        className="action-button report"
-        onClick={() => onReport(rowData.id)}
-      >
-        Reportar
-      </button>
+      <Link to={`/reportar-aviso/${rowData.id}`}>
+        <button className="action-button report">Reportar</button>
+      </Link>
       {onDelete && (
         <button
           className="action-button eliminar"
@@ -39,8 +36,6 @@ const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) 
             <th>Descripción</th>
             <th>Precio</th>
             <th>Categoría</th>
-            <th>Email</th>
-            <th>Teléfono</th>
             {showActions && <th>Acciones</th>}
           </tr>
         </thead>
@@ -52,14 +47,12 @@ const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) 
                 <td>{aviso.descripcion}</td>
                 <td>${aviso.precio || "N/A"}</td>
                 <td>{aviso.categoria || "Sin categoría"}</td>
-                <td>{aviso.contacto?.email || "No disponible"}</td>
-                <td>{aviso.contacto?.telefono || "No disponible"}</td>
                 {showActions && <td>{actionBodyTemplate(aviso)}</td>}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={7}>No hay avisos para mostrar.</td>
+              <td colSpan={5}>No hay avisos para mostrar.</td>
             </tr>
           )}
         </tbody>

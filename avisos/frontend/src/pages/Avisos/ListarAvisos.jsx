@@ -1,65 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { getAvisos, reportAviso } from '../../services/avisos.service';
 import AvisoTable from '../../components/AvisoTable';
-import { useNavigate } from 'react-router-dom';
-
-const isAuthenticated = () => !!localStorage.getItem('user');
+import ReportModal from '../../components/ReporteModal'; // Componente del modal
 
 const ListarAvisos = () => {
-  const navigate = useNavigate();
   const [avisos, setAvisos] = useState([]);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-
-  const fetchAvisos = async () => {
-    try {
-      const data = isAuthenticated() ? await getAvisos() : [];
-      setAvisos(data);
-    } catch (error) {
-      console.error('Error al cargar los avisos:', error);
-    }
-  };
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // Estado para el modal
+  const [selectedAviso, setSelectedAviso] = useState(null); // Aviso seleccionado
+  const [gravedad, setGravedad] = useState('Leve'); // Gravedad predeterminada
+  const [comentario, setComentario] = useState(''); // Comentario opcional
 
   useEffect(() => {
-    setIsUserAuthenticated(isAuthenticated());
+    const fetchAvisos = async () => {
+      try {
+        const data = await getAvisos();
+        setAvisos(data);
+        setIsUserAuthenticated(!!localStorage.getItem('user')); // Verificar autenticación
+      } catch (error) {
+        console.error('Error al cargar los avisos:', error);
+      }
+    };
+
     fetchAvisos();
   }, []);
 
-  const handleReport = async (id) => {
-    if (!isUserAuthenticated) {
-      alert("Debes iniciar sesión para reportar avisos.");
-      return;
-    }
-  
+  const openReportModal = (aviso) => {
+    setSelectedAviso(aviso);
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+    setSelectedAviso(null);
+    setGravedad('Leve');
+    setComentario('');
+  };
+
+  const handleReport = async (e) => {
+    e.preventDefault(); // Evitar redirección o recarga del formulario
     try {
-      const usuario = localStorage.getItem("user"); // Usuario autenticado
-      const gravedad = prompt("Selecciona la gravedad del reporte: Leve, Media, Alta");
-  
-      debugger; // Pausa la ejecución aquí
-      console.log("Datos enviados al servicio:", { id, usuario, gravedad });
-  
-      if (!["Leve", "Media", "Alta"].includes(gravedad)) {
-        alert("Gravedad inválida.");
-        return;
-      }
-  
-      const response = await reportAviso(id, usuario, gravedad);
-      console.log("Respuesta del backend:", response);
-      alert(response.message || "Reporte registrado con éxito.");
+      const usuario = localStorage.getItem('user'); // Usuario autenticado
+      const response = await reportAviso(selectedAviso.id, usuario, gravedad, comentario);
+
+      alert(response.message || 'Reporte registrado con éxito.');
+      closeReportModal();
     } catch (error) {
-      console.error("Error al reportar el aviso:", error);
-      alert("Hubo un problema al reportar el aviso.");
+      console.error('Error al reportar el aviso:', error);
+      alert('Hubo un problema al reportar el aviso. Por favor, inténtalo nuevamente.');
     }
   };
-  
+
   return (
     <div className="listar-avisos-container">
       <h1 className="listar-avisos-title">{isUserAuthenticated ? 'Avisos' : 'Avisos Públicos'}</h1>
       <div className="avisos-table-container">
         <AvisoTable
           avisos={avisos}
-          onReport={handleReport} // Pasamos la función como prop
+          onReport={openReportModal} // Pasar la función para abrir el modal
         />
       </div>
+
+      {/* Modal para reportar aviso */}
+      {isReportModalOpen && (
+        <ReportModal
+          aviso={selectedAviso}
+          onClose={closeReportModal}
+          onSubmit={handleReport}
+          title="Reportar Aviso"
+          gravedad={gravedad}
+          setGravedad={setGravedad}
+          comentario={comentario}
+          setComentario={setComentario}
+        />
+      )}
     </div>
   );
 };

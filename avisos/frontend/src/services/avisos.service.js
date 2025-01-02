@@ -78,21 +78,15 @@ export const deleteAviso = async (id) => {
   }
 };
 
-// Reportar un aviso por ID
 export const reportAviso = async (avisoId, usuario, gravedad) => {
   try {
-    const response = await axios.post(
-      `/avisos/${avisoId}/reportes`, // Endpoint del backend
-      { usuario, gravedad }, // Cuerpo de la solicitud
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluye el token si es necesario
-        },
-      }
-    );
+    const response = await axios.post(`/avisos/${avisoId}/reportes`, {
+      usuario,
+      gravedad,
+    });
     return response.data;
   } catch (error) {
-    console.error(`Error al reportar el aviso con ID ${avisoId}:`, error);
+    console.error('Error al reportar el aviso:', error);
     throw error;
   }
 };

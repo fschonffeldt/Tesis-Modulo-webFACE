@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import AvisoTable from '../../components/AvisoTable';
 import AvisoForm from '../../components/AvisoForm';
-import { getAvisosByUsuario, deleteAviso, updateAviso, getReportesByAviso } from '../../services/avisos.service';
+import { getAvisosByUsuario, deleteAviso, updateAviso } from '../../services/avisos.service';
 import '../../styles/Modal.css'; // Importar estilos del modal
 
 // Configuración de React Modal
@@ -43,13 +43,13 @@ const MisAvisos = () => {
     }
   };
 
-  // Función para abrir el modal y editar un aviso
+  // Función para abrir el modal de edición
   const openModal = (aviso) => {
     setSelectedAviso(aviso);
     setIsModalOpen(true);
   };
 
-  // Función para cerrar el modal
+  // Función para cerrar el modal de edición
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedAviso(null);
@@ -78,7 +78,6 @@ const MisAvisos = () => {
       ) : (
         <AvisoTable
           avisos={avisos}
-          onReport={() => alert('Función de reporte aún no implementada')}
           onDelete={handleDelete}
           onEdit={openModal} // Función para abrir el modal
           showActions={true}
@@ -87,23 +86,23 @@ const MisAvisos = () => {
 
       {/* Modal para actualizar un aviso */}
       <Modal
-  isOpen={isModalOpen}
-  onRequestClose={closeModal}
-  contentLabel="Modificar Aviso"
-  className="modal-content"
-  overlayClassName="modal-overlay"
->
-  {selectedAviso && (
-    <AvisoForm
-      onSubmit={handleUpdate}
-      initialData={selectedAviso}
-      title="Modificar Aviso" // Título dinámico
-    />
-  )}
-  <button onClick={closeModal} className="close-button">
-    Cerrar
-  </button>
-</Modal>
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Modificar Aviso"
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        {selectedAviso && (
+          <AvisoForm
+            onSubmit={handleUpdate}
+            initialData={selectedAviso}
+            title="Modificar Aviso" // Título dinámico
+          />
+        )}
+        <button onClick={closeModal} className="close-button">
+          Cerrar
+        </button>
+      </Modal>
     </div>
   );
 };
