@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import AvisoTable from '../../components/AvisoTable';
 import AvisoForm from '../../components/AvisoForm';
-import { getAvisosByUsuario, deleteAviso, updateAviso } from '../../services/avisos.service';
+import { getAvisosByUsuario, deleteAviso, updateAviso, getReportesByAviso } from '../../services/avisos.service';
 import '../../styles/Modal.css'; // Importar estilos del modal
 
 // Configuración de React Modal

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getPublicAvisos } from "../../services/avisos.service";
-import AvisoTable from "../../components/AvisoTable";
+import AvisoTable from "../../components/AvisoTablePublico";
 import { useNavigate } from "react-router-dom";
 import "../../styles/AvisoTable.css"; // Importa los estilos de la tabla
 

@@ -5,23 +5,28 @@ const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) 
   // Template para la columna de acciones
   const actionBodyTemplate = (rowData) => (
     <div className="actions-column">
+      {/* Botón Reportar */}
       <button
         className="action-button report"
         onClick={() => onReport(rowData.id)}
       >
         Reportar
       </button>
+
+      {/* Botón Eliminar - Solo aparece si onDelete se pasa */}
       {onDelete && (
         <button
-          className="action-button eliminar"
+          className="action-button delete"
           onClick={() => onDelete(rowData.id)}
         >
           Eliminar
         </button>
       )}
+
+      {/* Botón Actualizar - Solo aparece si onEdit se pasa */}
       {onEdit && (
         <button
-          className="action-button editar"
+          className="action-button edit"
           onClick={() => onEdit(rowData)}
         >
           Actualizar
@@ -37,10 +42,6 @@ const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) 
           <tr>
             <th>Título</th>
             <th>Descripción</th>
-            <th>Precio</th>
-            <th>Categoría</th>
-            <th>Email</th>
-            <th>Teléfono</th>
             {showActions && <th>Acciones</th>}
           </tr>
         </thead>
@@ -50,16 +51,12 @@ const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) 
               <tr key={aviso.id}>
                 <td>{aviso.titulo}</td>
                 <td>{aviso.descripcion}</td>
-                <td>${aviso.precio || "N/A"}</td>
-                <td>{aviso.categoria || "Sin categoría"}</td>
-                <td>{aviso.contacto?.email || "No disponible"}</td>
-                <td>{aviso.contacto?.telefono || "No disponible"}</td>
                 {showActions && <td>{actionBodyTemplate(aviso)}</td>}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={7}>No hay avisos para mostrar.</td>
+              <td colSpan={5}>No hay avisos para mostrar.</td>
             </tr>
           )}
         </tbody>

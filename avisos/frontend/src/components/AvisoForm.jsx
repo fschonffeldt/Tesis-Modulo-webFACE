@@ -73,7 +73,9 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
           >
             <option value="" disabled>Seleccione una categoría</option>
             <option value="Educación">Educación</option>
-            <option value="Electrónica">Electrónica</option>
+            <option value="Venta">Venta</option>
+            <option value="Compra">Compra</option>
+            <option value="Habitacional">Habitacional</option>
             <option value="Otros">Otros</option>
           </select>
         </div>
