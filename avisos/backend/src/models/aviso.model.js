@@ -30,7 +30,7 @@ const avisoSchema = new mongoose.Schema({
   },
   fechaExpiracion: {
     type: Date,
-    default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 días después de la publicación
+    default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   },
   contacto: {
     telefono: { type: String, required: true },
@@ -41,7 +41,7 @@ const avisoSchema = new mongoose.Schema({
     enum: ["Vigente", "Vencido", "Desactivado"],
     default: "Vigente",
   },
-  reportes: {
+  puntosReporte: {
     type: Number,
     default: 0,
   },
