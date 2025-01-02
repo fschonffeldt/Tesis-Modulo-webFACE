@@ -78,17 +78,15 @@ export const deleteAviso = async (id) => {
   }
 };
 
-// Reportar un aviso por ID
-export const reportAviso = async (id) => {
+export const reportAviso = async (avisoId, usuario, gravedad) => {
   try {
-    const response = await axios.post(`/avisos/${id}/report`, null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+    const response = await axios.post(`/avisos/${avisoId}/reportes`, {
+      usuario,
+      gravedad,
     });
     return response.data;
   } catch (error) {
-    console.error(`Error al reportar el aviso con ID ${id}:`, error);
+    console.error('Error al reportar el aviso:', error);
     throw error;
   }
 };
@@ -104,6 +102,21 @@ export const getAvisosByUsuario = async () => {
     return response.data;
   } catch (error) {
     console.error('Error al obtener los avisos del usuario:', error);
+    throw error;
+  }
+};
+
+// Obtener datos de contacto de un aviso por ID
+export const getAvisoContactInfo = async (id) => {
+  try {
+    const response = await axios.get(`/avisos/${id}/contacto`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluye el token si es necesario
+      },
+    });
+    return response.data; // Los datos de contacto del aviso
+  } catch (error) {
+    console.error(`Error al obtener los datos de contacto del aviso con ID ${id}:`, error);
     throw error;
   }
 };

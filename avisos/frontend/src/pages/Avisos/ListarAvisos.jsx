@@ -1,63 +1,79 @@
 import React, { useEffect, useState } from 'react';
-import { getAvisos, reportAviso } from '../../services/avisos.service.js';
+import { getAvisos, reportAviso } from '../../services/avisos.service';
 import AvisoTable from '../../components/AvisoTable';
-import { useNavigate } from 'react-router-dom';
-
-// Función auxiliar para verificar si el usuario está autenticado
-const isAuthenticated = () => !!localStorage.getItem('user');
+import ReportModal from '../../components/ReporteModal'; // Componente del modal
 
 const ListarAvisos = () => {
-  const navigate = useNavigate();
   const [avisos, setAvisos] = useState([]);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-
-  const fetchAvisos = async () => {
-    try {
-      const data = isAuthenticated() ? await getAvisos() : [];
-      setAvisos(data);
-    } catch (error) {
-      console.error('Error al cargar los avisos:', error);
-    }
-  };
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // Estado para el modal
+  const [selectedAviso, setSelectedAviso] = useState(null); // Aviso seleccionado
+  const [gravedad, setGravedad] = useState('Leve'); // Gravedad predeterminada
+  const [comentario, setComentario] = useState(''); // Comentario opcional
 
   useEffect(() => {
-    setIsUserAuthenticated(isAuthenticated());
+    const fetchAvisos = async () => {
+      try {
+        const data = await getAvisos();
+        setAvisos(data);
+        setIsUserAuthenticated(!!localStorage.getItem('user')); // Verificar autenticación
+      } catch (error) {
+        console.error('Error al cargar los avisos:', error);
+      }
+    };
+
     fetchAvisos();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (!isUserAuthenticated) {
-      alert('Debes iniciar sesión para realizar esta acción.');
-      return;
-    }
-
-    if (window.confirm('¿Estás seguro de que deseas eliminar este aviso?')) {
-      await deleteAviso(id);
-      setAvisos(avisos.filter((aviso) => aviso.id !== id));
-    }
+  const openReportModal = (aviso) => {
+    setSelectedAviso(aviso);
+    setIsReportModalOpen(true);
   };
 
-  const handleReport = async (id) => {
-    if (!isUserAuthenticated) {
-      alert('Debes iniciar sesión para reportar avisos.');
-      return;
-    }
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+    setSelectedAviso(null);
+    setGravedad('Leve');
+    setComentario('');
+  };
 
-    await reportAviso(id);
-    alert('Aviso reportado.');
+  const handleReport = async (e) => {
+    e.preventDefault(); // Evitar redirección o recarga del formulario
+    try {
+      const usuario = localStorage.getItem('user'); // Usuario autenticado
+      const response = await reportAviso(selectedAviso.id, usuario, gravedad, comentario);
+
+      alert(response.message || 'Reporte registrado con éxito.');
+      closeReportModal();
+    } catch (error) {
+      console.error('Error al reportar el aviso:', error);
+      alert('Hubo un problema al reportar el aviso. Por favor, inténtalo nuevamente.');
+    }
   };
 
   return (
     <div className="listar-avisos-container">
-      <h1 className="listar-avisos-title">
-        {isUserAuthenticated ? 'Mis Avisos' : 'Avisos Públicos'}
-      </h1>
+      <h1 className="listar-avisos-title">{isUserAuthenticated ? 'Avisos' : 'Avisos Públicos'}</h1>
       <div className="avisos-table-container">
-        <AvisoTable 
-          avisos={avisos} 
-          reportAviso={handleReport} 
+        <AvisoTable
+          avisos={avisos}
+          onReport={openReportModal} // Pasar la función para abrir el modal
         />
       </div>
+
+      {/* Modal para reportar aviso */}
+      {isReportModalOpen && (
+        <ReportModal
+          aviso={selectedAviso}
+          onClose={closeReportModal}
+          onSubmit={handleReport}
+          title="Reportar Aviso"
+          gravedad={gravedad}
+          setGravedad={setGravedad}
+          comentario={comentario}
+          setComentario={setComentario}
+        />
+      )}
     </div>
   );
 };
