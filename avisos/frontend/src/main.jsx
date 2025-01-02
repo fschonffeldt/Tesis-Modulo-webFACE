@@ -10,6 +10,7 @@ import CrearAviso from './pages/Avisos/CrearAviso';
 import EditarAviso from './pages/Avisos/EditarAviso';
 import MisAvisos from './pages/Avisos/MisAvisos';
 import AvisosPublicos from './pages/Avisos/AvisosPublicos.jsx';
+import ReportarAviso from './pages/Avisos/ReportarAvisos.jsx';
 
 
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '/avisos-publicos',
         element: <AvisosPublicos />,
+      },
+      {
+        path: '/reportar-aviso/:id',
+        element: <ReportarAviso  />,
       },
     ],
   },

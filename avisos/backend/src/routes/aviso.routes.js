@@ -7,8 +7,11 @@ const {
   updateAviso, 
   deleteAviso,
   reportAviso,
-  getAvisosPublicos
+  getAvisosPublicos,
+  getAvisoContactInfo,
 } = require("../controllers/aviso.controller");
+
+const { getReportesByAviso, getAllReportes } = require("../controllers/reporte.controller");
 
 const authenticationMiddleware = require("../middlewares/authentication.middleware");
 const router = express.Router();
@@ -21,10 +24,14 @@ router.post("/", createAviso);
 router.get("/", getAvisos);
 
 router.get("/usuario", getAvisosByUsuario);
-router.post("/:id/report", reportAviso);
 router.put("/:id", updateAviso); 
 router.delete("/:id", deleteAviso);
+router.get("/:id/contacto", getAvisoContactInfo);
 
 router.get("/:id", getAvisoById);
+
+router.post("/:id/reportes", reportAviso);
+
+router.get("/:id/reportes", getReportesByAviso);
 
 module.exports = router;

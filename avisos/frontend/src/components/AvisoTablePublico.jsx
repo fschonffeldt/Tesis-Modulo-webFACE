@@ -1,24 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos, onDelete, onEdit, showActions = true }) => {
+const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) => {
+  // Template para la columna de acciones
   const actionBodyTemplate = (rowData) => (
     <div className="actions-column">
-      <Link to={`/reportar-aviso/${rowData.id}`}>
-        <button className="action-button report">Reportar</button>
-      </Link>
+      {/* Botón Reportar */}
+      <button
+        className="action-button report"
+        onClick={() => onReport(rowData.id)}
+      >
+        Reportar
+      </button>
+
+      {/* Botón Eliminar - Solo aparece si onDelete se pasa */}
       {onDelete && (
         <button
-          className="action-button eliminar"
+          className="action-button delete"
           onClick={() => onDelete(rowData.id)}
         >
           Eliminar
         </button>
       )}
+
+      {/* Botón Actualizar - Solo aparece si onEdit se pasa */}
       {onEdit && (
         <button
-          className="action-button editar"
+          className="action-button edit"
           onClick={() => onEdit(rowData)}
         >
           Actualizar
@@ -34,8 +42,6 @@ const AvisoTable = ({ avisos, onDelete, onEdit, showActions = true }) => {
           <tr>
             <th>Título</th>
             <th>Descripción</th>
-            <th>Precio</th>
-            <th>Categoría</th>
             {showActions && <th>Acciones</th>}
           </tr>
         </thead>
@@ -45,8 +51,6 @@ const AvisoTable = ({ avisos, onDelete, onEdit, showActions = true }) => {
               <tr key={aviso.id}>
                 <td>{aviso.titulo}</td>
                 <td>{aviso.descripcion}</td>
-                <td>${aviso.precio || "N/A"}</td>
-                <td>{aviso.categoria || "Sin categoría"}</td>
                 {showActions && <td>{actionBodyTemplate(aviso)}</td>}
               </tr>
             ))

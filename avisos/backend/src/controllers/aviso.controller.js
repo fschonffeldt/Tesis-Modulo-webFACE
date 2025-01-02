@@ -1,61 +1,56 @@
 const Aviso = require("../models/aviso.model");
+const Reporte = require ("../models/reporte.model");
+const { schemaAviso } = require('../schema/aviso.schema');
 
 // Crear un nuevo aviso
 
 exports.createAviso = async (req, res) => {
-    try {
-      console.log("Petición recibida en createAviso"); 
-      const { titulo, descripcion, precio, categoria, contacto } = req.body;
-      console.log("Datos recibidos en el body:", req.body); 
-  
-      const usuarioEmail = req.email;
-      console.log("Email del usuario autenticado:", usuarioEmail);
-  
-      const nuevoAviso = new Aviso({
-        titulo,
-        descripcion,
-        precio,
-        categoria,
-        contacto: {
-          telefono: contacto.telefono, // El usuario proporciona el teléfono
-          email: usuarioEmail, // El email se establece automáticamente desde req.email
-        },
-      });
-  
-      const avisoGuardado = await nuevoAviso.save();
-      console.log("Aviso guardado en la base de datos:", avisoGuardado);
-  
-      // Remueve el campo email antes de enviar la respuesta
-      const avisoSinEmail = avisoGuardado.toObject();
-      delete avisoSinEmail.contacto.email;
-  
-      res.status(201).json(avisoSinEmail);
-    } catch (error) {
-      console.error("Error al crear el aviso:", error); 
-      res.status(500).json({ message: "Error al crear el aviso", error });
+  try {
+    console.log("Petición recibida en createAviso"); 
+    const { titulo, descripcion, precio, categoria, contacto } = req.body;
+
+    // Validar que el contacto tiene un teléfono
+    if (!contacto || !contacto.telefono) {
+      return res.status(400).json({ message: "El número de teléfono es obligatorio." });
     }
-  };
+
+    // Obtener el email del usuario autenticado
+    const usuarioEmail = req.email;
+    if (!usuarioEmail) {
+      return res.status(400).json({ message: "El email del usuario es obligatorio." });
+    }
+
+    const nuevoAviso = new Aviso({
+      titulo,
+      descripcion,
+      precio,
+      categoria,
+      contacto: {
+        telefono: contacto.telefono, // Teléfono del body
+        email: usuarioEmail, // Email autenticado
+      },
+    });
+
+    const avisoGuardado = await nuevoAviso.save();
+    console.log("Aviso guardado en la base de datos:", avisoGuardado);
+
+    res.status(201).json(avisoGuardado);
+  } catch (error) {
+    console.error("Error al crear el aviso:", error);
+    res.status(500).json({ message: "Error al crear el aviso", error });
+  }
+};
 
 // Obtener todos los avisos sin información de contacto
 exports.getAvisos = async (req, res) => {
-    try {
-      let avisos;
-  
-      // Verifica si el usuario está autenticado (si existe req.user)
-      if (req.user) {
-        // Usuario autenticado: incluye los datos de contacto
-        avisos = await Aviso.find();
-      } else {
-        // Usuario no autenticado: excluye los datos de contacto
-        avisos = await Aviso.find().select("-contacto -usuarioEmail");
-      }
-  
-      res.status(200).json(avisos);
-    } catch (error) {
-      console.error("Error al obtener avisos:", error);
-      res.status(500).json({ message: "Error al obtener avisos", error });
-    }
-  };
+  try {
+    const avisos = await Aviso.find(); // Incluye todos los datos, incluido el contacto
+    res.status(200).json(avisos);
+  } catch (error) {
+    console.error("Error al obtener avisos:", error);
+    res.status(500).json({ message: "Error al obtener avisos", error });
+  }
+};
 
 // Obtener un aviso por ID, incluyendo la información de contacto si el usuario está autenticado
 exports.getAvisoById = async (req, res) => {
@@ -162,30 +157,6 @@ exports.getAvisosByUsuario = async (req, res) => {
 };
 
 
-exports.reportAviso = async (req, res) => {
-  try {
-    const avisoId = req.params.id;
-    const aviso = await Aviso.findOne({ id: avisoId });
-
-    if (!aviso) {
-      return res.status(404).json({ message: "Aviso no encontrado" });
-    }
-
-    aviso.reportes += 1;
-
-   
-    const limiteReportes = 3; 
-    if (aviso.reportes >= limiteReportes) {
-      aviso.estado = "Desactivado";
-    }
-
-    await aviso.save();
-    res.status(200).json({ message: "Reporte registrado", estado: aviso.estado });
-  } catch (error) {
-    res.status(500).json({ message: "Error al reportar el aviso", error });
-  }
-};
-
 exports.getAvisosPublicos = async (req, res) => {
   try {
       const avisos = await Aviso.find().select("-contacto -usuarioEmail");
@@ -193,5 +164,53 @@ exports.getAvisosPublicos = async (req, res) => {
   } catch (error) {
       console.error("Error al obtener avisos públicos:", error);
       res.status(500).json({ message: "Error al obtener avisos públicos", error });
+  }
+};
+
+exports.reportAviso = async (req, res) => {
+  try {
+    const { id: avisoId } = req.params;
+    const { usuario, gravedad } = req.body;
+
+    const puntos = gravedad === "Leve" ? 1 : gravedad === "Media" ? 3 : 5;
+
+    // Buscar el aviso
+    const aviso = await Aviso.findOne({ id: avisoId });
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
+
+    // Crear un nuevo reporte
+    const nuevoReporte = new Reporte({ avisoId: aviso._id, usuario, gravedad });
+    await nuevoReporte.save();
+
+    // Incrementar puntos en el aviso
+    aviso.puntosReporte += puntos;
+    if (aviso.puntosReporte >= 10) {
+      aviso.estado = "Desactivado";
+    }
+    await aviso.save();
+
+    res.status(200).json({ message: "Reporte registrado con éxito", reporte: nuevoReporte });
+  } catch (error) {
+    console.error("Error al reportar aviso:", error);
+    res.status(500).json({ message: "Error al reportar aviso", error });
+  }
+};
+
+exports.getAvisoContactInfo = async (req, res) => {
+  try {
+    const avisoId = req.params.id; // Obtén el ID del aviso desde los parámetros
+
+    // Busca el aviso y selecciona únicamente el campo de contacto
+    const aviso = await Aviso.findOne({ id: avisoId }).select("contacto");
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
+
+    res.status(200).json(aviso.contacto);
+  } catch (error) {
+    console.error("Error al obtener los datos de contacto:", error);
+    res.status(500).json({ message: "Error al obtener los datos de contacto", error });
   }
 };
