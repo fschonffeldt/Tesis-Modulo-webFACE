@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos, onDelete, onEdit, showActions = true }) => {
+const AvisoTable = ({ avisos, onDelete, onEdit, onReport, showActions = true }) => {
   const actionBodyTemplate = (rowData) => (
     <div className="actions-column">
-      <Link to={`/reportar-aviso/${rowData.id}`}>
-        <button className="action-button report">Reportar</button>
-      </Link>
+        <button 
+          className="action-button report"
+          onClick={() => onReport(rowData)}
+        >Reportar</button>
       {onDelete && (
         <button
           className="action-button eliminar"

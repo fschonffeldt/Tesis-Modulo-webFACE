@@ -38,8 +38,8 @@ const ListarAvisos = () => {
   };
 
   const handleReport = async (e) => {
-    e.preventDefault(); // Evitar redirección o recarga del formulario
     try {
+      e.preventDefault(); // Evitar redirección o recarga del formulario
       const usuario = localStorage.getItem('user'); // Usuario autenticado
       const response = await reportAviso(selectedAviso.id, usuario, gravedad, comentario);
 

@@ -23,8 +23,9 @@ const ReportarAviso = () => {
     fetchAviso();
   }, [id]);
 
-  const openReportModal = () => {
+  const openReportModal = (aviso) => {
     setIsReportModalOpen(true);
+    console.log('Reportar:', aviso);
   };
 
   const closeReportModal = () => {
@@ -38,8 +39,8 @@ const ReportarAviso = () => {
       const usuario = localStorage.getItem('user'); // Usuario autenticado
       const response = await reportAviso(id, usuario, gravedad, comentario); // Llamada a la API para reportar
       alert(response.message || 'Reporte registrado con éxito.');
-      closeReportModal();
-      navigate('/listar-avisos'); // Redirigir después de reportar
+      //closeReportModal();
+      // navigate('/listar-avisos'); // Redirigir después de reportar
     } catch (error) {
       console.error('Error al reportar el aviso:', error);
       alert('Hubo un problema al reportar el aviso.');
@@ -55,8 +56,8 @@ const ReportarAviso = () => {
           <p>{aviso.descripcion}</p>
           <p><strong>Precio:</strong> ${aviso.precio || 'N/A'}</p>
           <p><strong>Categoría:</strong> {aviso.categoria || 'Sin categoría'}</p>
-          <button onClick={openReportModal}>Reportar</button>
-          <button onClick={() => navigate('/listar-avisos')}>Volver</button>
+          <button onClick={() => openReportModal(aviso)}>Reportar</button>
+          {/* <button onClick={() => navigate('/listar-avisos')}>Volver</button> */}
         </div>
       ) : (
         <p>Cargando...</p>

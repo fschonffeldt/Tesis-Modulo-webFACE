@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import "../styles/Modal.css";
-
+import { reportAviso } from '../services/avisos.service';
 const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
   const [formData, setFormData] = useState({
     gravedad: 'Leve', // Valor predeterminado
@@ -15,9 +15,11 @@ const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(formData, aviso)
     onSubmit(aviso.id, formData); // Llama a la función de reporte con los datos del formulario
     onClose(); // Cierra el modal
   };
+
 
   return (
     <Modal
