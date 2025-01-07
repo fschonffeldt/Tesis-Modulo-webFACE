@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/AvisoForm.css'; // Archivo CSS para estilos
+import '../styles/AvisoForm.css';
 
 const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
   const [formData, setFormData] = useState(initialData || {
@@ -9,10 +9,16 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     categoria: '',
     telefono: '',
   });
+  const [sinPrecio, setSinPrecio] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCheckboxChange = () => {
+    setSinPrecio(!sinPrecio);
+    setFormData({ ...formData, precio: '' }); // Limpia el campo de precio si se desactiva
   };
 
   const handleSubmit = (e) => {
@@ -22,7 +28,7 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
 
   return (
     <div className="aviso-form-container">
-      <h1 className="form-title">{title}</h1> {/* Título dinámico */}
+      <h1 className="form-title">{title}</h1>
       <form onSubmit={handleSubmit} className="aviso-form">
         <div className="form-group">
           <label htmlFor="titulo">Título</label>
@@ -49,7 +55,7 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group precio-group">
           <label htmlFor="precio">Precio</label>
           <input
             type="number"
@@ -57,9 +63,19 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
             name="precio"
             value={formData.precio}
             onChange={handleChange}
-            placeholder="Ingrese el precio"
-            required
+            placeholder="00000"
+            disabled={sinPrecio} // Desactiva el campo si la casilla está marcada
           />
+          <div className="sin-precio-container">
+          <input
+          type="checkbox"
+          id="sinPrecio"
+          name="sinPrecio"
+          checked={sinPrecio}
+          onChange={handleCheckboxChange}
+          />
+           <label htmlFor="sinPrecio">Sin precio</label>
+          </div>
         </div>
 
         <div className="form-group">
