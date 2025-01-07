@@ -1,77 +1,105 @@
 /* Contenedor del formulario */
 .aviso-form-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9; /* Fondo claro */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  }
-  
-  /* Título del formulario */
-  .form-title {
-    text-align: center;
-    color: rgb(15, 91, 163); /* Deep Blue */
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  /* Grupo de campos */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  /* Etiquetas */
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Campos de entrada */
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc; /* Bordes grises */
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
-  }
-  
-  /* Campo de texto largo */
-  .form-group textarea {
-    height: 100px;
-    resize: none; /* Deshabilitar redimensionamiento */
-  }
-  
-  /* Botón de envío */
-  .submit-button {
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #0f5ba3; /* Deep Blue */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-button:hover {
-    background-color: #0c4a82; /* Azul más oscuro */
-  }
-  
-  /* Estilo del foco */
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: #0f5ba3; /* Azul más claro */
-    box-shadow: 0 0 5px rgba(15, 91, 163, 0.5);
-  }
-  
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9; /* Fondo claro */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Título del formulario */
+.form-title {
+  text-align: center;
+  color: rgb(15, 91, 163); /* Deep Blue */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Grupo de campos */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Etiquetas */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Contenedor para agrupar precio y "Sin precio" */
+.precio-group {
+  display: flex;
+  align-items: center; /* Alinear verticalmente */
+  gap: 10px; /* Espaciado entre elementos */
+}
+
+/* Campo de precio */
+.precio-group input[type="number"] {
+  width: 120px; /* Ancho reducido */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Contenedor del checkbox "Sin precio" */
+.sin-precio-container {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espaciado entre checkbox y etiqueta */
+}
+
+/* Estilo para el checkbox */
+.sin-precio-container input[type="checkbox"] {
+  margin: 0; /* Quitar márgenes predeterminados */
+}
+
+/* Campos de entrada */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc; /* Bordes grises */
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+}
+
+/* Campo de texto largo */
+.form-group textarea {
+  height: 100px;
+  resize: none; /* Deshabilitar redimensionamiento */
+}
+
+/* Botón de envío */
+.submit-button {
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #0f5ba3; /* Deep Blue */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #0c4a82; /* Azul más oscuro */
+}
+
+/* Estilo del foco */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0f5ba3; /* Azul más claro */
+  box-shadow: 0 0 5px rgba(15, 91, 163, 0.5);
+}

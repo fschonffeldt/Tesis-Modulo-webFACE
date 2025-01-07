@@ -19,13 +19,6 @@ export const showConfirmFormTarea = async () => {
     });
 };
 
-export const showConfirmFormTareaDuplicar = async () => {
-  await Toast.fire({
-      icon: "success",
-      title: "Tarea duplicada exitosamente!"
-  });
-};
-
 export const showErrorFormTarea = async (message) => {
     await Toast.fire({
         icon: "error",
@@ -61,61 +54,6 @@ export const showNotFoundTarea = async () => {
     });
 };
 
-export const showAsignadaEliminada = async () => {
-  await Toast.fire({
-      icon: "info",
-      title: "No se puede eliminar una tarea asignada"
-  });
-};
-
-export const showNoAsignada = async () => {
-    await Toast.fire({
-        icon: "info",
-        title: "No se puede editar una tarea asignada"
-    });
-};
-
-export const showNoEntregada = async () => {
-    await Toast.fire({
-        icon: "info",
-        title: "No se puede editar una tarea entregada"
-    });
-};
-
-export const showNoEntregadaEliminada = async () => {
-  await Toast.fire({
-      icon: "info",
-      title: "No se puede eliminar una tarea entregada"
-  });
-};
-
-export const showRevisadaEliminada = async () => {
-  await Toast.fire({
-      icon: "info",
-      title: "No se puede eliminar una tarea revisada"
-  });
-};
-
-export const showNoRevisada = async () => {
-    await Toast.fire({
-        icon: "info",
-        title: "No se puede editar una tarea revisada"
-    });
-};
-
-export const showNoEnRevision = async () => {
-    await Toast.fire({
-        icon: "info",
-        title: "No se puede editar una tarea en revisión"
-    });
-};
-
-export const showRevisionEliminada = async () => {
-  await Toast.fire({
-      icon: "info",
-      title: "No se puede eliminar una tarea en revisión"
-  });
-};
 
 export const showFoundTarea = async () => {
     await Toast.fire({
@@ -190,38 +128,6 @@ export const UpdateQuestion = async () => {
     return result.isConfirmed;
 };
 
-export const CreateQuestion = async () => {
-    const result = await Swal.fire({
-        title: "¿Estas seguro de los datos ingresados?",
-        text: "Estos cambios son irreversibles.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, crear",
-        cancelButtonText: "No, cancelar",
-        reverseButtons: true,
-        customClass: {
-            confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-            cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        },
-        buttonsStyling: false,
-    });
-
-    if (result.isConfirmed) {
-        await Swal.fire({
-            title: "Tarea creada correctamente!",
-            text: "La tarea ha sido creada",
-            icon: "success"
-        });
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        await Swal.fire({
-            title: "Cancelado",
-            text: "Tu tarea no ha sido creada",
-            icon: "success"
-        });
-    }
-
-    return result.isConfirmed;
-};
 
 export const VolverQuestion = async () => {
     const result = await Swal.fire({
@@ -240,119 +146,6 @@ export const VolverQuestion = async () => {
     });
 
     return result.isConfirmed;
-};
-
-export const UpdatedTicket = async () => {
-    const result = await Swal.fire({
-        title: "¿Estás seguro de modificar la tarea?",
-        text: "Estos cambios son irreversibles.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, modificar",
-        cancelButtonText: "No, cancelar",
-        reverseButtons: true,
-        customClass: {
-            confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-            cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        },
-        buttonsStyling: false,
-    });
-
-    if (result.isConfirmed) {
-        await Swal.fire({
-            title: "Tarea modificada correctamente!",
-            text: "La tarea ha sido modificada",
-            icon: "success"
-        });
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        await Swal.fire({
-            title: "Cancelado",
-            text: "Tu tarea no ha sido modificada",
-            icon: "success"
-        });
-    }
-
-    return result.isConfirmed;
-};
-
-export const CreatedTicket = async () => {
-    const result = await Swal.fire({
-        title: "¿Estas seguro de los datos ingresados?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, asignar",
-        cancelButtonText: "No, cancelar",
-        reverseButtons: true,
-        customClass: {
-            confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-            cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        },
-        buttonsStyling: false,
-    });
-
-    if (result.isConfirmed) {
-        await Swal.fire({
-            title: "Asignado correctamente!",
-            icon: "success"
-        });
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-        await Swal.fire({
-            title: "Cancelado",
-            text: "Tu tarea no ha sido asignada",
-            icon: "success"
-        });
-    }
-
-    return result.isConfirmed;
-};
-
-export const showConfirmFormTicket = async () => {
-    await Toast.fire({
-        icon: "success",
-        title: "Asignacion exitosa!"
-    });
-};
-
-export const showErrorFormTicket = async () => {
-    await Toast.fire({
-        icon: "error",
-        title: "Error al asignar la tarea"
-    });
-};
-
-export const showDeleteTicket = async () => {
-  await Toast.fire({
-      icon: "success",
-      title: "Tarea desasignada exitosamente!"
-  });
-}
-
-export const showFechaInicioError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "La fecha de inicio debe ser en el futuro"
-  });
-};
-
-export const showFechaInicioLaboralError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "La fecha de inicio debe ser en días laborables y horario de trabajo"
-  });
-};
-
-export const showFechaFinError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "La fecha de fin debe ser después de la fecha de inicio"
-  });
-};
-
-export const showFechaFinLaboralError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "La fecha de fin debe ser en días laborables y horario de trabajo"
-  });
 };
 
 export const showRutAsignadoError = async () => {
@@ -402,20 +195,6 @@ export const showRutDuplicateError = async () => {
   });
 };
 
-export const showRoleError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "El rol es obligatorio"
-  });
-};
-
-export const showFacultyError = async () => {
-  await Toast.fire({
-      icon: "error",
-      title: "La facultad es obligatoria"
-  });
-};
-
 export const showAuthError = async () => {
   await Toast.fire({
       icon: "error",
@@ -428,78 +207,6 @@ export const showConfirmUserCreated = async () => {
       icon: "success",
       title: "Usuario creado con éxito"
   });
-};
-
-
-export const DeleteFacultyQuestion = async () => {
-  const result = await Swal.fire({
-    title: "¿Estás seguro de eliminar esta facultad?",
-    text: "Estos cambios son irreversibles.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "No, cancelar",
-    reverseButtons: true,
-    customClass: {
-      confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-      cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-    },
-    buttonsStyling: false,
-  });
-
-  if (result.isConfirmed) {
-    await Swal.fire({
-      title: "Eliminado Correctamente!",
-      text: "La facultad ha sido eliminada",
-      icon: "success"
-    });
-  } else if (result.dismiss === Swal.DismissReason.cancel) {
-    await Swal.fire({
-      title: "Cancelado",
-      icon: "success"
-    });
-  }
-
-  return result.isConfirmed;
-};
-export const showConfirmFacultyCreated = async () => {
-  await Toast.fire({
-      icon: "success",
-      title: "Facultad creada con éxito!"
-  });
-};
-
-export const DuplicarQuestion = async () => {
-  const result = await Swal.fire({
-    title: "¿Estás seguro de duplicar la tarea?",
-    text: "Estos cambios son irreversibles.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, duplicar",
-    cancelButtonText: "No, cancelar",
-    reverseButtons: true,
-    customClass: {
-      confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
-      cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-    },
-    buttonsStyling: false,
-  });
-
-  if (result.isConfirmed) {
-    await Swal.fire({
-      title: "Tarea duplicada correctamente!",
-      text: "La tarea ha sido duplicada",
-      icon: "success"
-    });
-  } else if (result.dismiss === Swal.DismissReason.cancel) {
-    await Swal.fire({
-      title: "Cancelado",
-      text: "La tarea no ha sido duplicada",
-      icon: "success"
-    });
-  }
-
-  return result.isConfirmed;
 };
 
 // Función para mostrar una alerta de éxito
@@ -593,5 +300,84 @@ export const showCommentSuccess = async () => {
     icon: "success",
     title: "Comentario creado con éxito",
     confirmButtonColor: '#387ADF'
+  });
+};
+
+// Mensaje de éxito
+export const showSuccessToast = (message = "Operación exitosa!") => {
+  Toast.fire({
+    icon: "success",
+    title: message,
+  });
+};
+
+// Mensaje de error
+export const showErrorToast = (message = "Ocurrió un error!") => {
+  Toast.fire({
+    icon: "error",
+    title: message,
+  });
+};
+
+// Mensaje para validaciones específicas
+export const showValidationError = (message = "Hay errores en el formulario.") => {
+  Toast.fire({
+    icon: "warning",
+    title: message,
+  });
+};
+
+// Confirmación para eliminar
+export const showDeleteConfirm = async () => {
+  return await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "No podrás revertir esta acción.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  });
+};
+
+// Mensaje para actualización exitosa
+export const showUpdateSuccess = () => {
+  Swal.fire({
+    icon: "success",
+    title: "Aviso actualizado correctamente.",
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+// Mensaje de error para actualización
+export const showUpdateError = (message = "No se pudo actualizar el aviso.") => {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: message,
+    showConfirmButton: true,
+  });
+};
+
+// Mensaje de éxito al crear un aviso
+export const showCreateSuccess = () => {
+  Swal.fire({
+    icon: "success",
+    title: "¡Aviso creado exitosamente!",
+    text: "Tu aviso ha sido registrado correctamente.",
+    showConfirmButton: false,
+    timer: 3000,
+  });
+};
+
+// Mensaje de error al crear un aviso
+export const showCreateError = (message = "Ocurrió un error al crear el aviso. Intenta nuevamente.") => {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: message,
+    showConfirmButton: true,
   });
 };

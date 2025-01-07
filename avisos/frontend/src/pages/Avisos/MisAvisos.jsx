@@ -4,6 +4,7 @@ import AvisoTable from '../../components/AvisoTable';
 import AvisoForm from '../../components/AvisoForm';
 import { getAvisosByUsuario, deleteAviso, updateAviso } from '../../services/avisos.service';
 import '../../styles/Modal.css'; // Importar estilos del modal
+import { showErrorToast, showSuccessToast, showDeleteConfirm } from '../../helpers/swaHelper'; // Importa helpers
 
 // Configuración de React Modal
 Modal.setAppElement('#root');
@@ -23,6 +24,7 @@ const MisAvisos = () => {
       } catch (error) {
         console.error('Error al obtener los avisos:', error);
         setError('No se pudieron cargar los avisos. Intenta nuevamente.');
+        showErrorToast('Error al cargar los avisos.');
       }
     };
 
@@ -32,14 +34,15 @@ const MisAvisos = () => {
   // Función para eliminar un aviso
   const handleDelete = async (id) => {
     try {
-      if (window.confirm('¿Estás seguro de que deseas eliminar este aviso?')) {
+      const result = await showDeleteConfirm(); // Mostrar confirmación de eliminación
+      if (result.isConfirmed) {
         await deleteAviso(id);
         setAvisos((prevAvisos) => prevAvisos.filter((aviso) => aviso.id !== id));
-        alert('Aviso eliminado correctamente.');
+        showSuccessToast('Aviso eliminado correctamente.');
       }
     } catch (error) {
       console.error('Error al eliminar el aviso:', error);
-      alert('No se pudo eliminar el aviso. Intenta nuevamente.');
+      showErrorToast('No se pudo eliminar el aviso. Intenta nuevamente.');
     }
   };
 
@@ -63,10 +66,10 @@ const MisAvisos = () => {
         prevAvisos.map((aviso) => (aviso.id === updatedAviso.id ? updatedAviso : aviso))
       );
       closeModal();
-      alert('Aviso actualizado correctamente.');
+      showSuccessToast('Aviso actualizado correctamente.');
     } catch (error) {
       console.error('Error al actualizar el aviso:', error);
-      alert('No se pudo actualizar el aviso. Intenta nuevamente.');
+      showErrorToast('No se pudo actualizar el aviso. Intenta nuevamente.');
     }
   };
 
