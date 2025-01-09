@@ -16,7 +16,7 @@ const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData, aviso)
-    onSubmit(aviso.id, formData); // Llama a la función de reporte con los datos del formulario
+    onSubmit(e,aviso.id, formData); // Llama a la función de reporte con los datos del formulario
     onClose(); // Cierra el modal
   };
 

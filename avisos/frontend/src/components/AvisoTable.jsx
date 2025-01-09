@@ -1,18 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos, onDelete, onEdit, onReport, showActions = true }) => {
+const AvisoTable = ({ avisos, onDelete, onEdit, onReport, onRowClick, showActions = true, showReport = true }) => {
   const actionBodyTemplate = (rowData) => (
     <div className="actions-column">
+      {showReport && (
         <button 
           className="action-button report"
-          onClick={() => onReport(rowData)}
-        >Reportar</button>
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar conflicto con el clic en la fila
+            onReport(rowData);
+          }}
+        >
+          Reportar
+        </button>
+      )}
       {onDelete && (
         <button
           className="action-button eliminar"
-          onClick={() => onDelete(rowData.id)}
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar conflicto con el clic en la fila
+            onDelete(rowData.id);
+          }}
         >
           Eliminar
         </button>
@@ -20,7 +29,10 @@ const AvisoTable = ({ avisos, onDelete, onEdit, onReport, showActions = true }) 
       {onEdit && (
         <button
           className="action-button editar"
-          onClick={() => onEdit(rowData)}
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar conflicto con el clic en la fila
+            onEdit(rowData);
+          }}
         >
           Actualizar
         </button>
@@ -35,7 +47,6 @@ const AvisoTable = ({ avisos, onDelete, onEdit, onReport, showActions = true }) 
           <tr>
             <th>Título</th>
             <th>Descripción</th>
-            <th>Precio</th>
             <th>Categoría</th>
             {showActions && <th>Acciones</th>}
           </tr>
@@ -43,10 +54,9 @@ const AvisoTable = ({ avisos, onDelete, onEdit, onReport, showActions = true }) 
         <tbody>
           {avisos.length > 0 ? (
             avisos.map((aviso) => (
-              <tr key={aviso.id}>
+              <tr key={aviso.id} onClick={() => onRowClick(aviso)} style={{ cursor: 'pointer' }}>
                 <td>{aviso.titulo}</td>
                 <td>{aviso.descripcion}</td>
-                <td>${aviso.precio || "N/A"}</td>
                 <td>{aviso.categoria || "Sin categoría"}</td>
                 {showActions && <td>{actionBodyTemplate(aviso)}</td>}
               </tr>

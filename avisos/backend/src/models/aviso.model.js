@@ -18,7 +18,7 @@ const avisoSchema = new mongoose.Schema({
   },
   precio: {
     type: Number,
-    required: true,
+    required: false,
   },
   categoria: {
     type: String,

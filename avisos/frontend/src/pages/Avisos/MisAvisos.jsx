@@ -84,6 +84,7 @@ const MisAvisos = () => {
           onDelete={handleDelete}
           onEdit={openModal} // Función para abrir el modal
           showActions={true}
+          showReport={false} 
         />
       )}
 

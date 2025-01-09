@@ -37,12 +37,15 @@ const ListarAvisos = () => {
     setComentario('');
   };
 
-  const handleReport = async (e) => {
+  const handleReport = async (e, avisoId, formData) => {
+    if (e && e.preventDefault) {
+      e.preventDefault(); // Prevenir el comportamiento por defecto
+    }
+  
     try {
-      e.preventDefault(); // Evitar redirección o recarga del formulario
       const usuario = localStorage.getItem('user'); // Usuario autenticado
-      const response = await reportAviso(selectedAviso.id, usuario, gravedad, comentario);
-
+      const response = await reportAviso(avisoId, usuario, formData.gravedad, formData.comentario);
+  
       alert(response.message || 'Reporte registrado con éxito.');
       closeReportModal();
     } catch (error) {
