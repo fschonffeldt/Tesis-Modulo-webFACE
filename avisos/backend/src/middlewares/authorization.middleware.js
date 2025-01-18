@@ -54,6 +54,7 @@ async function isUser(req, res, next) {
   }
 }
 
+
 module.exports = {
-  isAdmin, isUser,
+  isAdmin, isUser
 };

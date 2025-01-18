@@ -24,12 +24,19 @@ router.get("/:id", usuarioController.getUserById);
 router.put(
   "/:id",
   authorizationMiddleware.isAdmin,
-  usuarioController.updateUser,
+  usuarioController.updateUser
 );
 router.delete(
   "/:id",
   authorizationMiddleware.isAdmin,
-  usuarioController.deleteUser,
+  usuarioController.deleteUser
+);
+
+// Nueva ruta para actualizar roles
+router.put(
+  "/:id/roles",
+  authorizationMiddleware.isAdmin, // Middleware que verifica si el usuario es administrador
+  usuarioController.updateUserRoles // Llama al método del controlador
 );
 
 // Exporta el enrutador

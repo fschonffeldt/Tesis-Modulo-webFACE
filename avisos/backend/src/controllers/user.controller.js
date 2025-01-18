@@ -12,15 +12,19 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function getUsers(req, res) {
   try {
-    const [usuarios, errorUsuarios] = await UserService.getUsers();
-    if (errorUsuarios) return respondError(req, res, 404, errorUsuarios);
+    // Llama al servicio para obtener los usuarios
+    const usuarios = await UserService.getUsers();
 
-    usuarios.length === 0
-      ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, usuarios);
+    // Si no hay usuarios, devuelve una respuesta vacía
+    if (!usuarios || usuarios.length === 0) {
+      return respondSuccess(req, res, 204, []);
+    }
+
+    // Devuelve la lista de usuarios
+    return respondSuccess(req, res, 200, usuarios);
   } catch (error) {
     handleError(error, "user.controller -> getUsers");
-    respondError(req, res, 400, error.message);
+    return respondError(req, res, 500, "Error al obtener los usuarios.");
   }
 }
 
@@ -32,20 +36,32 @@ async function getUsers(req, res) {
 async function createUser(req, res) {
   try {
     const { body } = req;
+
+    // Validar el cuerpo de la solicitud con el esquema
     const { error: bodyError } = userBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [newUser, userError] = await UserService.createUser(body);
-
-    if (userError) return respondError(req, res, 400, userError);
-    if (!newUser) {
-      return respondError(req, res, 400, "No se creo el usuario");
+    if (bodyError) {
+      return respondError(req, res, 400, bodyError.message);
     }
 
-    respondSuccess(req, res, 201, newUser);
+    // Llamar al servicio para crear el usuario
+    const [newUser, userError] = await UserService.createUser(body);
+
+    // Manejar errores del servicio
+    if (userError) {
+      return respondError(req, res, 400, userError);
+    }
+
+    // Validar que se haya creado un usuario
+    if (!newUser) {
+      return respondError(req, res, 400, "No se pudo crear el usuario.");
+    }
+
+    // Responder con éxito
+    return respondSuccess(req, res, 201, newUser);
   } catch (error) {
+    // Capturar errores inesperados y responder con error interno del servidor
     handleError(error, "user.controller -> createUser");
-    respondError(req, res, 500, "No se creo el usuario");
+    return respondError(req, res, 500, "No se pudo crear el usuario.");
   }
 }
 
@@ -123,10 +139,45 @@ async function deleteUser(req, res) {
   }
 }
 
+/**
+ * Actualiza los roles de un usuario
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function updateUserRoles(req, res) {
+  try {
+    const { params, body } = req;
+    const userId = params.id; // ID del usuario al que se quiere modificar roles
+    const { roles } = body;  // Nuevos roles enviados en el cuerpo de la solicitud
+
+    // Validar que roles sea un array válido
+    if (!Array.isArray(roles)) {
+      return respondError(req, res, 400, "El campo 'roles' debe ser un array.");
+    }
+
+    // Llamar al servicio para actualizar roles
+    const [updatedUser, error] = await UserService.updateUserRoles(userId, roles);
+
+    // Manejar errores del servicio
+    if (error) {
+      return respondError(req, res, 400, error);
+    }
+
+    // Responder con el usuario actualizado
+    respondSuccess(req, res, 200, updatedUser);
+  } catch (error) {
+    handleError(error, "user.controller -> updateUserRoles");
+    respondError(req, res, 500, "No se pudieron actualizar los roles del usuario.");
+  }
+}
+
+
+
 module.exports = {
   getUsers,
   createUser,
   getUserById,
   updateUser,
   deleteUser,
+  updateUserRoles,
 };

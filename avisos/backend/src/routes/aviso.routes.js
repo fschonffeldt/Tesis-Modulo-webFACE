@@ -11,8 +11,6 @@ const {
   getAvisoContactInfo,
 } = require("../controllers/aviso.controller");
 
-const { getReportesByAviso, getAllReportes } = require("../controllers/reporte.controller");
-
 const authenticationMiddleware = require("../middlewares/authentication.middleware");
 const router = express.Router();
 
@@ -31,7 +29,5 @@ router.get("/:id/contacto", getAvisoContactInfo);
 router.get("/:id", getAvisoById);
 
 router.post("/:id/reportes", reportAviso);
-
-router.get("/:id/reportes", getReportesByAviso);
 
 module.exports = router;
