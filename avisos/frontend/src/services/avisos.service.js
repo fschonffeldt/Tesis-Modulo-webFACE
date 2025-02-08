@@ -105,18 +105,3 @@ export const getAvisosByUsuario = async () => {
     throw error;
   }
 };
-
-// Obtener datos de contacto de un aviso por ID
-export const getAvisoContactInfo = async (id) => {
-  try {
-    const response = await axios.get(`/avisos/${id}/contacto`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluye el token si es necesario
-      },
-    });
-    return response.data; // Los datos de contacto del aviso
-  } catch (error) {
-    console.error(`Error al obtener los datos de contacto del aviso con ID ${id}:`, error);
-    throw error;
-  }
-};

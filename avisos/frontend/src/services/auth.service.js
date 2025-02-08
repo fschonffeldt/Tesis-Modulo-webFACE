@@ -55,25 +55,47 @@ export const test = async () => {
   }
 };
 
-
 /**
- * Registra un nuevo usuario
+ * Envía el código de activación al correo del usuario
  * @param {String} email - Correo del usuario
  * @returns {Object} Respuesta del backend
  */
-export const register = async (email) => {
+export const sendActivationCode = async (email) => {
   try {
-    const response = await axios.post('/auth/register', { email });
+    // Llamada al endpoint del backend
+    const response = await axios.post('/users/send-verification', { email });
     const { status, data } = response;
-    if (status === 201) {
-      console.log('Registro exitoso:', data);
+
+    if (status === 200) {
+      console.log('Código de activación enviado:', data);
+      return data; // Devuelve el mensaje de éxito del backend
+    }
+  } catch (error) {
+    console.error('Error enviando el código de activación:', error.response?.data || error.message);
+    throw error; // Lanza el error para manejarlo en el componente o flujo
+  }
+};
+
+/**
+ * Activa la cuenta del usuario
+ * @param {String} email - Correo del usuario
+ * @param {String} code - Código de activación enviado por correo
+ * @returns {Object} Respuesta del backend
+ */
+export const activateAccount = async ({ email, code }) => {
+  try {
+    const response = await axios.post('/users/activate', { email, code }); // Llama a la ruta del backend
+    const { status, data } = response;
+    if (status === 200) {
+      console.log('Cuenta activada exitosamente:', data);
       return data;
     }
   } catch (error) {
-    console.error('Error en el registro:', error.response?.data || error.message);
-    throw error;
+    console.error('Error activando la cuenta:', error.response?.data || error.message);
+    throw error; // Lanza el error para manejarlo en el componente
   }
 };
+
 
 /**
  * Restablece la contraseña de un usuario

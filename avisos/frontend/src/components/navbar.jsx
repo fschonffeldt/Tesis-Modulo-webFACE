@@ -7,7 +7,7 @@ import logo from '../assets/Logo.png';
 const Navbar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth(); // Accede al estado de autenticación y logout
+  const { isAuthenticated, logout, user } = useAuth(); // Accede al estado de autenticación y el usuario
 
   const handleToggleSidebar = () => {
     const newState = !isCollapsed;
@@ -50,6 +50,12 @@ const Navbar = () => {
           <li onClick={() => handleNavigation('/crear-aviso')}>
             <span>Crear Aviso</span>
           </li>
+          {/* Mostrar la sección de Reportes solo para administradores o moderadores */}
+          {(user?.role === 'admin' || user?.role === 'moderador') && (
+            <li onClick={() => handleNavigation('/reportes')}>
+              <span>Reportes</span>
+            </li>
+          )}
         </ul>
       </div>
     </div>

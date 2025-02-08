@@ -8,6 +8,7 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     precio: '',
     categoria: '',
     telefono: '',
+    imagen: null,  // Nuevo campo para la imagen
   });
   const [sinPrecio, setSinPrecio] = useState(false);
 
@@ -16,9 +17,14 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    // Guardar el archivo seleccionado en el estado
+    setFormData({ ...formData, imagen: e.target.files[0] });
+  };
+
   const handleCheckboxChange = () => {
     setSinPrecio(!sinPrecio);
-    setFormData({ ...formData, precio: '' }); // Limpia el campo de precio si se desactiva
+    setFormData({ ...formData, precio: '' });
   };
 
   const handleSubmit = (e) => {
@@ -64,17 +70,17 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
             value={formData.precio}
             onChange={handleChange}
             placeholder="00000"
-            disabled={sinPrecio} // Desactiva el campo si la casilla está marcada
+            disabled={sinPrecio}
           />
           <div className="sin-precio-container">
-          <input
-          type="checkbox"
-          id="sinPrecio"
-          name="sinPrecio"
-          checked={sinPrecio}
-          onChange={handleCheckboxChange}
-          />
-           <label htmlFor="sinPrecio">Sin precio</label>
+            <input
+              type="checkbox"
+              id="sinPrecio"
+              name="sinPrecio"
+              checked={sinPrecio}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="sinPrecio">Sin precio</label>
           </div>
         </div>
 
@@ -106,6 +112,18 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
             onChange={handleChange}
             placeholder="Número de contacto"
             required
+          />
+        </div>
+
+        {/* Campo para cargar la imagen */}
+        <div className="form-group">
+          <label htmlFor="imagen">Imagen</label>
+          <input
+            type="file"
+            id="imagen"
+            name="imagen"
+            accept="image/*"
+            onChange={handleFileChange}
           />
         </div>
 

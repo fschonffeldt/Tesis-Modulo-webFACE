@@ -3,7 +3,7 @@ import 'bulma/css/bulma.min.css';
 import '../styles/Login.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { login, register } from '../services/auth.service';
+import { login,activateAccount, sendActivationCode } from '../services/auth.service';
 import { showErrorLogin } from '../helpers/swaHelper.js';
 import Swal from 'sweetalert2';
 
@@ -24,20 +24,22 @@ function LoginForm() {
       inputLabel: 'Ingresa tu correo electrónico para activar la cuenta',
       inputPlaceholder: 'ejemplo@dominio.com',
       showCancelButton: true,
-      confirmButtonText: 'Activar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Enviar código',
       inputValidator: (email) => {
         if (!email) return 'El correo es obligatorio';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Ingresa un correo válido';
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        register(result.value)
-          .then(() => Swal.fire('Cuenta activada', 'Revisa tu correo para más detalles', 'success'))
-          .catch((error) => Swal.fire('Error', error.response?.data?.message || 'Error al activar la cuenta', 'error'));
+        sendActivationCode(result.value) // Llama al backend para enviar el código
+          .then(() => Swal.fire('Código enviado', 'Revisa tu correo para más detalles', 'success'))
+          .catch((error) =>
+            Swal.fire('Error', error.response?.data?.message || 'Error al enviar el código', 'error')
+          );
       }
     });
   };
+  
 
   return (
     <div className="page-container">
