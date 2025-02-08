@@ -6,7 +6,7 @@ const { schemaAviso } = require('../schema/aviso.schema');
 
 exports.createAviso = async (req, res) => {
   try {
-    console.log("Petición recibida en createAviso"); 
+    console.log("Petición recibida en createAviso");
     const { titulo, descripcion, precio, categoria, contacto } = req.body;
 
     // Validar que el contacto tiene un teléfono
@@ -20,6 +20,12 @@ exports.createAviso = async (req, res) => {
       return res.status(400).json({ message: "El email del usuario es obligatorio." });
     }
 
+    // Procesar imágenes si se subieron
+    const imagenes = req.files && req.files.length > 0 
+      ? req.files.map(file => `/uploads/${file.filename}`) 
+      : []; // Si no hay imágenes, inicializa como un arreglo vacío
+
+    // Crear el nuevo aviso
     const nuevoAviso = new Aviso({
       titulo,
       descripcion,
@@ -29,12 +35,14 @@ exports.createAviso = async (req, res) => {
         telefono: contacto.telefono, // Teléfono del body
         email: usuarioEmail, // Email autenticado
       },
+      imagenes, // Almacenar las rutas de las imágenes (si existen)
     });
 
+    // Guardar el aviso en la base de datos
     const avisoGuardado = await nuevoAviso.save();
     console.log("Aviso guardado en la base de datos:", avisoGuardado);
 
-    res.status(201).json(avisoGuardado);
+    res.status(201).json({ mensaje: "Aviso creado con éxito", aviso: avisoGuardado });
   } catch (error) {
     console.error("Error al crear el aviso:", error);
     res.status(500).json({ message: "Error al crear el aviso", error });

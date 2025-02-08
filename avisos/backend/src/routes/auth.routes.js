@@ -13,8 +13,6 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 router.get("/refresh", authController.refresh);
 
-// Ruta para registrar un nuevo usuario (activar cuenta)
-router.post("/register", authController.register);
 
 // Ruta para restablecer contraseña
 router.post("/forgot-password", authController.forgotPassword);

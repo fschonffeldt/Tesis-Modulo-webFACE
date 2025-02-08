@@ -4,6 +4,11 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const UserService = require("../services/user.service");
 const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
+const User = require("../models/user.model");
+const { generateVerificationCode } = require("../utils/codeGenerator");
+const { sendEmail } = require("../services/email.service");
+
+
 
 /**
  * Obtiene todos los usuarios
@@ -171,6 +176,71 @@ async function updateUserRoles(req, res) {
   }
 }
 
+/**
+ * Activa una cuenta de usuario mediante un código de verificación
+ * @param {Object} req - Solicitud HTTP
+ * @param {Object} res - Respuesta HTTP
+ */
+async function activateUser(req, res) {
+  const { email, code } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    if (user.isActive) {
+      return res.status(400).json({ message: "La cuenta ya está activada." });
+    }
+
+    if (user.verificationCode !== code) {
+      return res.status(400).json({ message: "Código de verificación incorrecto." });
+    }
+
+    // Activa la cuenta
+    user.isActive = true;
+    user.verificationCode = null; // Limpia el código
+    await user.save();
+
+    res.status(200).json({ message: "Cuenta activada con éxito." });
+  } catch (error) {
+    console.error("Error en activateUser:", error.message);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
+
+async function sendVerificationCode(req, res) {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    if (user.isActive) {
+      return res.status(400).json({ message: "La cuenta ya está activada." });
+    }
+
+    const verificationCode = generateVerificationCode();
+    user.verificationCode = verificationCode;
+    await user.save();
+
+    // Envía el correo con el código
+    const subject = "Código de activación";
+    const text = `Tu código de activación es: ${verificationCode}`;
+    const html = `<p>Tu código de activación es: <strong>${verificationCode}</strong></p>`;
+
+    await sendEmail(user.email, subject, text, html);
+
+    res.status(200).json({ message: "Código enviado al correo electrónico." });
+  } catch (error) {
+    console.error("Error en sendVerificationCode:", error.message);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
 
 
 module.exports = {
@@ -180,4 +250,6 @@ module.exports = {
   updateUser,
   deleteUser,
   updateUserRoles,
+  activateUser,
+  sendVerificationCode,
 };

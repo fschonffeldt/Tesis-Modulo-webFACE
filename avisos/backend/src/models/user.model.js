@@ -25,6 +25,13 @@ const userSchema = new mongoose.Schema(
         ref: "Role",
       },
     ],
+    isActive: {
+      type: Boolean,
+      default: false, // Nuevo campo: por defecto la cuenta está inactiva
+    },
+    verificationCode: {
+      type: String, // Nuevo campo: almacena el código de verificación
+    },
   },
   {
     versionKey: false,

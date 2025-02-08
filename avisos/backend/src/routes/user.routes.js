@@ -14,7 +14,12 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Instancia del enrutador */
 const router = express.Router();
 
-// Define el middleware de autenticación para todas las rutas
+// Ruta pública para activar la cuenta
+router.post("/activate", usuarioController.activateUser);
+router.post("/send-verification", usuarioController.sendVerificationCode);
+
+
+// Define el middleware de autenticación para todas las rutas protegidas
 router.use(authenticationMiddleware);
 
 // Define las rutas para los usuarios

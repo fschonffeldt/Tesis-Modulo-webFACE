@@ -4,6 +4,8 @@ const User = require("../models/user.model.js");
 const Role = require("../models/role.model.js");
 const { handleError } = require("../utils/errorHandler");
 const bcrypt = require("bcrypt");
+const { generateVerificationCode } = require("../utils/codeGenerator");
+const { sendEmail } = require("./email.service");
 
 
 class UserService {
@@ -224,6 +226,59 @@ static async updateUserRoles(userId, roles) {
       handleError(error, "UserService -> deleteUser");
     }
   }
+
+  /**
+   * Registra un nuevo usuario con verificación de correo electrónico
+   * @param {Object} data - Datos del usuario
+   * @returns {Array} - Usuario creado o mensaje de error
+   */
+  static async registerUser({ username, email, password, roles }) {
+    try {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return [null, "El correo ya está registrado."];
+      }
+
+      const verificationCode = generateVerificationCode();
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = new User({
+        username,
+        email,
+        password: hashedPassword,
+        roles,
+        verificationCode, // Código para verificar la cuenta
+        isActive: false,   // La cuenta está desactivada por defecto
+      });
+
+      await newUser.save();
+
+      // Enviar correo con el código de verificación
+      const htmlContent = `
+        <h1>Bienvenido a AVISOS</h1>
+        <p>Gracias por registrarte. Para activar tu cuenta, usa este código:</p>
+        <h2>${verificationCode}</h2>
+        <p>Si no solicitaste esta cuenta, ignora este mensaje.</p>
+      `;
+
+      const emailResult = await sendEmail(
+        email,
+        "Código de Verificación",
+        `Tu código de verificación es: ${verificationCode}`, // Texto plano
+        htmlContent                                        // Contenido HTML
+      );
+
+      if (!emailResult) {
+        return [null, "Error al enviar el correo de verificación."];
+      }
+
+      return [newUser, null];
+    } catch (error) {
+      handleError(error, "UserService -> registerUser");
+      return [null, "Error interno del servidor."];
+    }
+  }
+
 }
 
 module.exports = UserService;

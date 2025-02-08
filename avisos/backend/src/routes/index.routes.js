@@ -15,7 +15,7 @@ const avisoroutes = require("./aviso.routes.js");
 //const uploadRoutes = require('./upload.routes.js'); 
 const reportRoutes = require("./reporte.routes.js");
 const emailRoutes = require("./email.routes.js");
-
+const uploadRoutes = require('./upload.routes.js');
 /** Instancia del enrutador */
 const router = express.Router();
 
@@ -27,7 +27,7 @@ router.use("/avisos", avisoroutes);
 router.use("/reportes", reportRoutes);
 router.use("/emails", emailRoutes);
 
-//router.use('/uploads', uploadRoutes);
+router.use('/uploads', uploadRoutes);
 
 // Exporta el enrutador
 module.exports = router;

@@ -16,6 +16,7 @@ const { setupDB } = require("./config/configDB.js");
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
 const { createRoles, createUsers } = require("./config/initialSetup");
 require("./tasks/avisoCronJob.js"); 
+const path = require("path"); // Importa 'path' para manejar rutas de archivos
 
 /**
  * Inicia el servidor web
@@ -34,6 +35,11 @@ async function setupServer() {
     server.use(morgan("dev"));
     // Agrega el middleware para el manejo de datos en formato URL
     server.use(express.urlencoded({ extended: true }));
+
+    // Agregar el middleware para servir archivos estáticos desde la carpeta 'uploads'
+    server.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+
+
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 

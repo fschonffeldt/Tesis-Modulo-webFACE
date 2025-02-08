@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
+// Definición del esquema
 const avisoSchema = new mongoose.Schema({
   id: {
     type: String,
@@ -38,13 +39,19 @@ const avisoSchema = new mongoose.Schema({
   },
   estado: {
     type: String,
-    enum: ["Vigente", "Vencido", "Desactivado"],
-    default: "Vigente",
+    enum: ['Vigente', 'Vencido', 'Desactivado'],
+    default: 'Vigente',
   },
   puntosReporte: {
     type: Number,
     default: 0,
   },
+  imagenes: [
+    {
+      type: String, // Almacena las rutas de las imágenes
+      required: false,
+    },
+  ],
 });
 
-module.exports = mongoose.model("Aviso", avisoSchema);
+module.exports = mongoose.model('Aviso', avisoSchema);

@@ -79,41 +79,6 @@ async function refresh(req, res) {
   }
 }
 
-/**
- * Registra un nuevo usuario
- * @async
- * @function register
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function register(req, res) {
-  try {
-    const { email } = req.body;
-
-    if (!email) {
-      return respondError(req, res, 400, "El correo electrónico es obligatorio.");
-    }
-
-    const { newUser, randomPassword } = await AuthServices.register({ email });
-
-    const subject = "Tu cuenta ha sido activada exitosamente";
-    const message = `Hola, Tu contraseña temporal es: ${randomPassword}`;
-    const htmlMessage = `<p>Hola, Tu contraseña temporal es: <b>${randomPassword}</b></p>`;
-
-    await sendEmail(email, subject, message, htmlMessage);
-
-    respondSuccess(req, res, 201, {
-      message: "Usuario registrado exitosamente. Contraseña enviada al correo.",
-      user: {
-        id: newUser._id,
-        email: newUser.email,
-      },
-    });
-  } catch (error) {
-    handleError(error, "auth.controller -> register");
-    respondError(req, res, error.status || 500, error.message || "Error interno del servidor.");
-  }
-}
 
 /**
  * Restablece la contraseña del usuario
@@ -151,6 +116,5 @@ module.exports = {
   login,
   logout,
   refresh,
-  register,
   forgotPassword,
 };
