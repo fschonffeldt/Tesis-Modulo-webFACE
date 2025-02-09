@@ -21,7 +21,7 @@ const AvisoTable = ({ avisos }) => {
 
   return (
     <div className="avisos-container">
-      <h1 className="text-center">Listado de Avisos</h1>
+      <h1 className="text-center">Avisos</h1>
       <div className="avisos-grid">
         {avisos.length > 0 ? (
           avisos.map((aviso) => (

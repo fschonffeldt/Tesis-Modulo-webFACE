@@ -1,28 +1,28 @@
 /* Fondo oscuro y centrado del modal */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Más opaco */
-    display: flex;
-    z-index: 1000;
-  }
-  
-  /* Contenedor del modal */
-  .modal-content {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 15px; /* Bordes más redondeados */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    width: 100%; /* Ocupar el ancho máximo */
-    max-width: 350px; /* Un ancho más pequeño y balanceado */
-    max-height: 80vh; /* Altura máxima */
-    overflow-y: auto; /* Scroll interno si el contenido lo necesita */
-    text-align: center;
-    animation: fadeIn 0.3s ease-in-out;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Más opaco */
+  display: flex;
+  align-items: center;        /* Centrar verticalmente */
+  justify-content: center;    /* Centrar horizontalmente */
+  z-index: 1000;
+}
+
+/* Contenedor del modal */
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+  max-width: 800px;          /* Ancho máximo del modal */
+  width: 90%;                /* Ajustar para pantallas pequeñas */
+}
   
   /* Ajuste del formulario */
   .modal-content form {
