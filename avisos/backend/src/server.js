@@ -37,7 +37,7 @@ async function setupServer() {
     server.use(express.urlencoded({ extended: true }));
 
     // Agregar el middleware para servir archivos estáticos desde la carpeta 'uploads'
-    server.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+    server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
     // Agrega el enrutador principal al servidor

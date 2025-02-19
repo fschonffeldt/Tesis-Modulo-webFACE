@@ -1,45 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
 import { Button } from 'primereact/button';
+import { SpeedDial } from 'primereact/speeddial';
+import { Toast } from 'primereact/toast';
 import "../styles/AvisoTable.css";
+import 'primeicons/primeicons.css';  
+import 'primereact/resources/primereact.min.css';  
+import 'primereact/resources/themes/saga-blue/theme.css';
 
-const AvisoTable = ({ avisos }) => {
+const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate = true, onUpdate = () => {}, onDelete = () => {}, onReport = () => {} }) => {
   const [selectedAviso, setSelectedAviso] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const toast = useRef(null);
+  const API_URL = import.meta.env.VITE_IMAGE_URL || 'http://localhost:3000';
 
-  // Función para abrir el modal
   const handleMoreInfoClick = (aviso) => {
     setSelectedAviso(aviso);
     setIsModalOpen(true);
   };
 
-  // Función para cerrar el modal
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedAviso(null);
   };
 
+  const getSpeedDialItems = (aviso) => {
+    let items = [
+      {
+        label: 'Compartir',
+        icon: 'pi pi-share-alt',
+        command: () => {
+          navigator.share
+            ? navigator.share({ title: aviso.titulo, text: aviso.descripcion })
+                .then(() => toast.current.show({ severity: 'info', summary: 'Compartido', detail: `El aviso "${aviso.titulo}" fue compartido exitosamente` }))
+                .catch(() => toast.current.show({ severity: 'error', summary: 'Error al compartir', detail: `No se pudo compartir el aviso "${aviso.titulo}"` }))
+            : toast.current.show({ severity: 'info', summary: 'Compartir no soportado', detail: 'La funcionalidad no está disponible en este navegador' });
+        }
+      }
+    ];
+
+    // Agregar "Reportar" solo si showReport es true
+    if (showReport && onReport) {
+      items.unshift({
+        label: 'Reportar',
+        icon: 'pi pi-flag',
+        command: () => {
+          onReport(aviso);
+        }
+      });
+    }
+
+    // Agregar "Eliminar" solo si showDelete es true
+    if (showDelete && onDelete) {
+      items.unshift({
+        label: 'Eliminar',
+        icon: 'pi pi-trash',
+        command: () => {
+          onDelete(aviso.id);
+        }
+      });
+    }
+
+    // Agregar "Actualizar" solo si showUpdate es true
+    if (showUpdate) {
+      items.unshift({
+        label: 'Actualizar',
+        icon: 'pi pi-refresh',
+        command: () => {
+          if (onUpdate) {
+            onUpdate(aviso);
+          }
+        }
+      });
+    }
+
+    return items;
+  };
+
+  const handleImage = async () => {
+    try {
+
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <div className="avisos-container">
+      <Toast ref={toast} />
       <h1 className="text-center">Avisos</h1>
+
       <div className="avisos-grid">
         {avisos.length > 0 ? (
           avisos.map((aviso) => (
             <div key={aviso.id} className="aviso-card">
-              {/* Imagen circular en lugar del ícono */}
+              <div className="speeddial-container">
+                <SpeedDial
+                  model={getSpeedDialItems(aviso)}
+                  direction="down"
+                  style={{ background: 'none', boxShadow: 'none' }}
+                />
+              </div>
+
               <div className="aviso-image-container">
                 {aviso.imagenes && aviso.imagenes.length > 0 ? (
-                  <img
-                    src={aviso.imagenes[0]}
-                    alt="Imagen del aviso"
-                    className="aviso-image"
-                  />
+                  <img src={`${API_URL}/${aviso.imagenes[0]}`} /> // ! Mapear array para mostrar x cantidad de imagenes
                 ) : (
                   <i className="pi pi-home aviso-icon"></i>
                 )}
               </div>
 
-              <h5 className="aviso-title">AVISO</h5>
+
+              <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
               <Button
                 label="Más información"
@@ -53,7 +125,6 @@ const AvisoTable = ({ avisos }) => {
         )}
       </div>
 
-      {/* Modal para detalles del aviso */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -63,38 +134,13 @@ const AvisoTable = ({ avisos }) => {
         {selectedAviso && (
           <div className="popup-container">
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
-            <div className="popup-content">
-              {/* Imágenes del aviso */}
-              <div className="popup-images">
-                {selectedAviso.imagenes?.map((imagen, index) => (
-                  <img
-                    key={index}
-                    src={imagen}
-                    alt={`Imagen ${index + 1}`}
-                    className="popup-image"
-                  />
-                ))}
-              </div>
-
-              {/* Descripción */}
-              <p className="popup-description">{selectedAviso.descripcion}</p>
-
-              {/* Botón para reportar */}
-              <Button
-                label="Reportar Aviso"
-                icon="pi pi-flag"
-                className="p-button-danger popup-button"
-                onClick={() => alert('Reporte enviado')}
-              />
-
-              {/* Botón para cerrar */}
-              <Button
-                label="Cerrar"
-                icon="pi pi-times"
-                className="p-button-secondary close-button"
-                onClick={closeModal}
-              />
-            </div>
+            <p className="popup-description">{selectedAviso.descripcion}</p>
+            <Button
+              label="Cerrar"
+              icon="pi pi-times"
+              className="p-button-secondary close-button"
+              onClick={closeModal}
+            />
           </div>
         )}
       </Modal>

@@ -10,13 +10,13 @@ const {
   reportAviso,
   getAvisosPublicos,
 } = require("../controllers/aviso.controller");
+const path = require("path");
 
 const authenticationMiddleware = require("../middlewares/authentication.middleware");
 const router = express.Router();
 
 // Ruta para obtener avisos públicos (sin autenticación)
 router.get("/public", getAvisosPublicos);
-
 // Middleware de autenticación
 router.use(authenticationMiddleware);
 

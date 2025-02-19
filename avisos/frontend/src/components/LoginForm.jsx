@@ -3,7 +3,7 @@ import 'bulma/css/bulma.min.css';
 import '../styles/Login.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { login,activateAccount, sendActivationCode } from '../services/auth.service';
+import { login, activateAccount, sendActivationCode } from '../services/auth.service';
 import { showErrorLogin } from '../helpers/swaHelper.js';
 import Swal from 'sweetalert2';
 
@@ -11,17 +11,19 @@ function LoginForm() {
   const navigate = useNavigate();
   const { register: formRegister, handleSubmit, formState: { errors } } = useForm();
 
+  // 🔹 Función para iniciar sesión
   const onSubmit = (data) => {
     login(data)
       .then(() => navigate('/listar-avisos'))
       .catch(() => showErrorLogin());
   };
 
+  // 🔹 Función para solicitar código de activación
   const handleActivateAccount = () => {
     Swal.fire({
       title: 'Activar cuenta',
       input: 'email',
-      inputLabel: 'Ingresa tu correo electrónico para activar la cuenta',
+      inputLabel: 'Ingresa tu correo electrónico para recibir el código de activación',
       inputPlaceholder: 'ejemplo@dominio.com',
       showCancelButton: true,
       confirmButtonText: 'Enviar código',
@@ -32,14 +34,46 @@ function LoginForm() {
     }).then((result) => {
       if (result.isConfirmed) {
         sendActivationCode(result.value) // Llama al backend para enviar el código
-          .then(() => Swal.fire('Código enviado', 'Revisa tu correo para más detalles', 'success'))
+          .then(() => {
+            Swal.fire({
+              title: 'Código enviado',
+              text: 'Revisa tu correo e ingresa el código para activar tu cuenta.',
+              icon: 'success',
+            }).then(() => {
+              handleVerifyActivationCode(result.value); // 🔹 Llama a la función para ingresar el código
+            });
+          })
           .catch((error) =>
             Swal.fire('Error', error.response?.data?.message || 'Error al enviar el código', 'error')
           );
       }
     });
   };
-  
+
+  // 🔹 Función para ingresar el código de activación y activar la cuenta
+  const handleVerifyActivationCode = (email) => {
+    Swal.fire({
+      title: 'Ingresa el código de activación',
+      input: 'text',
+      inputLabel: 'Código de activación',
+      inputPlaceholder: '123456',
+      showCancelButton: true,
+      confirmButtonText: 'Activar cuenta',
+      inputValidator: (code) => {
+        if (!code) return 'El código es obligatorio';
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        activateAccount({ email, code: result.value }) // 🔹 Llama a activateAccount con el código ingresado
+          .then(() => {
+            Swal.fire('Cuenta activada', 'Tu cuenta ha sido activada correctamente.', 'success');
+          })
+          .catch((error) =>
+            Swal.fire('Error', error.response?.data?.message || 'Error al activar la cuenta', 'error')
+          );
+      }
+    });
+  };
 
   return (
     <div className="page-container">

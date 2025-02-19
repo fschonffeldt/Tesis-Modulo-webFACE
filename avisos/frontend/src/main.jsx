@@ -11,7 +11,7 @@ import EditarAviso from './pages/Avisos/EditarAviso';
 import MisAvisos from './pages/Avisos/MisAvisos';
 import AvisosPublicos from './pages/Avisos/AvisosPublicos.jsx';
 import ReportarAviso from './pages/Avisos/ReportarAvisos.jsx';
-
+import AvisosReportados from './pages/Avisos/AvisosReportados.jsx';
 
 
 const router = createBrowserRouter([
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: '/reportar-aviso/:id',
         element: <ReportarAviso  />,
+      },
+      {
+        path: '/avisos-reportados', // 🔹 Agregamos la nueva ruta
+        element: <AvisosReportados />,
       },
     ],
   },

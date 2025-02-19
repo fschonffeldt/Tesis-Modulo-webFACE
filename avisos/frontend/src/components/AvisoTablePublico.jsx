@@ -1,66 +1,103 @@
-import React from "react";
+import React, { useState } from 'react';
+import Modal from 'react-modal';
+import { Button } from 'primereact/button';
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos, onReport, onDelete, onEdit, showActions = true }) => {
-  // Template para la columna de acciones
-  const actionBodyTemplate = (rowData) => (
-    <div className="actions-column">
-      {/* Botón Reportar */}
-      <button
-        className="action-button report"
-        onClick={() => onReport(rowData.id)}
-      >
-        Reportar
-      </button>
+const AvisoTable = ({ avisos }) => {
+  const [selectedAviso, setSelectedAviso] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-      {/* Botón Eliminar - Solo aparece si onDelete se pasa */}
-      {onDelete && (
-        <button
-          className="action-button delete"
-          onClick={() => onDelete(rowData.id)}
-        >
-          Eliminar
-        </button>
-      )}
+  // Función para abrir el modal
+  const handleMoreInfoClick = (aviso) => {
+    setSelectedAviso(aviso);
+    setIsModalOpen(true);
+  };
 
-      {/* Botón Actualizar - Solo aparece si onEdit se pasa */}
-      {onEdit && (
-        <button
-          className="action-button edit"
-          onClick={() => onEdit(rowData)}
-        >
-          Actualizar
-        </button>
-      )}
-    </div>
-  );
+  // Función para cerrar el modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedAviso(null);
+  };
 
   return (
-    <div className="avisos-table-container">
-      <table className="avisos-table">
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Descripción</th>
-            {showActions && <th>Acciones</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {avisos.length > 0 ? (
-            avisos.map((aviso) => (
-              <tr key={aviso.id}>
-                <td>{aviso.titulo}</td>
-                <td>{aviso.descripcion}</td>
-                {showActions && <td>{actionBodyTemplate(aviso)}</td>}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={5}>No hay avisos para mostrar.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+    <div className="avisos-container">
+      <h1 className="text-center">Avisos</h1>
+      <div className="avisos-grid">
+        {avisos.length > 0 ? (
+          avisos.map((aviso) => (
+            <div key={aviso.id} className="aviso-card">
+              {/* Imagen circular en lugar del ícono */}
+              <div className="aviso-image-container">
+                {aviso.imagenes && aviso.imagenes.length > 0 ? (
+                  <img
+                    src={aviso.imagenes[0]}
+                    alt="Imagen del aviso"
+                    className="aviso-image"
+                  />
+                ) : (
+                  <i className="pi pi-home aviso-icon"></i>
+                )}
+              </div>
+
+              <h5 className="aviso-title">AVISO</h5>
+              <p className="aviso-description">{aviso.descripcion}</p>
+              <Button
+                label="Más información"
+                className="p-button-outlined"
+                onClick={() => handleMoreInfoClick(aviso)}
+              />
+            </div>
+          ))
+        ) : (
+          <p className="no-avisos-text">No hay avisos para mostrar.</p>
+        )}
+      </div>
+
+      {/* Modal para detalles del aviso */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        className="modal-content"
+        overlayClassName="modal-overlay"
+      >
+        {selectedAviso && (
+          <div className="popup-container">
+            <h2 className="popup-title">{selectedAviso.titulo}</h2>
+            <div className="popup-content">
+              {/* Imágenes del aviso */}
+              <div className="popup-images">
+                {selectedAviso.imagenes?.map((imagen, index) => (
+                  <img
+                    key={index}
+                    src={imagen}
+                    alt={`Imagen ${index + 1}`}
+                    className="popup-image"
+                  />
+                ))}
+              </div>
+
+              {/* Descripción */}
+              <p className="popup-description">{selectedAviso.descripcion}</p>
+
+              {/* Botón para reportar */}
+              <Button
+                label="Reportar Aviso"
+                icon="pi pi-flag"
+                className="p-button-danger popup-button"
+                onClick={() => alert('Reporte enviado')}
+              />
+
+              {/* Botón para cerrar */}
+              <Button
+                label="Cerrar"
+                icon="pi pi-times"
+                className="p-button-secondary close-button"
+                onClick={closeModal}
+              />
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

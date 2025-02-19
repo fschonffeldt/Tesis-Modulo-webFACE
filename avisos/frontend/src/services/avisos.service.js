@@ -1,9 +1,9 @@
 import axios from './root.service'; // Configuración global de Axios
-
+import axiosForm from './form.service';
 // Crear un nuevo aviso
 export const createAviso = async (aviso) => {
   try {
-    const response = await axios.post('/avisos', aviso);
+    const response = await axiosForm.post('/avisos', aviso);
     return response.data;
   } catch (error) {
     console.error('Error al crear el aviso:', error);
@@ -87,6 +87,46 @@ export const reportAviso = async (avisoId, usuario, gravedad) => {
     return response.data;
   } catch (error) {
     console.error('Error al reportar el aviso:', error);
+    throw error;
+  }
+};
+
+
+// Obtener todos los avisos reportados (Solo Admin o Moderador)
+export const getAllReportes = async () => {
+  try {
+    const response = await axios.get('/reportes', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener los reportes:', error);
+    throw error;
+  }
+};
+
+// Desactivar un aviso reportado (Solo Admin o Moderador)
+export const darDeBajaAviso = async (avisoId) => {
+  try {
+    const response = await axios.put(`/reportes/desactivar/${avisoId}`, {}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al desactivar el aviso:', error);
+    throw error;
+  }
+};
+
+// Actualizar un aviso reportado (Solo Admin o Moderador)
+export const actualizarAvisoReportado = async (avisoId, avisoData) => {
+  try {
+    const response = await axios.put(`/reportes/actualizar/${avisoId}`, avisoData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar el aviso reportado:', error);
     throw error;
   }
 };

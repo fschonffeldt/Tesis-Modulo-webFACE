@@ -20,6 +20,7 @@ const MisAvisos = () => {
     const fetchAvisos = async () => {
       try {
         const data = await getAvisosByUsuario();
+        console.log(data);
         setAvisos(data);
       } catch (error) {
         console.error('Error al obtener los avisos:', error);
@@ -82,10 +83,11 @@ const MisAvisos = () => {
         <AvisoTable
           avisos={avisos}
           onDelete={handleDelete}
-          onEdit={openModal} // Función para abrir el modal
-          showActions={true}
-          showReport={false} 
-        />
+          onUpdate={openModal}  // Pasa openModal para que el botón "Actualizar" abra el modal
+          showDelete={true} 
+          showUpdate={true}
+          showReport={false} // No mostramos "Reportar" en Mis Avisos
+/>
       )}
 
       {/* Modal para actualizar un aviso */}

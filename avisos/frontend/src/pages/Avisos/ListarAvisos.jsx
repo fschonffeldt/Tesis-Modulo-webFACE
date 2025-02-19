@@ -61,6 +61,9 @@ const ListarAvisos = () => {
         <AvisoTable
           avisos={avisos}
           onReport={openReportModal} // Pasar la función para abrir el modal
+          showDelete={false}  // Oculta el botón "Eliminar"
+          showUpdate={false}  // Oculta el botón "Actualizar"
+          showReport={true}   // Asegura que el botón "Reportar" siga visible
         />
       </div>
 

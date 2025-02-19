@@ -50,12 +50,9 @@ const Navbar = () => {
           <li onClick={() => handleNavigation('/crear-aviso')}>
             <span>Crear Aviso</span>
           </li>
-          {/* Mostrar la sección de Reportes solo para administradores o moderadores */}
-          {(user?.role === 'admin' || user?.role === 'moderador') && (
-            <li onClick={() => handleNavigation('/reportes')}>
+            <li onClick={() => handleNavigation('/avisos-reportados')}>
               <span>Reportes</span>
-            </li>
-          )}
+            </li>  
         </ul>
       </div>
     </div>

@@ -2,11 +2,11 @@
 import axios from 'axios';
 import cookies from 'js-cookie';
 
-export const API_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_BASE_URL || '';
 const instance = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'imagen/png',
   },
   withCredentials: true,
 });

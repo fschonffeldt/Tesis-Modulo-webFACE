@@ -7,7 +7,7 @@ const { schemaAviso } = require('../schema/aviso.schema');
 exports.createAviso = async (req, res) => {
   try {
     console.log("Petición recibida en createAviso");
-    const { titulo, descripcion, precio, categoria, contacto } = req.body;
+    const { titulo, descripcion, precio, categoria, contacto} = req.body;
 
     // Validar que el contacto tiene un teléfono
     if (!contacto || !contacto.telefono) {
@@ -22,7 +22,7 @@ exports.createAviso = async (req, res) => {
 
     // Procesar imágenes si se subieron
     const imagenes = req.files && req.files.length > 0 
-      ? req.files.map(file => `/uploads/${file.filename}`) 
+      ? req.files.map(file => `uploads/${file.filename}`) 
       : []; // Si no hay imágenes, inicializa como un arreglo vacío
 
     // Crear el nuevo aviso
