@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getPublicAvisos } from "../../services/avisos.service";
 import AvisoTable from "../../components/AvisoTablePublico";
 import { useNavigate } from "react-router-dom";
 import "../../styles/AvisoTable.css"; // Importa los estilos de la tabla
@@ -12,10 +11,15 @@ const AvisosPublicos = () => {
   useEffect(() => {
     const fetchAvisos = async () => {
       try {
-        const data = await getPublicAvisos();
-        setAvisos(data);
-      } catch (err) {
-        setError("Error al cargar los avisos públicos.");
+        const data = await getAvisos();
+        
+        // 🔴 Filtrar avisos desactivados o vencidos
+        const avisosActivos = data.filter(aviso => aviso.estado !== 'Desactivado' && aviso.estado !== 'Vencido');
+        
+        setAvisos(avisosActivos);
+        setIsUserAuthenticated(!!localStorage.getItem('user')); // Verificar autenticación
+      } catch (error) {
+        console.error('Error al cargar los avisos:', error);
       }
     };
 

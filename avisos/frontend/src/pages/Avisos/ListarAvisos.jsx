@@ -15,7 +15,11 @@ const ListarAvisos = () => {
     const fetchAvisos = async () => {
       try {
         const data = await getAvisos();
-        setAvisos(data);
+        
+        // 🔴 Filtrar avisos desactivados o vencidos
+        const avisosActivos = data.filter(aviso => aviso.estado !== 'Desactivado' && aviso.estado !== 'Vencido');
+        
+        setAvisos(avisosActivos);
         setIsUserAuthenticated(!!localStorage.getItem('user')); // Verificar autenticación
       } catch (error) {
         console.error('Error al cargar los avisos:', error);
