@@ -64,8 +64,10 @@ const AvisoModal = ({ aviso, onClose, onSubmit, title }) => {
           required
         >
           <option value="">Seleccione una categoría</option>
-          <option value="Educación">Educación</option>
-          <option value="Electrónica">Electrónica</option>
+          <option value="Compra/Venta">Compra/Venta</option>
+          <option value="Habitacional">Habitacional</option>
+          <option value="Tecnologia">Tecnologia</option>
+          <option value="Clases/Ayudantias">Clases/Ayudantias</option>
           <option value="Otros">Otros</option>
         </select>
 

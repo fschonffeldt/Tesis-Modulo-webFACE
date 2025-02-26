@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Tarea programada para ejecutarse diariamente a medianoche
-cron.schedule("0 0 * * *", async () => {
+// Tarea programada para ejecutarse diariamente a las 3 de la mañana
+cron.schedule("0 3 * * *", async () => {
   console.log("Revisando avisos...");
 
   const ahora = new Date();
@@ -29,11 +29,10 @@ cron.schedule("0 0 * * *", async () => {
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: aviso.contacto.email,
-        subject: "Su aviso está por expirar",
-        text: `Su aviso "${aviso.titulo}" expirará pronto. Ingrese para renovarlo o darlo de baja.`,
+        subject: "⏳ Su aviso está por expirar",
+        text: `📢 Su aviso "${aviso.titulo}" expirará el ${new Date(aviso.fechaExpiracion).toLocaleDateString()}. Ingrese a la plataforma para renovarlo o eliminarlo.`,
       });
     });
-
     // Avisos ya vencidos
     const avisosVencidos = await Aviso.find({
       estado: "Vigente",
@@ -56,4 +55,6 @@ cron.schedule("0 0 * * *", async () => {
   } catch (error) {
     console.error("Error en la tarea programada de avisos:", error);
   }
+  
 });
+

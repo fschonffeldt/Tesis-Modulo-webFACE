@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAvisos, reportAviso } from '../../services/avisos.service';
 import AvisoTable from '../../components/AvisoTable';
 import ReportModal from '../../components/ReporteModal'; // Componente del modal
+import '../../styles/AvisosGlobal.css'; // Importa los estilos de la tabla
 
 const ListarAvisos = () => {
   const [avisos, setAvisos] = useState([]);
@@ -60,7 +61,6 @@ const ListarAvisos = () => {
 
   return (
     <div className="listar-avisos-container">
-      <h1 className="listar-avisos-title">{isUserAuthenticated ? 'Avisos' : 'Avisos Públicos'}</h1>
       <div className="avisos-table-container">
         <AvisoTable
           avisos={avisos}

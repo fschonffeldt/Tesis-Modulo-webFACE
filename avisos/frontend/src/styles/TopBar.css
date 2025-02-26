@@ -18,25 +18,3 @@
   height: 30px;
   border-radius: 50%; /* Hace que el icono sea circular */
 }
-
-.logout-button {
-  background-color: #e47139; /* Color naranja para destacar */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.logout-button:hover {
-  background-color: #cc5c2b; /* Oscurece el botón al pasar el mouse */
-}
-
-.login-button {
-  background-color: #e47139; /* Color naranja para destacar */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}

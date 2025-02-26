@@ -76,7 +76,6 @@ const MisAvisos = () => {
 
   return (
     <div className="listar-avisos-container">
-      <h1>Mis Avisos</h1>
       {error ? (
         <div className="error-message">{error}</div>
       ) : (

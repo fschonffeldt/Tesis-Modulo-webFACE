@@ -1,23 +1,20 @@
+
 .sidebar {
-  width: 250px;
+  width: 150px; /* Ancho fijo de la barra */
   background-color: rgb(34, 42, 45);
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 100%;
-  position: fixed;
-  left: 0; /* Posiciona la barra lateral a la izquierda */
+  height: 100vh;
+  position: fixed; /* Fija la barra */
+  left: 0;
   top: 0;
   bottom: 0;
   padding-top: 20px;
-  border-left: 1px solid rgb(34, 42, 45);
-  transition: width 0.5s; /* Transición suave al colapsar */
-}
-
-.sidebar.collapsed {
-  width: 80px; /* Ajusta el ancho al colapsar */
-  transition: width 1s; /* Transición suave al colapsar */
+  border-right: 1px solid rgb(34, 42, 45);
+  transition: width 0.4s ease-in-out;
+  z-index: 1000; /* Asegura que la navbar esté sobre otros elementos */
 }
 
 .sidebar ul {
@@ -27,24 +24,18 @@
 }
 
 .sidebar li {
-  padding: 10px 20px;
+  padding: 10px 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .sidebar li:hover {
   background-color: #50c4ed;
 }
 
-.sidebar li::before {
-  content: attr(data-icon);
-  margin-right: 10px;
-}
-
-.sidebar.collapsed li span {
-  display: none; /* Oculta el texto al colapsar */
-}
 
 .sidebar .logo-container {
   display: flex;
@@ -53,16 +44,55 @@
   padding: 20px 0;
 }
 
-.sidebar.collapsed .logo-container {
-  justify-content: flex-start; /* Alinea el logo al inicio al colapsar */
-}
-
 .sidebar .logo-container img {
-  max-width: 50%;
+  max-width: 70%;
   height: auto;
 }
 
-.sidebar.collapsed .logo-container img {
-  max-width: 80px; /* Ajusta el tamaño del logo al colapsar */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100px; /* Ajusta el ancho en pantallas pequeñas */
+  }
+
+  .main-content {
+    margin-left: 100px;
+  }
+
+  .sidebar li {
+    font-size: 12px;
+  }
+
+  .sidebar .logo-container img {
+    max-width: 50%;
+  }
 }
 
+@media (max-width: 480px) {
+  .sidebar {
+    width: 80px; /* Más compacto en móviles */
+  }
+
+  .main-content {
+    margin-left: 80px;
+  }
+
+  .sidebar li span {
+    display: none; /* Oculta el texto en pantallas pequeñas */
+  }
+}
+
+.logout-container {
+  margin-top: auto; /* Empuja el botón de "Cerrar Sesión" hacia abajo */
+  margin-bottom: 50px;
+}
+.logout-button {
+  margin-top: auto; /* Empuja el botón hacia abajo */
+  padding: 15px 20px;
+  text-align: center;
+  cursor: pointer;
+
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
