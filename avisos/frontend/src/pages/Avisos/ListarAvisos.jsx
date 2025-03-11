@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { getAvisos, reportAviso } from '../../services/avisos.service';
 import AvisoTable from '../../components/AvisoTable';
 import ReportModal from '../../components/ReporteModal'; // Componente del modal
+import { InputText } from 'primereact/inputtext'; // 📌 Importar InputText de PrimeReact
 import '../../styles/AvisosGlobal.css'; // Importa los estilos de la tabla
 
 const ListarAvisos = () => {
   const [avisos, setAvisos] = useState([]);
+  const [filteredAvisos, setFilteredAvisos] = useState([]); // 📌 Nuevo estado para los avisos filtrados
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false); // Estado para el modal
-  const [selectedAviso, setSelectedAviso] = useState(null); // Aviso seleccionado
-  const [gravedad, setGravedad] = useState('Leve'); // Gravedad predeterminada
-  const [comentario, setComentario] = useState(''); // Comentario opcional
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [selectedAviso, setSelectedAviso] = useState(null);
+  const [gravedad, setGravedad] = useState('Leve');
+  const [comentario, setComentario] = useState('');
+  const [globalFilter, setGlobalFilter] = useState(''); // 📌 Estado del filtro global
 
   useEffect(() => {
     const fetchAvisos = async () => {
@@ -21,7 +24,8 @@ const ListarAvisos = () => {
         const avisosActivos = data.filter(aviso => aviso.estado !== 'Desactivado' && aviso.estado !== 'Vencido');
         
         setAvisos(avisosActivos);
-        setIsUserAuthenticated(!!localStorage.getItem('user')); // Verificar autenticación
+        setFilteredAvisos(avisosActivos); // Inicializar los avisos filtrados con todos los avisos activos
+        setIsUserAuthenticated(!!localStorage.getItem('user'));
       } catch (error) {
         console.error('Error al cargar los avisos:', error);
       }
@@ -29,6 +33,20 @@ const ListarAvisos = () => {
 
     fetchAvisos();
   }, []);
+
+  // 📌 Función para filtrar avisos según el texto ingresado
+  useEffect(() => {
+    if (!globalFilter) {
+      setFilteredAvisos(avisos); // Si no hay búsqueda, mostrar todos los avisos
+    } else {
+      const lowerCaseFilter = globalFilter.toLowerCase();
+      const filtered = avisos.filter(aviso =>
+        aviso.titulo.toLowerCase().includes(lowerCaseFilter) ||
+        aviso.descripcion.toLowerCase().includes(lowerCaseFilter)
+      );
+      setFilteredAvisos(filtered);
+    }
+  }, [globalFilter, avisos]);
 
   const openReportModal = (aviso) => {
     setSelectedAviso(aviso);
@@ -44,13 +62,13 @@ const ListarAvisos = () => {
 
   const handleReport = async (e, avisoId, formData) => {
     if (e && e.preventDefault) {
-      e.preventDefault(); // Prevenir el comportamiento por defecto
+      e.preventDefault();
     }
-  
+
     try {
-      const usuario = localStorage.getItem('user'); // Usuario autenticado
+      const usuario = localStorage.getItem('user');
       const response = await reportAviso(avisoId, usuario, formData.gravedad, formData.comentario);
-  
+
       alert(response.message || 'Reporte registrado con éxito.');
       closeReportModal();
     } catch (error) {
@@ -61,13 +79,28 @@ const ListarAvisos = () => {
 
   return (
     <div className="listar-avisos-container">
+      
+      <div className="search-container" style={{ marginLeft: '160px' }}>
+      <span className="p-input-icon-left" style={{ display: 'flex', alignItems: 'center' }}>
+    <i className="pi pi-search" style={{ paddingLeft: '10px', fontSize: '1.2rem' }} />
+    <InputText
+        type="search"
+        value={globalFilter}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Buscar aviso"
+        className="search-input"
+        style={{ paddingLeft: '35px', height: '40px', fontSize: '16px' }} 
+    />
+</span>
+      </div>
+
       <div className="avisos-table-container">
         <AvisoTable
-          avisos={avisos}
-          onReport={openReportModal} // Pasar la función para abrir el modal
-          showDelete={false}  // Oculta el botón "Eliminar"
-          showUpdate={false}  // Oculta el botón "Actualizar"
-          showReport={true}   // Asegura que el botón "Reportar" siga visible
+          avisos={filteredAvisos} // 📌 Usar avisos filtrados
+          onReport={openReportModal}
+          showDelete={false}
+          showUpdate={false}
+          showReport={true}
         />
       </div>
 

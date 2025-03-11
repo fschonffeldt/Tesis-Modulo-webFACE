@@ -7,18 +7,26 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     descripcion: '',
     precio: '',
     categoria: '',
-    telefono: '',
-    imagen: null,  // Nuevo campo para la imagen
+    contacto: { telefono: '' },  // ✅ Se encapsula dentro de "contacto"
+    imagen: null,
   });
+
   const [sinPrecio, setSinPrecio] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    if (name === "telefono") {
+      setFormData({
+        ...formData,
+        contacto: { ...formData.contacto, telefono: value }, // ✅ Se asegura que "telefono" está dentro de "contacto"
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleFileChange = (e) => {
-    // Guardar el archivo seleccionado en el estado
     setFormData({ ...formData, imagen: e.target.files[0] });
   };
 
@@ -29,7 +37,10 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      contacto: { telefono: formData.contacto.telefono }, // ✅ Se asegura que "contacto" se envía correctamente
+    });
   };
 
   return (
@@ -108,14 +119,13 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
             type="text"
             id="telefono"
             name="telefono"
-            value={formData.telefono}
+            value={formData.contacto.telefono} // ✅ Se asegura de apuntar a "contacto.telefono"
             onChange={handleChange}
             placeholder="Número de contacto"
             required
           />
         </div>
 
-        {/* Campo para cargar la imagen */}
         <div className="form-group">
           <label htmlFor="imagen">Imagen</label>
           <input

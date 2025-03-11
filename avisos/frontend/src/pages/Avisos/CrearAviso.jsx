@@ -9,32 +9,40 @@ const CrearAviso = () => {
 
   const handleCreate = async (aviso) => {
     try {
-      // Crear un FormData para enviar los datos y la imagen
+      console.log("🔹 Datos recibidos en handleCreate:", aviso);
+  
       const formData = new FormData();
-
-      // Agregar los campos al FormData
-      formData.append('titulo', aviso.titulo);
-      formData.append('descripcion', aviso.descripcion);
-      formData.append('precio', aviso.precio || '');
-      formData.append('categoria', aviso.categoria);
-      formData.append('contacto[telefono]', aviso.telefono);
-
-      // Agregar la imagen solo si existe
+  
+      // ✅ Agregar los campos de texto igual que en Postman
+      formData.append("titulo", aviso.titulo);
+      formData.append("descripcion", aviso.descripcion);
+      formData.append("precio", aviso.precio || ""); 
+      formData.append("categoria", aviso.categoria);
+      formData.append("contacto[telefono]", aviso.contacto?.telefono || "");
+  
+      // ✅ Asegurar que la imagen se agrega correctamente
       if (aviso.imagen) {
-        formData.append('imagen', aviso.imagen);  // Nombre del campo debe coincidir con el backend
+        formData.append("images", aviso.imagen); // 💡 Postman usa "images" en lugar de "imagenes"
       }
-
-      // Llamar al servicio para crear el aviso
-      await createAviso(formData);
-
-      // Mostrar mensaje de éxito y redirigir
+  
+      // 🔹 Depuración: Imprimir los datos antes de enviarlos
+      console.log("📤 Datos enviados en FormData:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]); // Verificar que se vean correctamente
+      }
+  
+      console.log("🔄 Llamando a createAviso...");
+      const response = await createAviso(formData);
+      console.log("✅ Aviso creado correctamente:", response);
+  
       showCreateSuccess();
       navigate("/listar-avisos");
     } catch (error) {
-      console.error("Error al crear el aviso:", error);
+      console.error("❌ Error al crear el aviso:", error);
       showCreateError("Ocurrió un error al crear el aviso. Intenta nuevamente.");
     }
   };
+  
 
   return (
     <div>

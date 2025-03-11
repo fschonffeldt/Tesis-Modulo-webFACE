@@ -1,15 +1,36 @@
 import axios from './root.service'; // Configuración global de Axios
 import axiosForm from './form.service';
-// Crear un nuevo aviso
-export const createAviso = async (aviso) => {
+
+export const createAviso = async (formData) => {
   try {
-    const response = await axiosForm.post('/avisos', aviso);
+    console.log("🔄 Enviando solicitud a backend...");
+
+    // 🔹 Depuración: Verificar que "contacto[telefono]" está en `FormData`
+    console.log("📤 Datos enviados en FormData antes de la petición:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]); // Verificar si "contacto[telefono]" está presente
+    }
+
+    const response = await axiosForm.post("/avisos", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("✅ Aviso creado correctamente:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error al crear el aviso:', error);
+    console.error("❌ Error en la petición axios:", error);
+
+    if (error.response) {
+      console.error("❌ Respuesta del backend:", error.response.data);
+    }
+
     throw error;
   }
 };
+
+
 
 // Obtener avisos públicos
 export const getPublicAvisos = async () => {

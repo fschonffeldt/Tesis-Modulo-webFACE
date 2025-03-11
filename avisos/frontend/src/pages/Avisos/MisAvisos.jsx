@@ -5,12 +5,15 @@ import AvisoForm from '../../components/AvisoForm';
 import { getAvisosByUsuario, deleteAviso, updateAviso } from '../../services/avisos.service';
 import '../../styles/Modal.css'; // Importar estilos del modal
 import { showErrorToast, showSuccessToast, showDeleteConfirm } from '../../helpers/swaHelper'; // Importa helpers
+import { InputText } from 'primereact/inputtext';
 
 // Configuración de React Modal
 Modal.setAppElement('#root');
 
 const MisAvisos = () => {
   const [avisos, setAvisos] = useState([]);
+  const [filteredAvisos, setFilteredAvisos] = useState([]); // Para la búsqueda
+  const [globalFilter, setGlobalFilter] = useState(''); // Estado de la búsqueda
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAviso, setSelectedAviso] = useState(null);
@@ -22,6 +25,7 @@ const MisAvisos = () => {
         const data = await getAvisosByUsuario();
         console.log(data);
         setAvisos(data);
+        setFilteredAvisos(data); // Inicializa los avisos filtrados con todos los avisos
       } catch (error) {
         console.error('Error al obtener los avisos:', error);
         setError('No se pudieron cargar los avisos. Intenta nuevamente.');
@@ -31,6 +35,19 @@ const MisAvisos = () => {
 
     fetchAvisos();
   }, []);
+
+  // Filtrar avisos en tiempo real cuando cambia el input de búsqueda
+  useEffect(() => {
+    if (!globalFilter) {
+      setFilteredAvisos(avisos);
+    } else {
+      const filtered = avisos.filter((aviso) =>
+        aviso.titulo.toLowerCase().includes(globalFilter.toLowerCase()) ||
+        aviso.descripcion.toLowerCase().includes(globalFilter.toLowerCase())
+      );
+      setFilteredAvisos(filtered);
+    }
+  }, [globalFilter, avisos]);
 
   // Función para eliminar un aviso
   const handleDelete = async (id) => {
@@ -76,17 +93,32 @@ const MisAvisos = () => {
 
   return (
     <div className="listar-avisos-container">
+      
+     <div className="search-container" style={{ marginLeft: '160px' }}>
+           <span className="p-input-icon-left" style={{ display: 'flex', alignItems: 'center' }}>
+         <i className="pi pi-search" style={{ paddingLeft: '10px', fontSize: '1.2rem' }} />
+         <InputText
+             type="search"
+             value={globalFilter}
+             onChange={(e) => setGlobalFilter(e.target.value)}
+             placeholder="Buscar aviso"
+             className="search-input"
+             style={{ paddingLeft: '35px', height: '40px', fontSize: '16px' }} 
+         />
+        </span>
+      </div>
+
       {error ? (
         <div className="error-message">{error}</div>
       ) : (
         <AvisoTable
-          avisos={avisos}
+          avisos={filteredAvisos} // Se pasan los avisos filtrados
           onDelete={handleDelete}
-          onUpdate={openModal}  // Pasa openModal para que el botón "Actualizar" abra el modal
+          onUpdate={openModal} // Pasa openModal para que el botón "Actualizar" abra el modal
           showDelete={true} 
           showUpdate={true}
           showReport={false} // No mostramos "Reportar" en Mis Avisos
-/>
+        />
       )}
 
       {/* Modal para actualizar un aviso */}
