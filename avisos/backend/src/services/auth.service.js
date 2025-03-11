@@ -104,7 +104,25 @@ async function refresh(cookies) {
   }
 }
 
+/**
+ * Busca un usuario por su email.
+ * @async
+ * @function findUserByEmail
+ * @param {string} email - Email del usuario a buscar
+ * @returns {Object|null} - Retorna el usuario si existe, de lo contrario null
+ */
+async function findUserByEmail(email) {
+  try {
+    const user = await User.findOne({ email }).exec();
+    return user;
+  } catch (error) {
+    console.error("Error en findUserByEmail:", error);
+    return null;
+  }
+}
+
 module.exports = {
   login,
   refresh,
+  findUserByEmail,
 };

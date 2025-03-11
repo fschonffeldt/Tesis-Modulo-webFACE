@@ -19,18 +19,34 @@ async function login(req, res) {
     const { error: bodyError } = authLoginBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-    const [accessToken, refreshToken, errorToken] =
-      await AuthServices.login(body);
+    // Buscar usuario en la base de datos
+    const user = await AuthServices.findUserByEmail(body.email);
+    if (!user) return respondError(req, res, 404, "Usuario no encontrado.");
+
+    // 🚨 Verificar si la cuenta está activada
+    if (!user.isActive) {
+      return respondError(req, res, 403, "Cuenta no activada. Revisa tu correo.");
+    }
+
+   // 🔥 Solo verifica el código de activación si el usuario NO está activado
+if (!user.isActive) {
+  if (body.password !== user.verificationCode) {
+    return respondError(req, res, 401, "Código de activación incorrecto.");
+  }
+}
+
+    // Generar tokens
+    const [accessToken, refreshToken, errorToken] = await AuthServices.login(body);
 
     if (errorToken) return respondError(req, res, 400, errorToken);
 
-    // * Existen más opciones de seguridad para las cookies *//
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
     });
 
     respondSuccess(req, res, 200, { accessToken });
+
   } catch (error) {
     handleError(error, "auth.controller -> login");
     respondError(req, res, 400, error.message);

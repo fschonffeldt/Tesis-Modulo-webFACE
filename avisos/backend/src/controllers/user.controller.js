@@ -195,20 +195,21 @@ async function activateUser(req, res) {
     }
 
     if (user.verificationCode !== code) {
-      return res.status(400).json({ message: "Código de verificación incorrecto." });
+      return res.status(400).json({ message: "Código de activación incorrecto." });
     }
 
-    // Activa la cuenta
+    // ✅ Activar cuenta y borrar el código de activación
     user.isActive = true;
-    user.verificationCode = null; // Limpia el código
+    user.verificationCode = null;
     await user.save();
 
-    res.status(200).json({ message: "Cuenta activada con éxito." });
+    res.status(200).json({ message: "Cuenta activada con éxito. Ahora puedes iniciar sesión." });
   } catch (error) {
     console.error("Error en activateUser:", error.message);
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
+
 
 
 async function sendVerificationCode(req, res) {
@@ -221,26 +222,28 @@ async function sendVerificationCode(req, res) {
     }
 
     if (user.isActive) {
-      return res.status(400).json({ message: "La cuenta ya está activada." });
+      return res.status(400).json({ message: "La cuenta ya está activada. No es necesario otro código." });
     }
 
+    // Generar y guardar el código de activación
     const verificationCode = generateVerificationCode();
     user.verificationCode = verificationCode;
     await user.save();
 
-    // Envía el correo con el código
+    // Enviar el código de activación por correo
     const subject = "Código de activación";
     const text = `Tu código de activación es: ${verificationCode}`;
     const html = `<p>Tu código de activación es: <strong>${verificationCode}</strong></p>`;
 
     await sendEmail(user.email, subject, text, html);
 
-    res.status(200).json({ message: "Código enviado al correo electrónico." });
+    res.status(200).json({ message: "Código de activación enviado a tu correo electrónico." });
   } catch (error) {
     console.error("Error en sendVerificationCode:", error.message);
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
+
 
 
 module.exports = {
