@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import { Button } from 'primereact/button';
+import React, { useState } from "react";
+import Modal from "react-modal";
+import { Button } from "primereact/button";
 import "../styles/AvisoTable.css";
 
-const AvisoTable = ({ avisos }) => {
+const AvisoTablePublico = ({ avisos }) => {
   const [selectedAviso, setSelectedAviso] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const API_URL = import.meta.env.VITE_IMAGE_URL || "http://localhost:3000";
 
-  // Función para abrir el modal
   const handleMoreInfoClick = (aviso) => {
     setSelectedAviso(aviso);
     setIsModalOpen(true);
   };
 
-  // Función para cerrar el modal
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedAviso(null);
@@ -22,24 +21,20 @@ const AvisoTable = ({ avisos }) => {
   return (
     <div className="avisos-container">
       <h1 className="text-center">Avisos</h1>
+
       <div className="avisos-grid">
         {avisos.length > 0 ? (
           avisos.map((aviso) => (
             <div key={aviso.id} className="aviso-card">
-              {/* Imagen circular en lugar del ícono */}
               <div className="aviso-image-container">
                 {aviso.imagenes && aviso.imagenes.length > 0 ? (
-                  <img
-                    src={aviso.imagenes[0]}
-                    alt="Imagen del aviso"
-                    className="aviso-image"
-                  />
+                  <img src={`${API_URL}/${aviso.imagenes[0]}`} alt="Aviso" className="aviso-image" />
                 ) : (
-                  <i className="pi pi-home aviso-icon"></i>
+                  <i className="pi pi-image aviso-icon"></i>
                 )}
               </div>
 
-              <h5 className="aviso-title">AVISO</h5>
+              <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
               <Button
                 label="Más información"
@@ -53,7 +48,7 @@ const AvisoTable = ({ avisos }) => {
         )}
       </div>
 
-      {/* Modal para detalles del aviso */}
+      {/* ✅ Modal con la información completa del aviso */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -62,39 +57,34 @@ const AvisoTable = ({ avisos }) => {
       >
         {selectedAviso && (
           <div className="popup-container">
+            {/* ✅ Mostrar imagen si existe */}
+            {selectedAviso.imagenes && selectedAviso.imagenes.length > 0 && (
+              <img src={`${API_URL}/${selectedAviso.imagenes[0]}`} alt="Aviso" className="popup-image" />
+            )}
+
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
-            <div className="popup-content">
-              {/* Imágenes del aviso */}
-              <div className="popup-images">
-                {selectedAviso.imagenes?.map((imagen, index) => (
-                  <img
-                    key={index}
-                    src={imagen}
-                    alt={`Imagen ${index + 1}`}
-                    className="popup-image"
-                  />
-                ))}
-              </div>
+            <p className="popup-description">{selectedAviso.descripcion}</p>
 
-              {/* Descripción */}
-              <p className="popup-description">{selectedAviso.descripcion}</p>
+            {/* ✅ Mostrar precio solo si existe */}
+            {selectedAviso.precio && (
+              <p>
+                <strong>Precio:</strong> ${selectedAviso.precio}
+              </p>
+            )}
 
-              {/* Botón para reportar */}
-              <Button
-                label="Reportar Aviso"
-                icon="pi pi-flag"
-                className="p-button-danger popup-button"
-                onClick={() => alert('Reporte enviado')}
-              />
+            {/* ✅ Mostrar fecha de publicación si existe */}
+            {selectedAviso.fechaPublicacion && (
+              <p>
+                <strong>Fecha de Publicación:</strong> {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+              </p>
+            )}
 
-              {/* Botón para cerrar */}
-              <Button
-                label="Cerrar"
-                icon="pi pi-times"
-                className="p-button-secondary close-button"
-                onClick={closeModal}
-              />
-            </div>
+            <Button
+              label="Cerrar"
+              icon="pi pi-times"
+              className="p-button-secondary close-button"
+              onClick={closeModal}
+            />
           </div>
         )}
       </Modal>
@@ -102,4 +92,4 @@ const AvisoTable = ({ avisos }) => {
   );
 };
 
-export default AvisoTable;
+export default AvisoTablePublico;

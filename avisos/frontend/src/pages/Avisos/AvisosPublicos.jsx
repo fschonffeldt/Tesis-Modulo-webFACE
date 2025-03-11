@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getPublicAvisos } from "../../services/avisos.service";
-import AvisoTable from "../../components/AvisoTablePublico";
-import { useNavigate } from "react-router-dom";
-import "../../styles/AvisoTable.css"; // Importa los estilos de la tabla
+import AvisoTable from "../../components/AvisoTablePublico"; // Usar una tabla sin contacto ni botones
+import { InputText } from "primereact/inputtext";
+import "../../styles/AvisosGlobal.css";
 
 const AvisosPublicos = () => {
   const [avisos, setAvisos] = useState([]);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [filteredAvisos, setFilteredAvisos] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
 
   useEffect(() => {
     const fetchAvisos = async () => {
@@ -17,43 +17,51 @@ const AvisosPublicos = () => {
         // 🔹 Filtrar avisos activos (Excluir desactivados y vencidos)
         const avisosActivos = data.filter(aviso => aviso.estado !== "Desactivado" && aviso.estado !== "Vencido");
 
-        // 🔹 Orden personalizado de categorías
-        const categoriasOrdenadas = ["Compra/Venta", "Habitacional", "Tecnología", "Clases/Ayudantías", "Otros"];
-
-        // 🔹 Función de comparación personalizada
-        const avisosOrdenados = avisosActivos.sort((a, b) => {
-          return categoriasOrdenadas.indexOf(a.categoria) - categoriasOrdenadas.indexOf(b.categoria);
-        });
-
-        setAvisos(avisosOrdenados);
-      } catch (err) {
-        console.error("Error al cargar los avisos públicos:", err);
-        setError("Error al cargar los avisos públicos.");
+        setAvisos(avisosActivos);
+        setFilteredAvisos(avisosActivos);
+      } catch (error) {
+        console.error("Error al cargar los avisos públicos:", error);
       }
     };
 
     fetchAvisos();
   }, []);
 
-  const handleLogin = () => {
-    navigate("/auth");
-  };
-
-  if (error) {
-    return <p className="text-danger text-center">{error}</p>;
-  }
+  // 📌 Función para filtrar avisos según el texto ingresado
+  useEffect(() => {
+    if (!globalFilter) {
+      setFilteredAvisos(avisos); // Si no hay búsqueda, mostrar todos los avisos
+    } else {
+      const lowerCaseFilter = globalFilter.toLowerCase();
+      const filtered = avisos.filter(aviso =>
+        aviso.titulo.toLowerCase().includes(lowerCaseFilter) ||
+        aviso.descripcion.toLowerCase().includes(lowerCaseFilter)
+      );
+      setFilteredAvisos(filtered);
+    }
+  }, [globalFilter, avisos]);
 
   return (
-    <div className="container mt-4">
-      <div className="row mb-4">
-        <div className="col-md-8">
-        </div>
-        <div className="col-md-4 text-md-end">
-        </div>
+    <div className="listar-avisos-container">
+      
+      {/* 🔍 Barra de búsqueda */}
+      <div className="search-container" style={{ marginLeft: "160px" }}>
+        <span className="p-input-icon-left" style={{ display: "flex", alignItems: "center" }}>
+          <i className="pi pi-search" style={{ paddingLeft: "10px", fontSize: "1.2rem" }} />
+          <InputText
+            type="search"
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Buscar aviso"
+            className="search-input"
+            style={{ paddingLeft: "35px", height: "40px", fontSize: "16px" }}
+          />
+        </span>
       </div>
 
-      <div className="listar-avisos-container">
-        <AvisoTable avisos={avisos} showActions={false} />
+      {/* 📌 Tabla de avisos públicos (sin datos de contacto y sin botones de acción) */}
+      <div className="avisos-table-container">
+        <AvisoTable avisos={filteredAvisos} />
       </div>
     </div>
   );
