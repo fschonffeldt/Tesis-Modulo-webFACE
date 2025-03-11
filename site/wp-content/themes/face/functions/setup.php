@@ -177,3 +177,5 @@ function my_login_logo_one() {
 	</style>
 	<?php 
 } add_action( 'login_enqueue_scripts', 'my_login_logo_one' );
+
+require_once get_template_directory() . '/functions/api-shortcodes.php';
