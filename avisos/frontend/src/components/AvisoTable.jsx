@@ -1,18 +1,26 @@
-import React, { useState, useRef } from 'react';
-import Modal from 'react-modal';
-import { Button } from 'primereact/button';
-import { SpeedDial } from 'primereact/speeddial';
-import { Toast } from 'primereact/toast';
+import React, { useState, useRef } from "react";
+import Modal from "react-modal";
+import { Button } from "primereact/button";
+import { SpeedDial } from "primereact/speeddial";
+import { Toast } from "primereact/toast";
 import "../styles/AvisoTable.css";
-import 'primeicons/primeicons.css';  
-import 'primereact/resources/primereact.min.css';  
-import 'primereact/resources/themes/saga-blue/theme.css';
+import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/saga-blue/theme.css";
 
-const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate = true, onUpdate = () => {}, onDelete = () => {}, onReport = () => {} }) => {
+const AvisoTable = ({
+  avisos,
+  showReport = true,
+  showDelete = true,
+  showUpdate = true,
+  onUpdate = () => {},
+  onDelete = () => {},
+  onReport = () => {},
+}) => {
   const [selectedAviso, setSelectedAviso] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toast = useRef(null);
-  const API_URL = import.meta.env.VITE_IMAGE_URL || 'http://localhost:3000';
+  const API_URL = import.meta.env.VITE_IMAGE_URL || "http://localhost:3000";
 
   const handleMoreInfoClick = (aviso) => {
     setSelectedAviso(aviso);
@@ -23,67 +31,6 @@ const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate =
     setIsModalOpen(false);
     setSelectedAviso(null);
   };
-
-  const getSpeedDialItems = (aviso) => {
-    let items = [
-      {
-        label: 'Compartir',
-        icon: 'pi pi-share-alt',
-        command: () => {
-          navigator.share
-            ? navigator.share({ title: aviso.titulo, text: aviso.descripcion })
-                .then(() => toast.current.show({ severity: 'info', summary: 'Compartido', detail: `El aviso "${aviso.titulo}" fue compartido exitosamente` }))
-                .catch(() => toast.current.show({ severity: 'error', summary: 'Error al compartir', detail: `No se pudo compartir el aviso "${aviso.titulo}"` }))
-            : toast.current.show({ severity: 'info', summary: 'Compartir no soportado', detail: 'La funcionalidad no está disponible en este navegador' });
-        }
-      }
-    ];
-
-    // Agregar "Reportar" solo si showReport es true
-    if (showReport && onReport) {
-      items.unshift({
-        label: 'Reportar',
-        icon: 'pi pi-flag',
-        command: () => {
-          onReport(aviso);
-        }
-      });
-    }
-
-    // Agregar "Eliminar" solo si showDelete es true
-    if (showDelete && onDelete) {
-      items.unshift({
-        label: 'Eliminar',
-        icon: 'pi pi-trash',
-        command: () => {
-          onDelete(aviso.id);
-        }
-      });
-    }
-
-    // Agregar "Actualizar" solo si showUpdate es true
-    if (showUpdate) {
-      items.unshift({
-        label: 'Actualizar',
-        icon: 'pi pi-refresh',
-        command: () => {
-          if (onUpdate) {
-            onUpdate(aviso);
-          }
-        }
-      });
-    }
-
-    return items;
-  };
-
-  const handleImage = async () => {
-    try {
-
-    } catch (error) {
-      
-    }
-  }
 
   return (
     <div className="avisos-container">
@@ -96,20 +43,78 @@ const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate =
             <div key={aviso.id} className="aviso-card">
               <div className="speeddial-container">
                 <SpeedDial
-                  model={getSpeedDialItems(aviso)}
+                  model={[
+                    ...(showReport
+                      ? [
+                          {
+                            label: "Reportar",
+                            icon: "pi pi-flag",
+                            command: () => onReport(aviso),
+                          },
+                        ]
+                      : []),
+                    ...(showDelete
+                      ? [
+                          {
+                            label: "Eliminar",
+                            icon: "pi pi-trash",
+                            command: () => onDelete(aviso.id),
+                          },
+                        ]
+                      : []),
+                    ...(showUpdate
+                      ? [
+                          {
+                            label: "Actualizar",
+                            icon: "pi pi-refresh",
+                            command: () => onUpdate(aviso),
+                          },
+                        ]
+                      : []),
+                    {
+                      label: "Compartir",
+                      icon: "pi pi-share-alt",
+                      command: () => {
+                        navigator.share
+                          ? navigator
+                              .share({
+                                title: aviso.titulo,
+                                text: aviso.descripcion,
+                              })
+                              .then(() =>
+                                toast.current.show({
+                                  severity: "info",
+                                  summary: "Compartido",
+                                  detail: `El aviso "${aviso.titulo}" fue compartido exitosamente`,
+                                })
+                              )
+                              .catch(() =>
+                                toast.current.show({
+                                  severity: "error",
+                                  summary: "Error al compartir",
+                                  detail: `No se pudo compartir el aviso "${aviso.titulo}"`,
+                                })
+                              )
+                          : toast.current.show({
+                              severity: "info",
+                              summary: "Compartir no soportado",
+                              detail: "La funcionalidad no está disponible en este navegador",
+                            });
+                      },
+                    },
+                  ]}
                   direction="down"
-                  style={{ background: 'none', boxShadow: 'none' }}
+                  style={{ background: "none", boxShadow: "none" }}
                 />
               </div>
 
               <div className="aviso-image-container">
                 {aviso.imagenes && aviso.imagenes.length > 0 ? (
-                  <img src={`${API_URL}/${aviso.imagenes[0]}`} /> // ! Mapear array para mostrar x cantidad de imagenes
+                  <img src={`${API_URL}/${aviso.imagenes[0]}`} alt="Aviso" />
                 ) : (
                   <i className="pi pi-home aviso-icon"></i>
                 )}
               </div>
-
 
               <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
@@ -125,6 +130,7 @@ const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate =
         )}
       </div>
 
+      {/* Modal con la información completa del aviso */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -133,8 +139,48 @@ const AvisoTable = ({ avisos, showReport = true, showDelete = true, showUpdate =
       >
         {selectedAviso && (
           <div className="popup-container">
+            {/* ✅ Mostrar imagen si existe */}
+            {selectedAviso.imagenes && selectedAviso.imagenes.length > 0 && (
+              <img
+                src={`${API_URL}/${selectedAviso.imagenes[0]}`}
+                alt="Aviso"
+                className="popup-image"
+              />
+            )}
+
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
             <p className="popup-description">{selectedAviso.descripcion}</p>
+
+            {/* ✅ Mostrar precio solo si existe */}
+            {selectedAviso.precio && (
+              <p>
+                <strong>Precio:</strong> ${selectedAviso.precio}
+              </p>
+            )}
+
+                      {/* ✅ Mostrar contacto solo si existe */}
+            {selectedAviso.contacto && (
+              <>
+                {selectedAviso.contacto.telefono && (
+                  <p>
+                    <strong>Teléfono:</strong> {selectedAviso.contacto.telefono}
+                  </p>
+                )}
+                
+                {selectedAviso.contacto.email && (
+                  <p>
+                    <strong>Correo:</strong> {selectedAviso.contacto.email}
+                  </p>
+                )}
+              </>
+            )}
+
+            {/* ✅ Mostrar fecha de publicación si existe */}
+            {selectedAviso.fechaPublicacion && (
+              <p>
+                <strong>Fecha de Publicación:</strong> {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+              </p>
+            )}
             <Button
               label="Cerrar"
               icon="pi pi-times"
