@@ -166,3 +166,31 @@ export const getAvisosByUsuario = async () => {
     throw error;
   }
 };
+
+export const renovarAvisoUsuario = async (avisoId) => {
+  try {
+    const response = await axios.put(`/avisos/${avisoId}/renovar`, {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error al renovar el aviso con ID ${avisoId}:`, error);
+    throw error;
+  }
+};
+
+export const desactivarAvisoUsuario = async (avisoId) => {
+  try {
+    const response = await axios.put(`/avisos/${avisoId}/desactivar`, {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error al desactivar el aviso con ID ${avisoId}:`, error);
+    throw error;
+  }
+};

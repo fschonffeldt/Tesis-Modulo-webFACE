@@ -1,52 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { getAvisos, reportAviso } from '../../services/avisos.service';
-import AvisoTable from '../../components/AvisoTable';
-import ReportModal from '../../components/ReporteModal'; // Componente del modal
-import { InputText } from 'primereact/inputtext'; // 📌 Importar InputText de PrimeReact
-import '../../styles/AvisosGlobal.css'; // Importa los estilos de la tabla
+import React, { useEffect, useState } from "react";
+import { getAvisos, reportAviso } from "../../services/avisos.service";
+import AvisoTable from "../../components/AvisoTable";
+import ReportModal from "../../components/ReporteModal";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
+import "../../styles/AvisosGlobal.css";
 
 const ListarAvisos = () => {
   const [avisos, setAvisos] = useState([]);
-  const [filteredAvisos, setFilteredAvisos] = useState([]); // 📌 Nuevo estado para los avisos filtrados
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [filteredAvisos, setFilteredAvisos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedAviso, setSelectedAviso] = useState(null);
-  const [gravedad, setGravedad] = useState('Leve');
-  const [comentario, setComentario] = useState('');
-  const [globalFilter, setGlobalFilter] = useState(''); // 📌 Estado del filtro global
+  const [gravedad, setGravedad] = useState("Leve");
+  const [comentario, setComentario] = useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
 
   useEffect(() => {
     const fetchAvisos = async () => {
       try {
         const data = await getAvisos();
-        
-        // 🔴 Filtrar avisos desactivados o vencidos
-        const avisosActivos = data.filter(aviso => aviso.estado !== 'Desactivado' && aviso.estado !== 'Vencido');
-        
+
+        const avisosActivos = data.filter(aviso => aviso.estado !== "Desactivado" && aviso.estado !== "Vencido");
+
         setAvisos(avisosActivos);
-        setFilteredAvisos(avisosActivos); // Inicializar los avisos filtrados con todos los avisos activos
-        setIsUserAuthenticated(!!localStorage.getItem('user'));
+        setFilteredAvisos(avisosActivos);
+
+        // 📌 Categorías predefinidas en minúsculas
+        const categoriasPredefinidas = ["Educación", "Venta", "Compra", "Habitacional", "Otros"];
+
+        // 📌 Obtener categorías únicas desde los avisos, normalizando mayúsculas/minúsculas
+        const categoriasAvisos = [...new Set(avisosActivos.map(aviso => aviso.categoria.trim().toLowerCase()))];
+
+        // 📌 Fusionar categorías predefinidas y dinámicas sin duplicados
+        const categoriasFinal = [...new Set([...categoriasPredefinidas.map(cat => cat.toLowerCase()), ...categoriasAvisos])];
+
+        // 📌 Convertir la primera letra en mayúscula para uniformidad
+        const categoriasNormalizadas = categoriasFinal.map(cat => ({
+          label: cat.charAt(0).toUpperCase() + cat.slice(1),
+          value: cat.charAt(0).toUpperCase() + cat.slice(1),
+        }));
+
+        // 📌 Agregar opción para ver todos los avisos con `null` manejado correctamente
+        setCategorias([{ label: "Todas las categorías", value: "Todas" }, ...categoriasNormalizadas]);
       } catch (error) {
-        console.error('Error al cargar los avisos:', error);
+        console.error("Error al cargar los avisos:", error);
       }
     };
 
     fetchAvisos();
   }, []);
 
-  // 📌 Función para filtrar avisos según el texto ingresado
   useEffect(() => {
-    if (!globalFilter) {
-      setFilteredAvisos(avisos); // Si no hay búsqueda, mostrar todos los avisos
-    } else {
+    let avisosFiltrados = avisos;
+
+    if (selectedCategoria && selectedCategoria !== "Todas") {
+      avisosFiltrados = avisos.filter(aviso => aviso.categoria.toLowerCase() === selectedCategoria.toLowerCase());
+    }
+
+    if (globalFilter) {
       const lowerCaseFilter = globalFilter.toLowerCase();
-      const filtered = avisos.filter(aviso =>
-        aviso.titulo.toLowerCase().includes(lowerCaseFilter) ||
+      avisosFiltrados = avisosFiltrados.filter(aviso =>
+        aviso.titulo.toLowerCase().includes(lowerCaseFilter) || 
         aviso.descripcion.toLowerCase().includes(lowerCaseFilter)
       );
-      setFilteredAvisos(filtered);
     }
-  }, [globalFilter, avisos]);
+
+    setFilteredAvisos(avisosFiltrados);
+  }, [globalFilter, selectedCategoria, avisos]);
 
   const openReportModal = (aviso) => {
     setSelectedAviso(aviso);
@@ -56,8 +78,8 @@ const ListarAvisos = () => {
   const closeReportModal = () => {
     setIsReportModalOpen(false);
     setSelectedAviso(null);
-    setGravedad('Leve');
-    setComentario('');
+    setGravedad("Leve");
+    setComentario("");
   };
 
   const handleReport = async (e, avisoId, formData) => {
@@ -66,37 +88,49 @@ const ListarAvisos = () => {
     }
 
     try {
-      const usuario = localStorage.getItem('user');
+      const usuario = localStorage.getItem("user");
       const response = await reportAviso(avisoId, usuario, formData.gravedad, formData.comentario);
 
-      alert(response.message || 'Reporte registrado con éxito.');
+      alert(response.message || "Reporte registrado con éxito.");
       closeReportModal();
     } catch (error) {
-      console.error('Error al reportar el aviso:', error);
-      alert('Hubo un problema al reportar el aviso. Por favor, inténtalo nuevamente.');
+      console.error("Error al reportar el aviso:", error);
+      alert("Hubo un problema al reportar el aviso. Por favor, inténtalo nuevamente.");
     }
   };
 
   return (
     <div className="listar-avisos-container">
       
-      <div className="search-container" style={{ marginLeft: '160px' }}>
-      <span className="p-input-icon-left" style={{ display: 'flex', alignItems: 'center' }}>
-    <i className="pi pi-search" style={{ paddingLeft: '10px', fontSize: '1.2rem' }} />
-    <InputText
-        type="search"
-        value={globalFilter}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        placeholder="Buscar aviso"
-        className="search-input"
-        style={{ paddingLeft: '35px', height: '40px', fontSize: '16px' }} 
-    />
-</span>
+      {/* 🔍 Barra de búsqueda y filtro de categoría */}
+      <div className="filters-container" style={{ display: "flex", alignItems: "center", gap: "20px", marginLeft: "160px" }}>
+        {/* Campo de búsqueda */}
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" style={{ paddingLeft: "10px", fontSize: "1.2rem" }} />
+          <InputText
+            type="search"
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Buscar aviso"
+            className="search-input"
+            style={{ paddingLeft: "35px", height: "40px", fontSize: "16px" }}
+          />
+        </span>
+
+        {/* 📌 Filtro por categoría */}
+        <Dropdown
+          value={selectedCategoria}
+          options={categorias}
+          onChange={(e) => setSelectedCategoria(e.value)}
+          placeholder="Seleccione una categoría"
+          className="p-dropdown"
+          style={{ width: "250px", height: "40px",borderRadius: '5px'  }}
+        />
       </div>
 
       <div className="avisos-table-container">
         <AvisoTable
-          avisos={filteredAvisos} // 📌 Usar avisos filtrados
+          avisos={filteredAvisos}
           onReport={openReportModal}
           showDelete={false}
           showUpdate={false}
