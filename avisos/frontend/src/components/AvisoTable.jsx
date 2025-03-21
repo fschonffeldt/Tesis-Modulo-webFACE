@@ -118,6 +118,13 @@ const AvisoTable = ({
 
               <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
+              <p>
+                <strong style={{ color: "#000" }}>Categoría:</strong>{" "}
+                <span style={{ color: "#000", fontWeight: "normal" }}>
+                  {aviso.categoria}
+                </span>
+              </p>
+
               <Button
                 label="Más información"
                 className="p-button-outlined"
@@ -148,39 +155,54 @@ const AvisoTable = ({
               />
             )}
 
+            {/* ✅ Título del aviso */}
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
+
+            {/* ✅ Descripción */}
             <p className="popup-description">{selectedAviso.descripcion}</p>
 
-            {/* ✅ Mostrar precio solo si existe */}
+            {/* ✅ Mostrar información en negrita */}
             {selectedAviso.precio && (
               <p>
-                <strong>Precio:</strong> ${selectedAviso.precio}
+                <strong style={{ color: "#000" }}>Precio:</strong>{" "}
+                <span style={{ color: "#000", fontWeight: "normal" }}>
+                  ${selectedAviso.precio}
+                </span>
               </p>
             )}
 
-                      {/* ✅ Mostrar contacto solo si existe */}
             {selectedAviso.contacto && (
               <>
                 {selectedAviso.contacto.telefono && (
                   <p>
-                    <strong>Teléfono:</strong> {selectedAviso.contacto.telefono}
+                    <strong style={{ color: "#000" }}>Teléfono:</strong>{" "}
+                    <span style={{ color: "#000", fontWeight: "normal" }}>
+                      {selectedAviso.contacto.telefono}
+                    </span>
                   </p>
                 )}
-                
+
                 {selectedAviso.contacto.email && (
                   <p>
-                    <strong>Correo:</strong> {selectedAviso.contacto.email}
+                    <strong style={{ color: "#000" }}>Correo:</strong>{" "}
+                    <span style={{ color: "#000", fontWeight: "normal" }}>
+                      {selectedAviso.contacto.email}
+                    </span>
                   </p>
                 )}
               </>
             )}
 
-            {/* ✅ Mostrar fecha de publicación si existe */}
             {selectedAviso.fechaPublicacion && (
               <p>
-                <strong>Fecha de Publicación:</strong> {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+                <strong style={{ color: "#000" }}>Fecha de Publicación:</strong>{" "}
+                <span style={{ color: "#000", fontWeight: "normal" }}>
+                  {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+                </span>
               </p>
             )}
+
+            {/* ✅ Botón para cerrar */}
             <Button
               label="Cerrar"
               icon="pi pi-times"

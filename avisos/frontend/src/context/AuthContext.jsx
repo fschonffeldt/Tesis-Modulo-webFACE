@@ -9,12 +9,15 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [jwt, setJwt] = useState('');
+  
+  // 📌 Obtener el usuario desde localStorage
+  const user = JSON.parse(localStorage.getItem('user')) || null;
+  const isAuthenticated = !!user;
 
-  const user = JSON.parse(localStorage.getItem('user')) || '';
-  const isAuthenticated = user ? true : false;
+  // 📌 Extraer el primer rol del array (Si el usuario tiene múltiples roles, tomará el primero)
+  const userRole = user?.roles?.length > 0 ? user.roles[0].name : 'usuario';
 
   useEffect(() => {
-    // Obtener el token JWT de las cookies
     const token = cookies.get('jwt-auth');
     if (token) {
       setJwt(token);
@@ -22,13 +25,13 @@ export function AuthProvider({ children }) {
       navigate('/avisos-publicos');
     }
     
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       navigate('/avisos-publicos');
     }
   }, [isAuthenticated, navigate]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, userRole }}>
       {children}
     </AuthContext.Provider>
   );

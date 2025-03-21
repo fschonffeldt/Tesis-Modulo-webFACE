@@ -7,7 +7,7 @@ import logo from '../assets/Logo.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth(); // NO extraemos logout de aquí
+  const { isAuthenticated, userRole } = useAuth(); // Ahora obtenemos el rol del usuario
 
   const handleLogin = () => {
     navigate('/auth');
@@ -15,10 +15,10 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Usamos el mismo método que en TopBar.jsx
-      localStorage.clear(); // Borra datos de sesión
-      navigate('/avisos-publicos'); // Redirige
-      window.location.reload(); // Fuerza la actualización de la vista
+      await logout(); 
+      localStorage.clear(); 
+      navigate('/avisos-publicos'); 
+      window.location.reload();
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -46,9 +46,13 @@ const Navbar = () => {
             <li onClick={() => navigate('/crear-aviso')}>
               <span>Crear Aviso</span>
             </li>
-            <li onClick={() => navigate('/avisos-reportados')}>
-              <span>Reportes</span>
-            </li>
+
+            {/* 📌 Mostrar Reportes solo si el usuario es Admin o Moderador */}
+            {(userRole === 'admin' || userRole === 'moderador') && (
+              <li onClick={() => navigate('/avisos-reportados')}>
+                <span>Reportes</span>
+              </li>
+            )}
           </>
         )}
       </ul>
