@@ -4,7 +4,8 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
-import { getAllReportes, darDeBajaAviso, actualizarAvisoReportado } from '../../services/avisos.service';
+import { getAllReportes, darDeBajaAviso } from '../../services/avisos.service';
+import { showSuccessToast, showErrorToast, showDeleteConfirm } from '../../helpers/swaHelper'; // 📌 Mensajes de alerta
 import '../../styles/AvisosReportados.css';
 
 const AvisosReportados = () => {
@@ -16,54 +17,64 @@ const AvisosReportados = () => {
         fetchAvisosReportados();
     }, []);
 
-    // Cargar reportes agrupados desde la API
+    // 📌 Cargar reportes agrupados desde la API
     const fetchAvisosReportados = async () => {
         try {
             const data = await getAllReportes();
             setReportes(data);
         } catch (error) {
-            console.error('Error al obtener reportes agrupados:', error);
+            console.error('❌ Error al obtener reportes agrupados:', error);
+            showErrorToast('Error al obtener reportes.');
         } finally {
             setLoading(false);
         }
     };
 
-    // Mostrar el estado del aviso (Activo / Desactivado / Modificado)
+    // 📌 Mostrar el estado del aviso (Activo / Desactivado / Modificado)
     const statusBodyTemplate = (rowData) => {
         const estado = rowData.aviso.estado || 'Activo';
         const severity = estado === 'Desactivado' ? 'danger' : estado === 'Modificado' ? 'warning' : 'success';
         return <Tag value={estado} severity={severity} />;
     };
 
-    // Mostrar número de reportes
+    // 📌 Mostrar número de reportes con puntaje
     const totalReportesBodyTemplate = (rowData) => {
-        return <Tag value={rowData.totalReportes} severity="warning" />;
+        return (
+            <div style={{ fontWeight: 'bold', color: '#000' }}>
+                <Tag value={rowData.totalReportes} severity="warning" /> <br />
+                <span style={{ fontSize: '0.9rem', color: '#555' }}>Puntaje: {rowData.aviso.puntosReporte || 0}</span>
+            </div>
+        );
     };
 
-    // Acción de dar de baja un aviso
+    // 📌 Mostrar descripción con saltos de línea y truncado opcional
+    const descripcionBodyTemplate = (rowData) => {
+        return (
+            <div style={{ whiteSpace: 'pre-line', wordWrap: 'break-word', maxWidth: '250px', color: '#000' }}>
+                {rowData.aviso.descripcion}
+            </div>
+        );
+    };
+
+    // 📌 Acción para dar de baja un aviso con confirmación
     const handleDarDeBaja = async (avisoId) => {
+        const result = await showDeleteConfirm("¿Estás seguro de desactivar este aviso?");
+        if (!result.isConfirmed) return; // Si el usuario cancela, no hacer nada
+
         try {
             await darDeBajaAviso(avisoId);
-            fetchAvisosReportados();
+            showSuccessToast("🛑 Aviso desactivado correctamente.");
+            fetchAvisosReportados(); // Recargar la tabla
         } catch (error) {
-            console.error('Error al dar de baja el aviso:', error);
+            console.error('❌ Error al desactivar el aviso:', error);
+            showErrorToast("⚠️ Hubo un problema al desactivar el aviso.");
         }
     };
 
-    // Acción de modificar un aviso
-    const handleActualizarAviso = async (avisoId) => {
-        try {
-            await actualizarAvisoReportado(avisoId, { estado: 'Modificado' });
-            fetchAvisosReportados();
-        } catch (error) {
-            console.error('Error al actualizar el aviso:', error);
-        }
-    };
-
-    // Filtro global
+    // 📌 Filtro global
     const header = (
         <div className="header-container">
-            <h1>Avisos Reportados</h1>
+            <h1 style={{ fontWeight: 'bold', color: '#000' }}>Avisos Reportados</h1>
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText
@@ -89,10 +100,10 @@ const AvisosReportados = () => {
                 responsiveLayout="scroll"
                 className="responsive-table"
             >
-                <Column field="aviso.titulo" header="Título" filter filterPlaceholder="Buscar título" style={{ minWidth: '250px' }} />
-                <Column field="aviso.descripcion" header="Descripción" style={{ minWidth: '300px' }} />
-                <Column header="Total Reportes" body={totalReportesBodyTemplate} style={{ minWidth: '120px', textAlign: 'center' }} />
-                <Column header="Estado" body={statusBodyTemplate} style={{ minWidth: '150px', textAlign: 'center' }} />
+                <Column field="aviso.titulo" header="Título" filter filterPlaceholder="Buscar título" style={{ minWidth: '200px', fontWeight: 'bold', color: '#000' }} />
+                <Column field="aviso.descripcion" header="Descripción" body={descripcionBodyTemplate} style={{ minWidth: '250px', fontWeight: 'bold', color: '#000' }} />
+                <Column header="Total Reportes" body={totalReportesBodyTemplate} style={{ minWidth: '120px', textAlign: 'center', fontWeight: 'bold', color: '#000' }} />
+                <Column header="Estado" body={statusBodyTemplate} style={{ minWidth: '150px', textAlign: 'center', fontWeight: 'bold', color: '#000' }} />
                 <Column
                     header="Acciones"
                     body={(rowData) => (
@@ -101,18 +112,11 @@ const AvisosReportados = () => {
                                 label="Desactivar"
                                 icon="pi pi-ban"
                                 className="p-button-danger p-button-sm"
-                                onClick={() => handleDarDeBaja(rowData.aviso._id)}
-                            />
-                            <Button
-                                label="Modificar"
-                                icon="pi pi-pencil"
-                                className="p-button-warning p-button-sm"
-                                onClick={() => handleActualizarAviso(rowData.aviso._id)}
-                                style={{ marginLeft: '10px' }}
+                                onClick={() => handleDarDeBaja(rowData.aviso.id)} // 📌 Cambio de _id a id
                             />
                         </div>
                     )}
-                    style={{ minWidth: '200px', textAlign: 'center' }}
+                    style={{ minWidth: '200px', textAlign: 'center', fontWeight: 'bold', color: '#000' }}
                 />
             </DataTable>
         </div>

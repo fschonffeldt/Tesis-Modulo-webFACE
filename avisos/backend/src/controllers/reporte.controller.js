@@ -80,7 +80,7 @@ Si crees que se trata de un error, por favor contáctanos.`;
 
           const html = `<p>Hola,</p>
           <p>Lamentamos informarte que tu aviso titulado <strong>"${aviso.titulo}"</strong> ha sido desactivado por incumplir las normas de nuestra plataforma.</p>
-          <p>Si crees que se trata de un error, por favor <a href="mailto:soporte@tusitio.com">contáctanos</a>.</p>`;
+          `;
 
           await sendEmail(aviso.contacto.email, subject, text, html);
       }

@@ -9,6 +9,8 @@ const {
   deleteAviso,
   reportAviso,
   getAvisosPublicos,
+  renovarAviso,
+  darDeBajaAvisoUsuario,
 } = require("../controllers/aviso.controller");
 const path = require("path");
 
@@ -30,5 +32,6 @@ router.put("/:id", updateAviso);
 router.delete("/:id", deleteAviso);
 router.get("/:id", getAvisoById);
 router.post("/:id/reportes", reportAviso);
-
+router.put("/:id/renovar", renovarAviso);
+router.put("/:id/desactivar", darDeBajaAvisoUsuario);
 module.exports = router;

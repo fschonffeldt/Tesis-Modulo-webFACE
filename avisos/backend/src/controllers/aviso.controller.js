@@ -222,3 +222,61 @@ exports.getAvisoContactInfo = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los datos de contacto", error });
   }
 };
+
+// 📌 Renovar un aviso (extender la fecha de expiración 30 días más)
+exports.renovarAviso = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Buscar el aviso
+    const aviso = await Aviso.findOne({ id: id });
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
+
+    // Verificar que el aviso no esté desactivado
+    if (aviso.estado === "Desactivado") {
+      return res.status(400).json({ message: "No se puede renovar un aviso desactivado" });
+    }
+
+    // Extender la fecha de expiración 30 días más
+    const nuevaFechaExpiracion = new Date(aviso.fechaExpiracion);
+    nuevaFechaExpiracion.setDate(nuevaFechaExpiracion.getDate() + 30);
+    aviso.fechaExpiracion = nuevaFechaExpiracion;
+
+    await aviso.save();
+
+    res.status(200).json({ message: "✅ Aviso renovado con éxito", aviso });
+  } catch (error) {
+    console.error("Error al renovar aviso:", error);
+    res.status(500).json({ message: "⚠️ Error interno al renovar aviso" });
+  }
+};
+
+// 📌 Permitir que los usuarios desactiven sus propios avisos (sin correo)
+exports.darDeBajaAvisoUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuarioEmail = req.email; // Obtener el email del usuario autenticado
+
+    // Buscar el aviso
+    const aviso = await Aviso.findOne({ id: id });
+    if (!aviso) {
+      return res.status(404).json({ message: "Aviso no encontrado" });
+    }
+
+    // Verificar que el usuario autenticado es el dueño del aviso
+    if (aviso.contacto.email !== usuarioEmail) {
+      return res.status(403).json({ message: "No tienes permiso para dar de baja este aviso" });
+    }
+
+    // Cambiar estado del aviso a "Desactivado"
+    aviso.estado = "Desactivado";
+    await aviso.save();
+
+    res.status(200).json({ message: "✅ Aviso desactivado correctamente", aviso });
+  } catch (error) {
+    console.error("Error al dar de baja el aviso:", error);
+    res.status(500).json({ message: "Error al dar de baja el aviso", error });
+  }
+};
