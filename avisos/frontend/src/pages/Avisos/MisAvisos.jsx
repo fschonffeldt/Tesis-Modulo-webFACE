@@ -2,25 +2,31 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import AvisoTable from "../../components/AvisoTable";
 import AvisoForm from "../../components/AvisoForm";
-import { getAvisosByUsuario, deleteAviso, updateAviso, desactivarAvisoUsuario, renovarAvisoUsuario } from "../../services/avisos.service";
-import "../../styles/Modal.css"; 
-import { showErrorToast, showSuccessToast, showDeleteConfirm } from "../../helpers/swaHelper"; 
+import {
+  getAvisosByUsuario,
+  deleteAviso,
+  updateAviso,
+  desactivarAvisoUsuario,
+  renovarAvisoUsuario
+} from "../../services/avisos.service";
+import "../../styles/Modal.css";
+import { showErrorToast, showSuccessToast, showDeleteConfirm } from "../../helpers/swaHelper";
 import { InputText } from "primereact/inputtext";
-import { Dialog } from "primereact/dialog";  // 📌 Importamos Dialog de PrimeReact
-import { Button } from "primereact/button"; // 📌 Importamos Button de PrimeReact
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
 
-// Configuración de React Modal
 Modal.setAppElement("#root");
 
 const MisAvisos = () => {
   const [avisos, setAvisos] = useState([]);
   const [filteredAvisos, setFilteredAvisos] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAviso, setSelectedAviso] = useState(null);
   const [avisosPorVencer, setAvisosPorVencer] = useState([]);
-  const [isDialogVisible, setIsDialogVisible] = useState(false); // 📌 Estado para el popup emergente
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     const fetchAvisos = async () => {
@@ -29,7 +35,6 @@ const MisAvisos = () => {
         setAvisos(data);
         setFilteredAvisos(data);
 
-        // 📌 Filtrar avisos que vencerán en los próximos 7 días
         const ahora = new Date();
         const sieteDiasDespues = new Date();
         sieteDiasDespues.setDate(ahora.getDate() + 7);
@@ -40,14 +45,10 @@ const MisAvisos = () => {
         });
 
         setAvisosPorVencer(porVencer);
-
-        // 📌 Mostrar el popup si hay avisos por vencer
-        if (porVencer.length > 0) {
-          setIsDialogVisible(true);
-        }
+        if (porVencer.length > 0) setIsDialogVisible(true);
       } catch (error) {
         console.error("Error al obtener los avisos:", error);
-        setError("No se pudieron cargar los avisos. Intenta nuevamente.");
+        setError("No se pudieron cargar los avisos.");
         showErrorToast("Error al cargar los avisos.");
       }
     };
@@ -55,91 +56,111 @@ const MisAvisos = () => {
     fetchAvisos();
   }, []);
 
-  // 📌 Función para renovar un aviso
+  useEffect(() => {
+    let filtrados = avisos;
+
+    if (globalFilter) {
+      const lower = globalFilter.toLowerCase();
+      filtrados = filtrados.filter(aviso =>
+        aviso.titulo.toLowerCase().includes(lower) ||
+        aviso.descripcion.toLowerCase().includes(lower)
+      );
+    }
+
+    if (tagFilter) {
+      const lowerTag = tagFilter.toLowerCase();
+      filtrados = filtrados.filter(aviso =>
+        aviso.tags && aviso.tags.some(tag => tag.toLowerCase().includes(lowerTag))
+      );
+    }
+
+    setFilteredAvisos(filtrados);
+  }, [avisos, globalFilter, tagFilter]);
+
   const handleRenovarAviso = async (avisoId) => {
     try {
       const response = await renovarAvisoUsuario(avisoId);
-      setAvisos(prevAvisos =>
-        prevAvisos.map(aviso =>
-          aviso.id === avisoId ? { ...aviso, fechaExpiracion: response.aviso.fechaExpiracion } : aviso
-        )
-      );
+      setAvisos(prev => prev.map(a => a.id === avisoId ? { ...a, fechaExpiracion: response.aviso.fechaExpiracion } : a));
       showSuccessToast("✅ Aviso renovado por 30 días más.");
       setIsDialogVisible(false);
     } catch (error) {
-      console.error("Error al renovar el aviso:", error);
-      showErrorToast("⚠️ Hubo un problema al renovar el aviso.");
+      console.error("Error al renovar:", error);
+      showErrorToast("⚠️ Error al renovar el aviso.");
     }
   };
 
-  // 📌 Función para desactivar un aviso
   const handleDesactivarAviso = async (avisoId) => {
     try {
       await desactivarAvisoUsuario(avisoId);
-      setAvisos(prevAvisos => prevAvisos.filter(aviso => aviso.id !== avisoId));
-      showSuccessToast("🛑 Aviso desactivado correctamente.");
+      setAvisos(prev => prev.filter(a => a.id !== avisoId));
+      showSuccessToast("🛑 Aviso desactivado.");
       setIsDialogVisible(false);
     } catch (error) {
-      console.error("Error al desactivar el aviso:", error);
-      showErrorToast("⚠️ Hubo un problema al desactivar el aviso.");
+      console.error("Error al desactivar:", error);
+      showErrorToast("⚠️ Error al desactivar.");
     }
   };
 
-  // 📌 Función para eliminar un aviso
   const handleDelete = async (id) => {
     try {
       const result = await showDeleteConfirm();
       if (result.isConfirmed) {
         await deleteAviso(id);
-        setAvisos(prevAvisos => prevAvisos.filter(aviso => aviso.id !== id));
-        showSuccessToast("✅ Aviso eliminado correctamente.");
+        setAvisos(prev => prev.filter(a => a.id !== id));
+        showSuccessToast("✅ Aviso eliminado.");
       }
     } catch (error) {
-      console.error("Error al eliminar el aviso:", error);
-      showErrorToast("⚠️ No se pudo eliminar el aviso.");
+      console.error("Error al eliminar:", error);
+      showErrorToast("⚠️ Error al eliminar.");
     }
   };
 
-  // 📌 Función para abrir el modal de edición
   const openModal = (aviso) => {
     setSelectedAviso(aviso);
     setIsModalOpen(true);
   };
 
-  // 📌 Función para cerrar el modal de edición
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedAviso(null);
   };
 
-  // 📌 Función para actualizar un aviso
   const handleUpdate = async (updatedData) => {
     try {
       const updatedAviso = await updateAviso(selectedAviso.id, updatedData);
-      setAvisos(prevAvisos =>
-        prevAvisos.map(aviso => (aviso.id === updatedAviso.id ? updatedAviso : aviso))
-      );
+      setAvisos(prev => prev.map(a => (a.id === updatedAviso.id ? updatedAviso : a)));
       closeModal();
-      showSuccessToast("✅ Aviso actualizado correctamente.");
+      showSuccessToast("✅ Aviso actualizado.");
     } catch (error) {
-      console.error("Error al actualizar el aviso:", error);
-      showErrorToast("⚠️ No se pudo actualizar el aviso.");
+      console.error("Error al actualizar:", error);
+      showErrorToast("⚠️ No se pudo actualizar.");
     }
   };
 
   return (
     <div className="listar-avisos-container">
-      
-      <div className="search-container" style={{ marginLeft: '160px' }}>
-        <span className="p-input-icon-left" style={{ display: 'flex', alignItems: 'center' }}>
-          <i className="pi pi-search" style={{ paddingLeft: '10px', fontSize: '1.2rem' }} />
+      <div className="search-container" style={{ marginLeft: '160px', display: 'flex', gap: '20px' }}>
+        {/* Buscador */}
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" style={{ paddingLeft: "10px", fontSize: "1.2rem" }} />
           <InputText
             type="search"
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             placeholder="Buscar aviso"
-            className="search-input"
-            style={{ paddingLeft: '35px', height: '40px', fontSize: '16px' }}
+            style={{ paddingLeft: "35px", height: "40px", fontSize: "16px" }}
+          />
+        </span>
+
+        {/* 🆕 Tag */}
+        <span className="p-input-icon-left">
+          <i className="pi pi-tags" style={{ paddingLeft: "10px", fontSize: "1.2rem" }} />
+          <InputText
+            type="text"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            placeholder="Filtrar por tag"
+            style={{ paddingLeft: "35px", height: "40px", fontSize: "16px", width: "250px" }}
           />
         </span>
       </div>
@@ -150,14 +171,13 @@ const MisAvisos = () => {
         <AvisoTable
           avisos={filteredAvisos}
           onDelete={handleDelete}
-          onUpdate={openModal} // 🔥✅ Agregado para habilitar el botón de actualizar
+          onUpdate={openModal}
           showDelete={true}
           showUpdate={true}
           showReport={false}
         />
       )}
 
-      {/* 📌 Pestaña emergente con PrimeReact Dialog */}
       <Dialog
         visible={isDialogVisible}
         onHide={() => setIsDialogVisible(false)}
@@ -169,7 +189,7 @@ const MisAvisos = () => {
           Los siguientes avisos están por vencer en menos de 7 días:
         </p>
         {avisosPorVencer.map(aviso => (
-          <div key={aviso.id} className="aviso-dialog-item" style={{ textAlign: "center", marginBottom: "20px" }}>
+          <div key={aviso.id} style={{ textAlign: "center", marginBottom: "20px" }}>
             <p style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#333" }}>
               El aviso titulado:
             </p>
@@ -179,7 +199,7 @@ const MisAvisos = () => {
             <p style={{ fontSize: "1rem", color: "#555", marginTop: "5px" }}>
               Expira el {new Date(aviso.fechaExpiracion).toLocaleDateString()}.
             </p>
-            <div className="aviso-dialog-buttons">
+            <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
               <Button label="🔄 Renovar" className="p-button-success p-button-sm" onClick={() => handleRenovarAviso(aviso.id)} />
               <Button label="🛑 Desactivar" className="p-button-danger p-button-sm" onClick={() => handleDesactivarAviso(aviso.id)} />
             </div>
@@ -187,12 +207,10 @@ const MisAvisos = () => {
         ))}
       </Dialog>
 
-      {/* Modal para actualizar un aviso */}
       <Modal isOpen={isModalOpen} onRequestClose={closeModal} contentLabel="Modificar Aviso" className="modal-content" overlayClassName="modal-overlay">
         {selectedAviso && <AvisoForm onSubmit={handleUpdate} initialData={selectedAviso} title="Modificar Aviso" />}
         <button onClick={closeModal} className="close-button">Cerrar</button>
       </Modal>
-
     </div>
   );
 };

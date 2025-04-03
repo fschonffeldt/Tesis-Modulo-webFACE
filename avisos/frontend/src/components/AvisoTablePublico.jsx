@@ -36,6 +36,30 @@ const AvisoTablePublico = ({ avisos }) => {
 
               <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
+
+              {/* ✅ Tags visibles en la tarjeta */}
+              {aviso.tags && aviso.tags.length > 0 && (
+                <div className="tags-container" style={{ marginBottom: '10px' }}>
+                  <strong style={{ color: "#000" }}>Tags:</strong>{" "}
+                  {aviso.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      style={{
+                        backgroundColor: "#e0e0e0",
+                        color: "#333",
+                        padding: "2px 8px",
+                        marginRight: "5px",
+                        borderRadius: "12px",
+                        fontSize: "0.85rem",
+                        display: "inline-block",
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <Button
                 label="Más información"
                 className="p-button-outlined"
@@ -57,7 +81,6 @@ const AvisoTablePublico = ({ avisos }) => {
       >
         {selectedAviso && (
           <div className="popup-container">
-            {/* ✅ Mostrar imagen si existe */}
             {selectedAviso.imagenes && selectedAviso.imagenes.length > 0 && (
               <img src={`${API_URL}/${selectedAviso.imagenes[0]}`} alt="Aviso" className="popup-image" />
             )}
@@ -65,17 +88,44 @@ const AvisoTablePublico = ({ avisos }) => {
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
             <p className="popup-description">{selectedAviso.descripcion}</p>
 
-            {/* ✅ Mostrar precio solo si existe */}
+            {/* ✅ Tags en el modal */}
+            {selectedAviso.tags && selectedAviso.tags.length > 0 && (
+              <div className="tags-container" style={{ marginBottom: '10px' }}>
+                <strong style={{ color: "#000" }}>Tags:</strong>{" "}
+                {selectedAviso.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      backgroundColor: "#e0e0e0",
+                      color: "#333",
+                      padding: "2px 8px",
+                      marginRight: "5px",
+                      borderRadius: "12px",
+                      fontSize: "0.85rem",
+                      display: "inline-block",
+                    }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {selectedAviso.precio && (
               <p>
-                <strong>Precio:</strong> ${selectedAviso.precio}
+                <strong style={{ color: "#000" }}>Precio:</strong>{" "}
+                <span style={{ color: "#000", fontWeight: "normal" }}>
+                  ${selectedAviso.precio}
+                </span>
               </p>
             )}
 
-            {/* ✅ Mostrar fecha de publicación si existe */}
             {selectedAviso.fechaPublicacion && (
               <p>
-                <strong>Fecha de Publicación:</strong> {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+                <strong style={{ color: "#000" }}>Fecha de Publicación:</strong>{" "}
+                <span style={{ color: "#000", fontWeight: "normal" }}>
+                  {new Date(selectedAviso.fechaPublicacion).toLocaleDateString()}
+                </span>
               </p>
             )}
 

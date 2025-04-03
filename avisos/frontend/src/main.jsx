@@ -12,19 +12,18 @@ import MisAvisos from './pages/Avisos/MisAvisos';
 import AvisosPublicos from './pages/Avisos/AvisosPublicos.jsx';
 import ReportarAviso from './pages/Avisos/ReportarAvisos.jsx';
 import AvisosReportados from './pages/Avisos/AvisosReportados.jsx';
-
+import Estadisticas from './pages/Avisos/Estadisticas.jsx'; // ✅ NUEVO
 
 const router = createBrowserRouter([
   {
-    path: '/', // Ruta raíz
-    element: <Root />, // Componente raíz
-    errorElement: <ErrorPage />, // Página para manejar errores
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
         element: <App />,
       },
-      // Rutas del CRUD de Avisos
       {
         path: '/crear-aviso',
         element: <CrearAviso />,
@@ -47,20 +46,22 @@ const router = createBrowserRouter([
       },
       {
         path: '/reportar-aviso/:id',
-        element: <ReportarAviso  />,
+        element: <ReportarAviso />,
       },
       {
-        path: '/avisos-reportados', // 🔹 Agregamos la nueva ruta
+        path: '/avisos-reportados',
         element: <AvisosReportados />,
+      },
+      {
+        path: '/estadisticas', // ✅ NUEVA RUTA PARA GRÁFICOS
+        element: <Estadisticas />,
       },
     ],
   },
-  
   {
     path: '/auth',
     element: <Login />,
   },
-
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

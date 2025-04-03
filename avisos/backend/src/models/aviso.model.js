@@ -21,9 +21,9 @@ const avisoSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  categoria: {
-    type: String,
-    required: true,
+  tags: {
+    type: [String],
+    default: []
   },
   fechaPublicacion: {
     type: Date,

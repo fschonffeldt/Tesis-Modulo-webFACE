@@ -6,8 +6,8 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     titulo: '',
     descripcion: '',
     precio: '',
-    categoria: '',
-    contacto: { telefono: '' },  // ✅ Se encapsula dentro de "contacto"
+    tags: '', // ✅ Nuevo campo para los tags
+    contacto: { telefono: '' },
     imagen: null,
   });
 
@@ -19,7 +19,7 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
     if (name === "telefono") {
       setFormData({
         ...formData,
-        contacto: { ...formData.contacto, telefono: value }, // ✅ Se asegura que "telefono" está dentro de "contacto"
+        contacto: { ...formData.contacto, telefono: value },
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -37,9 +37,10 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSubmit({
       ...formData,
-      contacto: { telefono: formData.contacto.telefono }, // ✅ Se asegura que "contacto" se envía correctamente
+      contacto: { telefono: formData.contacto.telefono },
     });
   };
 
@@ -95,22 +96,17 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
           </div>
         </div>
 
+        {/* ✅ Campo para tags personalizados */}
         <div className="form-group">
-          <label htmlFor="categoria">Categoría</label>
-          <select
-            id="categoria"
-            name="categoria"
-            value={formData.categoria}
+          <label htmlFor="tags">Tags (separados por coma)</label>
+          <input
+            type="text"
+            id="tags"
+            name="tags"
+            value={formData.tags}
             onChange={handleChange}
-            required
-          >
-            <option value="" disabled>Seleccione una categoría</option>
-            <option value="Educación">Educación</option>
-            <option value="Venta">Venta</option>
-            <option value="Compra">Compra</option>
-            <option value="Habitacional">Habitacional</option>
-            <option value="Otros">Otros</option>
-          </select>
+            placeholder="ej: libros, ayuda, venta"
+          />
         </div>
 
         <div className="form-group">
@@ -119,7 +115,7 @@ const AvisoForm = ({ onSubmit, initialData, title = "Crear Aviso" }) => {
             type="text"
             id="telefono"
             name="telefono"
-            value={formData.contacto.telefono} // ✅ Se asegura de apuntar a "contacto.telefono"
+            value={formData.contacto.telefono}
             onChange={handleChange}
             placeholder="Número de contacto"
             required

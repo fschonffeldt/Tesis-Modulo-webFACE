@@ -35,7 +35,7 @@ const AvisoTable = ({
   return (
     <div className="avisos-container">
       <Toast ref={toast} />
-      <h1 className="text-center">Avisos</h1>
+      <h1 className="text-center"></h1>
 
       <div className="avisos-grid">
         {avisos.length > 0 ? (
@@ -118,12 +118,29 @@ const AvisoTable = ({
 
               <h5 className="aviso-title">{aviso.titulo}</h5>
               <p className="aviso-description">{aviso.descripcion}</p>
-              <p>
-                <strong style={{ color: "#000" }}>Categoría:</strong>{" "}
-                <span style={{ color: "#000", fontWeight: "normal" }}>
-                  {aviso.categoria}
-                </span>
-              </p>
+
+              {/* ✅ Mostrar tags */}
+              {aviso.tags && aviso.tags.length > 0 && (
+                <div className="tags-container" style={{ marginBottom: '10px' }}>
+                  <strong style={{ color: "#000" }}>Tags:</strong>{" "}
+                  {aviso.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      style={{
+                        backgroundColor: "#e0e0e0",
+                        color: "#333",
+                        padding: "2px 8px",
+                        marginRight: "5px",
+                        borderRadius: "12px",
+                        fontSize: "0.85rem",
+                        display: "inline-block",
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               <Button
                 label="Más información"
@@ -146,7 +163,6 @@ const AvisoTable = ({
       >
         {selectedAviso && (
           <div className="popup-container">
-            {/* ✅ Mostrar imagen si existe */}
             {selectedAviso.imagenes && selectedAviso.imagenes.length > 0 && (
               <img
                 src={`${API_URL}/${selectedAviso.imagenes[0]}`}
@@ -155,13 +171,9 @@ const AvisoTable = ({
               />
             )}
 
-            {/* ✅ Título del aviso */}
             <h2 className="popup-title">{selectedAviso.titulo}</h2>
-
-            {/* ✅ Descripción */}
             <p className="popup-description">{selectedAviso.descripcion}</p>
 
-            {/* ✅ Mostrar información en negrita */}
             {selectedAviso.precio && (
               <p>
                 <strong style={{ color: "#000" }}>Precio:</strong>{" "}
@@ -202,7 +214,29 @@ const AvisoTable = ({
               </p>
             )}
 
-            {/* ✅ Botón para cerrar */}
+            {/* ✅ Mostrar tags en el modal */}
+            {selectedAviso.tags && selectedAviso.tags.length > 0 && (
+              <div className="tags-modal" style={{ marginTop: '10px' }}>
+                <strong style={{ color: "#000" }}>Tags:</strong>{" "}
+                {selectedAviso.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      backgroundColor: "#f0f0f0",
+                      color: "#000",
+                      padding: "4px 10px",
+                      margin: "4px",
+                      borderRadius: "15px",
+                      display: "inline-block",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
             <Button
               label="Cerrar"
               icon="pi pi-times"

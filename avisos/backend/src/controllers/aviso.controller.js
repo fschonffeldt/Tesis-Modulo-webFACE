@@ -1,46 +1,67 @@
 const Aviso = require("../models/aviso.model");
 const Reporte = require ("../models/reporte.model");
 const { schemaAviso } = require('../schema/aviso.schema');
+const Tag = require("../models/tag.model"); // Importar el modelo de Tag
+const natural = require("natural");
+const stemmer = natural.PorterStemmerEs;
 
 // Crear un nuevo aviso
 
 exports.createAviso = async (req, res) => {
   try {
     console.log("Petición recibida en createAviso");
-    const { titulo, descripcion, precio, categoria, contacto} = req.body;
+    const { titulo, descripcion, precio, contacto, tags = [] } = req.body;
 
-    // Validar que el contacto tiene un teléfono
     if (!contacto || !contacto.telefono) {
       return res.status(400).json({ message: "El número de teléfono es obligatorio." });
     }
 
-    // Obtener el email del usuario autenticado
     const usuarioEmail = req.email;
     if (!usuarioEmail) {
       return res.status(400).json({ message: "El email del usuario es obligatorio." });
     }
 
-    // Procesar imágenes si se subieron
     const imagenes = req.files && req.files.length > 0 
       ? req.files.map(file => `uploads/${file.filename}`) 
-      : []; // Si no hay imágenes, inicializa como un arreglo vacío
+      : [];
 
-    // Crear el nuevo aviso
+    const tagsArray = Array.isArray(tags)
+      ? tags.map(tag => tag.trim().toLowerCase())
+      : typeof tags === 'string'
+        ? tags.split(',').map(tag => tag.trim().toLowerCase())
+        : [];
+
     const nuevoAviso = new Aviso({
       titulo,
       descripcion,
       precio,
-      categoria,
       contacto: {
-        telefono: contacto.telefono, // Teléfono del body
-        email: usuarioEmail, // Email autenticado
+        telefono: contacto.telefono,
+        email: usuarioEmail,
       },
-      imagenes, // Almacenar las rutas de las imágenes (si existen)
+      imagenes,
+      tags: tagsArray,
     });
 
-    // Guardar el aviso en la base de datos
     const avisoGuardado = await nuevoAviso.save();
     console.log("Aviso guardado en la base de datos:", avisoGuardado);
+
+   // Guardar o actualizar tags
+    if (tags.length > 0) {
+      for (const tag of tags) {
+        const originalTag = tag.trim();
+        const normalizedTag = stemmer.stem(originalTag.toLowerCase());
+
+        const existente = await Tag.findOne({ normalizedTag });
+        if (existente) {
+          existente.cantidadUsos += 1;
+          await existente.save();
+        } else {
+          await Tag.create({ originalTag, normalizedTag });
+        }
+      }
+    }
+
 
     res.status(201).json({ mensaje: "Aviso creado con éxito", aviso: avisoGuardado });
   } catch (error) {
@@ -48,6 +69,7 @@ exports.createAviso = async (req, res) => {
     res.status(500).json({ message: "Error al crear el aviso", error });
   }
 };
+
 
 // Obtener todos los avisos sin información de contacto
 exports.getAvisos = async (req, res) => {
@@ -82,35 +104,62 @@ exports.getAvisoById = async (req, res) => {
 // Actualizar un aviso
 exports.updateAviso = async (req, res) => {
   try {
-    const avisoId = req.params.id; // El ID personalizado (UUID)
+    const avisoId = req.params.id;
     console.log("ID recibido para actualizar:", avisoId);
 
-    const { titulo, descripcion, precio, categoria, contacto } = req.body;
+    const { titulo, descripcion, precio, contacto, tags = [] } = req.body;
 
-    // Buscar el aviso usando el campo 'id' (UUID personalizado)
     const aviso = await Aviso.findOne({ id: avisoId });
     if (!aviso) {
       return res.status(404).json({ message: "Aviso no encontrado" });
     }
 
-    // Verificar si el usuario autenticado es el propietario del aviso
+    // Verificación de permisos
     if (aviso.contacto.email !== req.email) {
       return res.status(403).json({ message: "No tienes permiso para modificar este aviso" });
     }
 
-    // Actualizar los campos del aviso solo si se envían en el body
+    // Actualización de campos básicos
     aviso.titulo = titulo || aviso.titulo;
     aviso.descripcion = descripcion || aviso.descripcion;
     aviso.precio = precio || aviso.precio;
-    aviso.categoria = categoria || aviso.categoria;
 
     if (contacto && contacto.telefono) {
       aviso.contacto.telefono = contacto.telefono;
     }
 
-    // Guardar los cambios
+    // 📌 Convertir los tags a array si vienen como string
+    let parsedTags = [];
+
+    if (Array.isArray(tags)) {
+      parsedTags = tags;
+    } else if (typeof tags === "string") {
+      parsedTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+    }
+
+    // 📌 Guardar tags en el aviso
+    if (parsedTags.length > 0) {
+      aviso.tags = parsedTags;
+
+      for (const tag of parsedTags) {
+        const normalized = natural.PorterStemmerEs.stem(tag.toLowerCase());
+
+        const existente = await Tag.findOne({ normalizedTag: normalized });
+        if (existente) {
+          existente.cantidadUsos += 1;
+          await existente.save();
+        } else {
+          await Tag.create({
+            originalTag: tag,
+            normalizedTag: normalized
+          });
+        }
+      }
+    }
+
     const avisoActualizado = await aviso.save();
     res.status(200).json({ message: "Aviso actualizado correctamente", aviso: avisoActualizado });
+
   } catch (error) {
     console.error("Error al actualizar el aviso:", error);
     res.status(500).json({ message: "Error al actualizar el aviso", error });
@@ -178,7 +227,9 @@ exports.getAvisosPublicos = async (req, res) => {
 exports.reportAviso = async (req, res) => {
   try {
     const { id: avisoId } = req.params;
-    const { usuario, gravedad } = req.body;
+    const { gravedad } = req.body;
+
+    const usuarioEmail = req.email; // 👈 Asegurate de que viene del token
 
     const puntos = gravedad === "Leve" ? 1 : gravedad === "Media" ? 3 : 5;
 
@@ -188,8 +239,13 @@ exports.reportAviso = async (req, res) => {
       return res.status(404).json({ message: "Aviso no encontrado" });
     }
 
-    // Crear un nuevo reporte
-    const nuevoReporte = new Reporte({ avisoId: aviso._id, usuario, gravedad });
+    // Crear un nuevo reporte con solo el email como string
+    const nuevoReporte = new Reporte({
+      avisoId: aviso._id,
+      usuario: usuarioEmail, // 👈 solo el string del email
+      gravedad
+    });
+
     await nuevoReporte.save();
 
     // Incrementar puntos en el aviso
@@ -205,6 +261,7 @@ exports.reportAviso = async (req, res) => {
     res.status(500).json({ message: "Error al reportar aviso", error });
   }
 };
+
 
 exports.getAvisoContactInfo = async (req, res) => {
   try {
@@ -278,5 +335,24 @@ exports.darDeBajaAvisoUsuario = async (req, res) => {
   } catch (error) {
     console.error("Error al dar de baja el aviso:", error);
     res.status(500).json({ message: "Error al dar de baja el aviso", error });
+  }
+};
+
+// Buscar avisos por tag (normalizado)
+exports.getAvisosByTag = async (req, res) => {
+  try {
+    const queryTag = req.query.tag;
+    if (!queryTag) {
+      return res.status(400).json({ message: "Tag requerido en query param." });
+    }
+
+    const normalized = natural.PorterStemmerEs.stem(queryTag.toLowerCase());
+
+    const avisos = await Aviso.find({ "tags.normalized": normalized });
+
+    res.status(200).json(avisos);
+  } catch (error) {
+    console.error("Error al filtrar por tag:", error);
+    res.status(500).json({ message: "Error al filtrar por tag" });
   }
 };

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import "../styles/Modal.css";
 import { reportAviso } from '../services/avisos.service';
+
 const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
   const [formData, setFormData] = useState({
-    gravedad: 'Leve', // Valor predeterminado
-    comentario: '', // Comentario opcional
+    gravedad: 'Leve',
+    comentario: '',
   });
 
   const handleChange = (e) => {
@@ -15,11 +16,10 @@ const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData, aviso)
-    onSubmit(e,aviso.id, formData); // Llama a la función de reporte con los datos del formulario
-    onClose(); // Cierra el modal
+    console.log(formData, aviso);
+    onSubmit(e, aviso.id, formData);
+    onClose();
   };
-
 
   return (
     <Modal
@@ -28,35 +28,49 @@ const ReporteModal = ({ aviso, onClose, onSubmit, title }) => {
       className="modal-content"
       overlayClassName="modal-overlay"
     >
-      <h2>{title}</h2>
-      <form onSubmit={handleSubmit}>
-        <p><strong>Aviso:</strong> {aviso?.titulo || 'Información no disponible'}</p>
+      <h2 style={{ color: '#000', fontWeight: 'bold' }}>{title}</h2>
 
-        <label htmlFor="gravedad">Gravedad del reporte</label>
+      <form onSubmit={handleSubmit}>
+        <p>
+        <strong style={{ color: '#000', fontWeight: 'bold' }}>
+          Título del aviso:
+        </strong>{" "}
+        <span style={{ color: '#000', }}>
+          {aviso?.titulo || 'Información no disponible'}
+        </span>
+      </p>
+
+
+        <label htmlFor="gravedad" style={{ color: '#000', fontWeight: 'bold' }}>
+          Gravedad del reporte
+        </label>
         <select
           id="gravedad"
           name="gravedad"
           value={formData.gravedad}
           onChange={handleChange}
           required
+          style={{ color: '#000', fontWeight: 'bold' }}
         >
           <option value="Leve">Leve</option>
           <option value="Media">Media</option>
           <option value="Grave">Grave</option>
         </select>
 
-        <label htmlFor="comentario">Comentario (opcional)</label>
+        <label htmlFor="comentario" style={{ color: '#000', fontWeight: 'bold' }}>
+          Comentario (opcional)
+        </label>
         <textarea
           id="comentario"
           name="comentario"
           value={formData.comentario}
           onChange={handleChange}
           placeholder="Escribe un comentario adicional"
+          style={{ color: '#000' }}
         />
 
         <div className="modal-buttons">
           <button type="submit" className="submit-button">Enviar Reporte</button>
-          <button type="button" onClick={onClose} className="close-button">Cerrar</button>
         </div>
       </form>
     </Modal>

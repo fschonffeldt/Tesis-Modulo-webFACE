@@ -49,9 +49,14 @@ const Navbar = () => {
 
             {/* 📌 Mostrar Reportes solo si el usuario es Admin o Moderador */}
             {(userRole === 'admin' || userRole === 'moderador') && (
-              <li onClick={() => navigate('/avisos-reportados')}>
-                <span>Reportes</span>
-              </li>
+              <>
+                <li onClick={() => navigate('/avisos-reportados')}>
+                  <span>Reportes</span>
+                </li>
+                <li onClick={() => navigate('/estadisticas')}>
+                  <span>Estadísticas</span>
+                </li>
+              </>
             )}
           </>
         )}

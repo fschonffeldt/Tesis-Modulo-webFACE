@@ -10,31 +10,42 @@ const CrearAviso = () => {
   const handleCreate = async (aviso) => {
     try {
       console.log("🔹 Datos recibidos en handleCreate:", aviso);
-  
+
       const formData = new FormData();
-  
-      // ✅ Agregar los campos de texto igual que en Postman
+
+      // ✅ Campos básicos
       formData.append("titulo", aviso.titulo);
       formData.append("descripcion", aviso.descripcion);
-      formData.append("precio", aviso.precio || ""); 
-      formData.append("categoria", aviso.categoria);
+      formData.append("precio", aviso.precio || "");
       formData.append("contacto[telefono]", aviso.contacto?.telefono || "");
-  
-      // ✅ Asegurar que la imagen se agrega correctamente
-      if (aviso.imagen) {
-        formData.append("images", aviso.imagen); // 💡 Postman usa "images" en lugar de "imagenes"
+
+      // ✅ Tags separados por comas
+      if (aviso.tags && typeof aviso.tags === "string") {
+        const tagsArray = aviso.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag !== "");
+
+        // Agregar como múltiples campos con el mismo nombre
+        tagsArray.forEach((tag) => {
+          formData.append("tags[]", tag);
+        });
       }
-  
-      // 🔹 Depuración: Imprimir los datos antes de enviarlos
+
+      // ✅ Imagen
+      if (aviso.imagen) {
+        formData.append("images", aviso.imagen);
+      }
+
       console.log("📤 Datos enviados en FormData:");
       for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]); // Verificar que se vean correctamente
+        console.log(pair[0], pair[1]);
       }
-  
+
       console.log("🔄 Llamando a createAviso...");
       const response = await createAviso(formData);
       console.log("✅ Aviso creado correctamente:", response);
-  
+
       showCreateSuccess();
       navigate("/listar-avisos");
     } catch (error) {
@@ -42,7 +53,6 @@ const CrearAviso = () => {
       showCreateError("Ocurrió un error al crear el aviso. Intenta nuevamente.");
     }
   };
-  
 
   return (
     <div>

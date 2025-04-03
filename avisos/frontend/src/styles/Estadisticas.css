@@ -1,0 +1,48 @@
+.estadisticas-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.estadisticas-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.chart-wrapper {
+  margin-bottom: 40px;
+}
+
+/* Nueva clase para cada bloque individual de estadísticas */
+.chart-section {
+  margin-bottom: 50px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+
+.chart-section:first-child {
+  border-top: none;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+  .estadisticas-container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .estadisticas-container h2 {
+    font-size: 20px;
+  }
+}
